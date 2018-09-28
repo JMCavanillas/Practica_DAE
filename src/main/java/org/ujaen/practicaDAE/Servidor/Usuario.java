@@ -5,6 +5,9 @@
  */
 package org.ujaen.practicaDAE.Servidor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author macosx
@@ -14,13 +17,14 @@ public class Usuario {
     private String nombre;
     private String contraseña;
 
-    public Usuario(String nombre, String contraseña)
-    {
-        this.nombre=nombre;
-        this.contraseña=contraseña;
+    private List<Evento> eventosInscritos = new ArrayList<>();
+    private List<Evento> eventosCreados = new ArrayList<>();
+
+    public Usuario(String nombre, String contraseña) {
+        this.nombre = nombre;
+        this.contraseña = contraseña;
     }
-    
-    
+
     /**
      * @return the nombre
      */
@@ -48,7 +52,33 @@ public class Usuario {
     public void setContraseña(String contraseña) {
         this.contraseña = contraseña;
     }
-    
-    
+
+    /**
+     * @return the eventosInscritos
+     */
+    public List<Evento> getEventosInscritos() {
+        return eventosInscritos;
+    }
+
+    /**
+     * @param eventosInscritos the eventosInscritos to set
+     */
+    public void setEventosInscritos(List<Evento> eventosInscritos) {
+        this.eventosInscritos = eventosInscritos;
+    }
+
+    /**
+     * @return the eventosCreados
+     */
+    public List<Evento> getEventosCreados() {
+        return eventosCreados;
+    }
+
+    /**
+     * @param eventosCreados the eventosCreados to set
+     */
+    public void setEventosCreados(List<Evento> eventosCreados) {
+        this.eventosCreados = eventosCreados;
+    }
 
 }
