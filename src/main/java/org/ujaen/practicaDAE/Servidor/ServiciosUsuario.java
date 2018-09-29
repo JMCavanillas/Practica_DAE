@@ -9,7 +9,7 @@ package org.ujaen.practicaDAE.Servidor;
  *
  * @author jabm9
  */
-public interface ServiciosUsuario {
+public interface ServiciosUsuario{
     
     boolean login(String usuario, String clave);
     
