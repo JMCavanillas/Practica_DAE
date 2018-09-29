@@ -9,7 +9,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.springframework.stereotype.Component;
-
+import org.ujaen.practicaDAE.Servidor.DTOs.EventoDTO;
+import org.ujaen.practicaDAE.Servidor.DTOs.UsuarioDTO;
+import org.ujaen.practicaDAE.Servidor.Interfaces.ServiciosEvento;
 
 /**
  *
@@ -21,76 +23,77 @@ public class GestionEventos implements ServiciosEvento {
     List<Evento> eventos = new ArrayList<>();
 
     @Override
-    public List<Evento> buscarEventoTipo(Tipo tipo) {
-        List<Evento> tmp = new ArrayList<>();
+    public List<EventoDTO> buscarEventoTipo(Evento.Tipo tipo) {
+
+        List<EventoDTO> tmp = new ArrayList<>();
 
         for (Evento evento : eventos) {
             if (evento.getTipo().equals(tipo)) {
-                tmp.add(evento);
+
+                tmp.add(evento.toDTO());
             }
         }
 
         return tmp;
-
     }
 
     @Override
-    public List<Evento> buscarEventoPalabrasClave(List<String> palabras) {
-        List<Evento> tmp = new ArrayList<>();
+    public List<EventoDTO> buscarEventoPalabrasClave(List<String> palabras) {
+        List<EventoDTO> tmp = new ArrayList<>();
 
         //A lo mejor se podria cambiar para las primeras
         //posiciones de la lista la ocupen los eventos
         //que tengan mas coincidencias de palabras clave
-        
         for (Evento evento : eventos) {
-            for(String palabra: palabras){
-                if(evento.getDescripcion().contains(palabra)){
-                    tmp.add(evento);
+            for (String palabra : palabras) {
+                if (evento.getDescripcion().contains(palabra)) {
+
+                    tmp.add(evento.toDTO());
                 }
             }
-            
+
         }
 
         return tmp;
     }
 
     @Override
-    public Evento crearEvento(String lugar, Date fecha, String descripcion, int numeroMaxAsistentes) {
+    public EventoDTO crearEvento(String lugar, Date fecha, String descripcion, int numeroMaxAsistentes) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public boolean cancelarEvento(Evento evento) {
+    public boolean cancelarEvento(EventoDTO evento) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public boolean inscribirseEvento(Evento evento, Usuario usuario) {
+    public boolean inscribirseEvento(EventoDTO evento, UsuarioDTO usuario) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public boolean cancelarInscripcionEvento(Evento evento, Usuario usuario) {
+    public boolean cancelarInscripcionEvento(EventoDTO evento, UsuarioDTO usuario) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public List<Evento> verEventosInscritosCelebrados(Usuario usuario) {
+    public List<EventoDTO> verEventosInscritosCelebrados(UsuarioDTO usuario) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public List<Evento> verEventosInscritosFuturos(Usuario usuario) {
+    public List<EventoDTO> verEventosInscritosFuturos(UsuarioDTO usuario) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public List<Evento> verEventosOrganizados(Usuario usuario) {
+    public List<EventoDTO> verEventosOrganizados(UsuarioDTO usuario) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public List<Evento> verEventosOrganizadosFuturos(Usuario usuario) {
+    public List<EventoDTO> verEventosOrganizadosFuturos(UsuarioDTO usuario) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

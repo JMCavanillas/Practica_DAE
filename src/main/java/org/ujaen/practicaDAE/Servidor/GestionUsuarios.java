@@ -8,6 +8,7 @@ package org.ujaen.practicaDAE.Servidor;
 import java.util.Map;
 import java.util.TreeMap;
 import org.springframework.stereotype.Component;
+import org.ujaen.practicaDAE.Servidor.Interfaces.ServiciosUsuario;
 
 /**
  *
@@ -24,6 +25,7 @@ public class GestionUsuarios implements ServiciosUsuario {
             return true;
         }
         return false;
+
     }
 
     @Override
@@ -33,7 +35,6 @@ public class GestionUsuarios implements ServiciosUsuario {
             return true;
         }
         return false;
-
     }
 
 }

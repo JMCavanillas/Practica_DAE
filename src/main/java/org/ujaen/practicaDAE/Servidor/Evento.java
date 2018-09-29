@@ -23,7 +23,7 @@ public class Evento {
     public enum Tipo {
         CHARLA, CURSO, ACTIVIDAD_DEPORTIVA, VISITA_CULTURAL
     }
-    static int id = 0;
+   
     private Date fecha;
     private String lugar;
     private Tipo tipo;
@@ -36,7 +36,7 @@ public class Evento {
     
     
     public Evento(Date fecha, String lugar, Tipo tipo, String descripcion, int numeroMaxAsistentes){
-        id=id+1;
+       
         this.fecha=fecha;
         this.lugar=lugar;
         this.tipo=tipo;
@@ -145,19 +145,7 @@ public class Evento {
         this.descripcion = descripcion;
     }
 
-    /**
-     * @return the id
-     */
-    public static int getId() {
-        return id;
-    }
 
-    /**
-     * @param aId the id to set
-     */
-    public static void setId(int aId) {
-        id = aId;
-    }
     
     public EventoDTO toDTO() {
         return new EventoDTO(fecha, lugar, tipo, 
