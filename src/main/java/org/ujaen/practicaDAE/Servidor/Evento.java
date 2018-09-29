@@ -8,18 +8,18 @@ package org.ujaen.practicaDAE.Servidor;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import org.ujaen.practicaDAE.Servidor.DTOs.EventoDTO;
 
 /**
  *
  * @author macosx
  */
 public class Evento {
-    
-
 
     /*
-    Enum para restringir los tipos de eventos
-    */
+     * Enum para restringir los tipos de eventos
+     */
+    
     public enum Tipo {
         CHARLA, CURSO, ACTIVIDAD_DEPORTIVA, VISITA_CULTURAL
     }
@@ -41,7 +41,6 @@ public class Evento {
         this.tipo=tipo;
         this.descripcion=descripcion;
         this.numeroMaxAsistentes=numeroMaxAsistentes;
-        
         
     }
     
@@ -145,6 +144,9 @@ public class Evento {
         this.descripcion = descripcion;
     }
     
-    
+    public EventoDTO toDTO() {
+        return new EventoDTO(fecha, lugar, tipo, 
+                descripcion, numeroMaxAsistentes);
+    }
 
 }

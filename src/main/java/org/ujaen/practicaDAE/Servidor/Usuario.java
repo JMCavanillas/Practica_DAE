@@ -7,6 +7,7 @@ package org.ujaen.practicaDAE.Servidor;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.ujaen.practicaDAE.Servidor.DTOs.UsuarioDTO;
 
 /**
  *
@@ -79,6 +80,10 @@ public class Usuario {
      */
     public void setEventosCreados(List<Evento> eventosCreados) {
         this.eventosCreados = eventosCreados;
+    }
+    
+    public UsuarioDTO toDTO() {
+        return new UsuarioDTO(nombre);
     }
 
 }
