@@ -14,6 +14,8 @@ import java.util.List;
  * @author macosx
  */
 public class Evento {
+    
+
 
     /*
     Enum para restringir los tipos de eventos
