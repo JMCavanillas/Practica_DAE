@@ -23,7 +23,8 @@ public class Evento {
         CHARLA, CURSO, ACTIVIDAD_DEPORTIVA, VISITA_CULTURAL
     }
 
-    private static int id = 0;
+    static int secuenciaID = 0;
+    private int id;
     private Date fecha;
     private String lugar;
     private Tipo tipo;
@@ -33,8 +34,19 @@ public class Evento {
     private List<Usuario> usuariosInscritos = new ArrayList<>();
     private List<Usuario> listaEspera = new ArrayList<>();
 
+    public Evento(int id, Date fecha, String lugar, Tipo tipo, String descripcion, int numeroMaxAsistentes) {
+        this.id = id;
+        this.fecha = fecha;
+        this.lugar = lugar;
+        this.tipo = tipo;
+        this.descripcion = descripcion;
+        this.numeroMaxAsistentes = numeroMaxAsistentes;
+
+    }
+
     public Evento(Date fecha, String lugar, Tipo tipo, String descripcion, int numeroMaxAsistentes) {
-        id++;
+        id=secuenciaID;
+        secuenciaID++;
         this.fecha = fecha;
         this.lugar = lugar;
         this.tipo = tipo;
@@ -144,12 +156,12 @@ public class Evento {
     /**
      * @return the id
      */
-    public static int getId() {
+    public int getId() {
         return id;
     }
 
     public EventoDTO toDTO() {
-        return new EventoDTO(fecha, lugar, tipo,
+        return new EventoDTO(id, fecha, lugar, tipo,
                 descripcion, numeroMaxAsistentes);
     }
 

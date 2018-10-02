@@ -15,15 +15,15 @@ import org.ujaen.practicaDAE.Servidor.Evento;
 public class EventoDTO {
 
 
-
+    private int id;
     private Date fecha;
     private String lugar;
     private Evento.Tipo tipo;
     private String descripcion;
     private int numeroMaxAsistentes;
 
-    public EventoDTO(Date fecha, String lugar, Evento.Tipo tipo, String descripcion, int numeroMaxAsistentes) {
- 
+    public EventoDTO(int id, Date fecha, String lugar, Evento.Tipo tipo, String descripcion, int numeroMaxAsistente ) {
+        this.id = id;
         this.fecha = fecha;
         this.lugar = lugar;
         this.tipo = tipo;
@@ -99,6 +99,20 @@ public class EventoDTO {
      */
     public void setNumeroMaxAsistentes(int numeroMaxAsistentes) {
         this.numeroMaxAsistentes = numeroMaxAsistentes;
+    }
+
+    /**
+     * @return the id
+     */
+    public int getId() {
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(int id) {
+        this.id = id;
     }
 
 }
