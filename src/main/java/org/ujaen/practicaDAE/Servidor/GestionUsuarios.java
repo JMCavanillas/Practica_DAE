@@ -7,6 +7,7 @@ package org.ujaen.practicaDAE.Servidor;
 
 import java.util.Map;
 import java.util.TreeMap;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ujaen.practicaDAE.Servidor.Interfaces.ServiciosUsuario;
 
@@ -17,7 +18,9 @@ import org.ujaen.practicaDAE.Servidor.Interfaces.ServiciosUsuario;
 @Component
 public class GestionUsuarios implements ServiciosUsuario {
 
-    Map<String, String> usuarios = new TreeMap<>();
+
+
+    Map<String, Usuario> usuarios = new TreeMap<>();
 
     @Override
     public boolean login(String usuario, String clave) {
@@ -31,10 +34,18 @@ public class GestionUsuarios implements ServiciosUsuario {
     @Override
     public boolean registro(String usuario, String clave) {
         if (!usuarios.containsKey(usuario)) {
-            usuarios.put(usuario, clave);
+            Usuario tmp=new Usuario(usuario,clave);
+            usuarios.put(usuario, tmp);
             return true;
         }
         return false;
+    }
+    
+    
+    public Usuario buscarUsuario(String usuario){
+        //Falta meter excepciones y tal 
+        return usuarios.get(usuario);
+        
     }
 
 }

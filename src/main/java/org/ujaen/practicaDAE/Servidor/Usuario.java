@@ -86,4 +86,9 @@ public class Usuario {
         return new UsuarioDTO(nombre);
     }
 
+    
+    public void añadirEventoCreado(Evento evento){
+        eventosCreados.add(evento);
+    }
+    
 }

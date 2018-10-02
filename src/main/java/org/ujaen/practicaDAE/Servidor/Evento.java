@@ -19,33 +19,29 @@ public class Evento {
     /*
      * Enum para restringir los tipos de eventos
      */
-    
     public enum Tipo {
         CHARLA, CURSO, ACTIVIDAD_DEPORTIVA, VISITA_CULTURAL
     }
-   
+
+    private static int id = 0;
     private Date fecha;
     private String lugar;
     private Tipo tipo;
     private String descripcion;
     private int numeroMaxAsistentes;
-    
-    private List<Usuario> usuariosInscritos=new ArrayList<>();
-    private List<Usuario> listaEspera=new ArrayList<>();
-    
-    
-    
-    public Evento(Date fecha, String lugar, Tipo tipo, String descripcion, int numeroMaxAsistentes){
-       
-        this.fecha=fecha;
-        this.lugar=lugar;
-        this.tipo=tipo;
-        this.descripcion=descripcion;
-        this.numeroMaxAsistentes=numeroMaxAsistentes;
-        
+
+    private List<Usuario> usuariosInscritos = new ArrayList<>();
+    private List<Usuario> listaEspera = new ArrayList<>();
+
+    public Evento(Date fecha, String lugar, Tipo tipo, String descripcion, int numeroMaxAsistentes) {
+        id++;
+        this.fecha = fecha;
+        this.lugar = lugar;
+        this.tipo = tipo;
+        this.descripcion = descripcion;
+        this.numeroMaxAsistentes = numeroMaxAsistentes;
+
     }
-    
-    
 
     /**
      * @return the fecha
@@ -145,10 +141,15 @@ public class Evento {
         this.descripcion = descripcion;
     }
 
+    /**
+     * @return the id
+     */
+    public static int getId() {
+        return id;
+    }
 
-    
     public EventoDTO toDTO() {
-        return new EventoDTO(fecha, lugar, tipo, 
+        return new EventoDTO(fecha, lugar, tipo,
                 descripcion, numeroMaxAsistentes);
     }
 

@@ -10,6 +10,13 @@ package org.ujaen.practicaDAE.Servidor.DTOs;
  * @author javier
  */
 public class UsuarioDTO {
+
+    /**
+     * @return the contraseña
+     */
+    public String getContraseña() {
+        return contraseña;
+    }
     
     private String nombre;
     private String contraseña;

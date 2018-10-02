@@ -13,100 +13,92 @@ import org.ujaen.practicaDAE.Servidor.Evento;
  * @author javier
  */
 public class EventoDTO {
-    
+
+
+
     private Date fecha;
     private String lugar;
     private Evento.Tipo tipo;
     private String descripcion;
     private int numeroMaxAsistentes;
-    
-    public EventoDTO(Date fecha, String lugar, Evento.Tipo tipo, String descripcion, int numeroMaxAsistentes)
-    {
-        this.fecha=fecha;
-        this.lugar=lugar;
-        this.tipo=tipo;
-        this.descripcion=descripcion;
-        this.numeroMaxAsistentes=numeroMaxAsistentes;
+
+    public EventoDTO(Date fecha, String lugar, Evento.Tipo tipo, String descripcion, int numeroMaxAsistentes) {
+ 
+        this.fecha = fecha;
+        this.lugar = lugar;
+        this.tipo = tipo;
+        this.descripcion = descripcion;
+        this.numeroMaxAsistentes = numeroMaxAsistentes;
     }
-    
-    
+
     /**
      * @return the fecha
      */
-    public Date getFecha()
-    {
+    public Date getFecha() {
         return fecha;
     }
 
     /**
      * @param fecha the fecha to set
      */
-    public void setFecha(Date fecha)
-    {
+    public void setFecha(Date fecha) {
         this.fecha = fecha;
     }
 
     /**
      * @return the lugar
      */
-    public String getLugar()
-    {
+    public String getLugar() {
         return lugar;
     }
 
     /**
      * @param lugar the lugar to set
      */
-    public void setLugar(String lugar)
-    {
+    public void setLugar(String lugar) {
         this.lugar = lugar;
     }
 
     /**
      * @return the tipo
      */
-    public Evento.Tipo getTipo()
-    {
+    public Evento.Tipo getTipo() {
         return tipo;
     }
 
     /**
      * @param tipo the tipo to set
      */
-    public void setTipo(Evento.Tipo tipo)
-    {
+    public void setTipo(Evento.Tipo tipo) {
         this.tipo = tipo;
     }
 
     /**
      * @return the descripcion
      */
-    public String getDescripcion()
-    {
+    public String getDescripcion() {
         return descripcion;
     }
 
     /**
      * @param descripcion the descripcion to set
      */
-    public void setDescripcion(String descripcion)
-    {
+    public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
 
     /**
      * @return the numeroMaxAsistentes
      */
-    public int getNumeroMaxAsistentes()
-    {
+    public int getNumeroMaxAsistentes() {
         return numeroMaxAsistentes;
     }
 
     /**
      * @param numeroMaxAsistentes the numeroMaxAsistentes to set
      */
-    public void setNumeroMaxAsistentes(int numeroMaxAsistentes)
-    {
+    public void setNumeroMaxAsistentes(int numeroMaxAsistentes) {
         this.numeroMaxAsistentes = numeroMaxAsistentes;
     }
+
 }
