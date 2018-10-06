@@ -5,26 +5,29 @@
  */
 package org.ujaen.practicaDAE.Servidor;
 
+import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 import org.springframework.stereotype.Component;
 import org.ujaen.practicaDAE.Servidor.Interfaces.ServiciosUsuario;
 
 /**
- * Clase que gestiona una coleccion de usuarios
+ *
  * @author macosx
  */
 @Component
 public class GestionUsuarios implements ServiciosUsuario {
-
-
 
     Map<String, Usuario> usuarios = new TreeMap<>();
 
     @Override
     public boolean login(String usuario, String clave) 
     {
-        return usuarios.get(usuario).getContraseña().equals(clave);
+        if (usuarios.get(usuario).equals(clave)) {
+            return true;
+        }
+        return false;
+
     }
 
     @Override
@@ -36,6 +39,17 @@ public class GestionUsuarios implements ServiciosUsuario {
             return true;
         }
         return false;
+    }
+    
+    @Override
+    public void mostrarUsuarios()
+    {
+       
+        Iterator<String> itr=usuarios.keySet().iterator();
+        while(itr.hasNext()){
+            System.out.println(itr.next());
+        }
+        
     }
     
     
