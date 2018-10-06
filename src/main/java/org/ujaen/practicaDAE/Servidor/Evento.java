@@ -11,7 +11,7 @@ import java.util.List;
 import org.ujaen.practicaDAE.Servidor.DTOs.EventoDTO;
 
 /**
- *
+ * Clase que encapsula el comportamiento de un evento
  * @author macosx
  */
 public class Evento {
@@ -25,16 +25,28 @@ public class Evento {
 
     static int secuenciaID = 0;
     private int id;
+    private Usuario organizador;
     private Date fecha;
     private String lugar;
     private Tipo tipo;
     private String descripcion;
     private int numeroMaxAsistentes;
 
-    private List<Usuario> usuariosInscritos = new ArrayList<>();
-    private List<Usuario> listaEspera = new ArrayList<>();
+    protected List<Usuario> usuariosInscritos;
+    protected List<Usuario> listaEspera;
 
-    public Evento(int id, Date fecha, String lugar, Tipo tipo, String descripcion, int numeroMaxAsistentes) {
+    /**
+     * Constructor orientado a DTOs
+     * @param id
+     * @param fecha
+     * @param lugar
+     * @param tipo
+     * @param descripcion
+     * @param numeroMaxAsistentes 
+     */
+    public Evento(int id, Date fecha, String lugar, Tipo tipo, 
+            String descripcion, int numeroMaxAsistentes) 
+    {
         this.id = id;
         this.fecha = fecha;
         this.lugar = lugar;
@@ -44,125 +56,137 @@ public class Evento {
 
     }
 
-    public Evento(Date fecha, String lugar, Tipo tipo, String descripcion, int numeroMaxAsistentes) {
+    /**
+     * Constructor por defecto
+     * @param organizador
+     * @param fecha
+     * @param lugar
+     * @param tipo
+     * @param descripcion
+     * @param numeroMaxAsistentes 
+     */
+    public Evento(Usuario organizador, Date fecha, String lugar, Tipo tipo, 
+            String descripcion, int numeroMaxAsistentes) 
+    {
         id=secuenciaID;
         secuenciaID++;
+        this.organizador = organizador;
         this.fecha = fecha;
         this.lugar = lugar;
         this.tipo = tipo;
         this.descripcion = descripcion;
         this.numeroMaxAsistentes = numeroMaxAsistentes;
+        
+        // Inicializamos las listas de usuarios
+        this.usuariosInscritos = new ArrayList<>();
+        this.listaEspera = new ArrayList<>();
 
     }
 
     /**
      * @return the fecha
      */
-    public Date getFecha() {
+    public Date getFecha() 
+    {
         return fecha;
     }
 
     /**
      * @param fecha the fecha to set
      */
-    public void setFecha(Date fecha) {
+    public void setFecha(Date fecha) 
+    {
         this.fecha = fecha;
     }
 
     /**
      * @return the lugar
      */
-    public String getLugar() {
+    public String getLugar() 
+    {
         return lugar;
     }
 
     /**
      * @param lugar the lugar to set
      */
-    public void setLugar(String lugar) {
+    public void setLugar(String lugar) 
+    {
         this.lugar = lugar;
     }
 
     /**
      * @return the tipo
      */
-    public Tipo getTipo() {
+    public Tipo getTipo() 
+    {
         return tipo;
     }
 
     /**
      * @param tipo the tipo to set
      */
-    public void setTipo(Tipo tipo) {
+    public void setTipo(Tipo tipo) 
+    {
         this.tipo = tipo;
     }
 
     /**
      * @return the numeroMaxAsistentes
      */
-    public int getNumeroMaxAsistentes() {
+    public int getNumeroMaxAsistentes() 
+    {
         return numeroMaxAsistentes;
     }
 
     /**
      * @param numeroMaxAsistentes the numeroMaxAsistentes to set
      */
-    public void setNumeroMaxAsistentes(int numeroMaxAsistentes) {
+    public void setNumeroMaxAsistentes(int numeroMaxAsistentes) 
+    {
         this.numeroMaxAsistentes = numeroMaxAsistentes;
-    }
-
-    /**
-     * @return the usuariosInscritos
-     */
-    public List<Usuario> getUsuariosInscritos() {
-        return usuariosInscritos;
-    }
-
-    /**
-     * @param usuariosInscritos the usuariosInscritos to set
-     */
-    public void setUsuariosInscritos(List<Usuario> usuariosInscritos) {
-        this.usuariosInscritos = usuariosInscritos;
-    }
-
-    /**
-     * @return the listaEspera
-     */
-    public List<Usuario> getListaEspera() {
-        return listaEspera;
-    }
-
-    /**
-     * @param listaEspera the listaEspera to set
-     */
-    public void setListaEspera(List<Usuario> listaEspera) {
-        this.listaEspera = listaEspera;
     }
 
     /**
      * @return the descripcion
      */
-    public String getDescripcion() {
+    public String getDescripcion() 
+    {
         return descripcion;
     }
 
     /**
      * @param descripcion the descripcion to set
      */
-    public void setDescripcion(String descripcion) {
+    public void setDescripcion(String descripcion) 
+    {
         this.descripcion = descripcion;
     }
 
     /**
      * @return the id
      */
-    public int getId() {
+    public int getId() 
+    {
         return id;
     }
 
-    public EventoDTO toDTO() {
+    /**
+     * Genera un DTO a partir del evento
+     * @return 
+     */
+    public EventoDTO toDTO() 
+    {
         return new EventoDTO(id, fecha, lugar, tipo,
                 descripcion, numeroMaxAsistentes);
+    }
+
+    /**
+     * @return the organizador
+     */
+    public Usuario getOrganizador()
+    {
+        return organizador;
     }
 
 }

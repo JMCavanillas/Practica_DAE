@@ -15,21 +15,31 @@ import org.ujaen.practicaDAE.Servidor.DTOs.UsuarioDTO;
 import org.ujaen.practicaDAE.Servidor.Interfaces.ServiciosEvento;
 
 /**
- *
+ * Clase que gestiona una coleccion de eventos y sus servicios relacionados
  * @author macosx
  */
 @Component
-public class GestionEventos implements ServiciosEvento {
+public class GestionEventos implements ServiciosEvento 
+{
 
     @Autowired
     GestionUsuarios gestionusuarios;
     
     List<Evento> eventos = new ArrayList<>();
     
-    
+    public Evento obtenerEvento(int id)
+    {
+        for (Evento evento : eventos) 
+        {
+            if (evento.getId() == id) 
+                return evento;
+        }
+        return null;
+    }
 
     @Override
-    public List<EventoDTO> buscarEventoTipo(Evento.Tipo tipo) {
+    public List<EventoDTO> buscarEventoTipo(Evento.Tipo tipo) 
+    {
 
         List<EventoDTO> tmp = new ArrayList<>();
 
@@ -44,7 +54,8 @@ public class GestionEventos implements ServiciosEvento {
     }
 
     @Override
-    public List<EventoDTO> buscarEventoPalabrasClave(List<String> palabras) {
+    public List<EventoDTO> buscarEventoPalabrasClave(List<String> palabras) 
+    {
         List<EventoDTO> tmp = new ArrayList<>();
 
         //A lo mejor se podria cambiar para las primeras
@@ -63,55 +74,115 @@ public class GestionEventos implements ServiciosEvento {
         return tmp;
     }
 
+    /**
+     * Crea un nuevo Evento
+     * @param evento
+     * @param usuario
+     * @return Un DTO con el evento creado, un evento nulo en caso de que no se 
+     * haya creado
+     */
     @Override
-    public EventoDTO crearEvento(String lugar, Date fecha, Evento.Tipo tipo, String descripcion, int numeroMaxAsistentes, UsuarioDTO usuario) {
-        Evento tmp=new Evento(fecha, lugar, tipo, descripcion, numeroMaxAsistentes);
-        eventos.add(tmp);
-       
+    public EventoDTO crearEvento(EventoDTO evento, UsuarioDTO usuario) 
+    {
        //Añade el evento creado a la lista de eventos creados del usuario
-       gestionusuarios.buscarUsuario(usuario.getNombre()).añadirEventoCreado(tmp);
+       Evento nuevo_evento = gestionusuarios.buscarUsuario(usuario.getNombre())
+               .creaEvento(evento);
        
-
-        return tmp.toDTO();
+       eventos.add(nuevo_evento);
+       
+       return nuevo_evento.toDTO();
     }
 
     @Override
-    public boolean cancelarEvento(EventoDTO evento, UsuarioDTO usuario) {
-    
-   
-        //Añadir identificador para eventos..
-       throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-
+    public boolean cancelarEvento(EventoDTO evento, UsuarioDTO usuario) 
+    {
+       Usuario r_usuario = gestionusuarios.buscarUsuario(usuario.getNombre());
+       Evento r_evento = obtenerEvento(evento.getId());
+       
+       Evento resultado = r_usuario.cancelaEvento(r_evento);
+       
+       if (resultado != null)
+           eventos.remove(r_evento);
+       
+       return resultado != null;
     }
 
     @Override
-    public boolean inscribirseEvento(EventoDTO evento, UsuarioDTO usuario) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean inscribirseEvento(EventoDTO evento, UsuarioDTO usuario) 
+    {
+       Usuario r_usuario = gestionusuarios.buscarUsuario(usuario.getNombre());
+       Evento r_evento = obtenerEvento(evento.getId());
+       
+       return r_usuario.inscribirseEvento(r_evento);
     }
 
     @Override
-    public boolean cancelarInscripcionEvento(EventoDTO evento, UsuarioDTO usuario) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean cancelarInscripcionEvento(EventoDTO evento, UsuarioDTO usuario) 
+    {
+        Usuario r_usuario = gestionusuarios.buscarUsuario(usuario.getNombre());
+        Evento r_evento = obtenerEvento(evento.getId());
+        
+        return r_usuario.cancelarSuscripcion(r_evento);
     }
 
     @Override
-    public List<EventoDTO> verEventosInscritosCelebrados(UsuarioDTO usuario) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<EventoDTO> verEventosInscritosCelebrados(UsuarioDTO usuario) 
+    {
+        Usuario r_usuario = gestionusuarios.buscarUsuario(usuario.getNombre());
+        List<Evento> eventos_inscritos = r_usuario.getEventosInscritos();
+        List<EventoDTO> eventos_inscritos_celebrados = new ArrayList<>();
+        Date fecha_actual = new Date();
+        
+        for (Evento evento : eventos_inscritos)
+            if(evento.getFecha().before(fecha_actual))
+                eventos_inscritos_celebrados.add(evento.toDTO());
+        
+        return eventos_inscritos_celebrados;
     }
 
     @Override
-    public List<EventoDTO> verEventosInscritosFuturos(UsuarioDTO usuario) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<EventoDTO> verEventosInscritosFuturos(UsuarioDTO usuario) 
+    {
+        Usuario r_usuario = gestionusuarios.buscarUsuario(usuario.getNombre());
+        List<Evento> eventos_inscritos = r_usuario.getEventosInscritos();
+        List<EventoDTO> eventos_inscritos_celebrados = new ArrayList<>();
+        Date fecha_actual = new Date();
+        
+        for (Evento evento : eventos_inscritos)
+            if(!evento.getFecha().before(fecha_actual))
+                eventos_inscritos_celebrados.add(evento.toDTO());
+        
+        return eventos_inscritos_celebrados;
     }
 
     @Override
-    public List<EventoDTO> verEventosOrganizados(UsuarioDTO usuario) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<EventoDTO> verEventosOrganizados(UsuarioDTO usuario) 
+    {
+        Usuario r_usuario = gestionusuarios.buscarUsuario(usuario.getNombre());
+        List<Evento> eventos_organizados = r_usuario.getEventosCreados();
+        List<EventoDTO> eventos_organizados_celebrados = new ArrayList<>();
+        Date fecha_actual = new Date();
+        
+        for (Evento evento : eventos_organizados)
+            if(evento.getFecha().before(fecha_actual))
+                eventos_organizados_celebrados.add(evento.toDTO());
+        
+        return eventos_organizados_celebrados;
     }
 
     @Override
-    public List<EventoDTO> verEventosOrganizadosFuturos(UsuarioDTO usuario) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<EventoDTO> verEventosOrganizadosFuturos(UsuarioDTO usuario) 
+    {
+        Usuario r_usuario = gestionusuarios.buscarUsuario(usuario.getNombre());
+        List<Evento> eventos_organizados = r_usuario.getEventosCreados();
+        List<EventoDTO> eventos_organizados_celebrados = new ArrayList<>();
+        Date fecha_actual = new Date();
+        
+        for (Evento evento : eventos_organizados)
+            if(!evento.getFecha().before(fecha_actual))
+                eventos_organizados_celebrados.add(evento.toDTO());
+        
+        return eventos_organizados_celebrados;
     }
 
 }
