@@ -5,6 +5,7 @@
  */
 package org.ujaen.practicaDAE.Servidor;
 
+import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,16 @@ public class GestionUsuarios implements ServiciosUsuario {
             return true;
         }
         return false;
+    }
+    
+    @Override
+    public void mostrarUsuarios(){
+       
+        Iterator<String> itr=usuarios.keySet().iterator();
+        while(itr.hasNext()){
+            System.out.println(itr.next());
+        }
+        
     }
     
     

@@ -8,6 +8,7 @@ package org.ujaen.practicaDAE.Servidor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
+import org.ujaen.practicaDAE.Cliente.Cliente;
 
 /**
  *
@@ -20,5 +21,8 @@ public class ServidorPracDAE
     {
         SpringApplication servidor=new SpringApplication(ServidorPracDAE.class);
         ApplicationContext context=servidor.run(args);
+        
+        Cliente cliente=new Cliente(context);
+        cliente.run();
     }
 }

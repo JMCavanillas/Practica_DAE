@@ -15,4 +15,9 @@ public interface ServiciosUsuario{
     
     boolean registro(String usuario, String clave);
     
+    //------------------------
+    //^Para depurar
+    
+    void mostrarUsuarios();
+    
 }
