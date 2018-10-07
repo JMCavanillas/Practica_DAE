@@ -180,6 +180,9 @@ public class Evento {
         return new EventoDTO(id, fecha, lugar, tipo,
                 descripcion, numeroMaxAsistentes);
     }
+    
+
+    
 
     /**
      * @return the organizador

@@ -14,7 +14,7 @@ import org.ujaen.practicaDAE.Servidor.Evento;
  */
 public class EventoDTO {
 
-
+    static int secuenciaID = 0;
     private int id;
     private Date fecha;
     private String lugar;
@@ -22,13 +22,23 @@ public class EventoDTO {
     private String descripcion;
     private int numeroMaxAsistentes;
 
-    public EventoDTO(int id, Date fecha, String lugar, Evento.Tipo tipo, String descripcion, int numeroMaxAsistente ) {
+    public EventoDTO(int id, Date fecha, String lugar, Evento.Tipo tipo, String descripcion, int numeroMaxAsistente) {
         this.id = id;
         this.fecha = fecha;
         this.lugar = lugar;
         this.tipo = tipo;
         this.descripcion = descripcion;
-        this.numeroMaxAsistentes = numeroMaxAsistentes;
+        this.numeroMaxAsistentes = numeroMaxAsistente;
+    }
+
+    public EventoDTO(Date fecha, String lugar, Evento.Tipo tipo, String descripcion, int numeroMaxAsistente) {
+        id=secuenciaID;
+        secuenciaID++;
+        this.fecha = fecha;
+        this.lugar = lugar;
+        this.tipo = tipo;
+        this.descripcion = descripcion;
+        this.numeroMaxAsistentes = numeroMaxAsistente;
     }
 
     /**
@@ -113,6 +123,11 @@ public class EventoDTO {
      */
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String eventoDTOString(EventoDTO e) {
+        String tmp = "Evento:" + e.getId() + e.getFecha() + e.getLugar() + e.getTipo() + e.getDescripcion() + e.getNumeroMaxAsistentes();
+        return tmp;
     }
 
 }

@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 import org.springframework.stereotype.Component;
+import org.ujaen.practicaDAE.Servidor.DTOs.UsuarioDTO;
 import org.ujaen.practicaDAE.Servidor.Interfaces.ServiciosUsuario;
 
 /**
@@ -58,6 +59,16 @@ public class GestionUsuarios implements ServiciosUsuario {
         //Falta meter excepciones y tal 
         return usuarios.get(usuario);
         
+    }
+
+    @Override
+    public boolean registro(UsuarioDTO usuario) {
+         if (!usuarios.containsKey(usuario.getNombre())) {
+            Usuario tmp=new Usuario(usuario.getNombre(),usuario.getContraseña());
+            usuarios.put(usuario.getNombre(), tmp);
+            return true;
+        }
+        return false;
     }
 
 }

@@ -37,5 +37,8 @@ public interface ServiciosEvento {
     List<EventoDTO> verEventosOrganizados(UsuarioDTO usuario);
 
     List<EventoDTO> verEventosOrganizadosFuturos(UsuarioDTO usuario);
+    
+    //Para depurar
+    void mostrarEventos();
 
 }
