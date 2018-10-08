@@ -24,55 +24,50 @@ public class GestionUsuarios implements ServiciosUsuario {
 
     /*
     Devuelve -1 si el usuario no está registrado o un número aleatorio entre 0 y 999 si lo está
-    */
+     */
     @Override
-    public int login(String usuario, String clave) 
-    {
-        int token=-1;
+    public int login(String usuario, String clave) {
+        int token = -1;
         if (usuarios.get(usuario).getContraseña().equals(clave)) {
             Random aleatorio = new Random(System.currentTimeMillis());
-            token=aleatorio.nextInt(1000);
+            token = aleatorio.nextInt(1000);
             return token;
-            
+
         }
         return token;
 
     }
 
     @Override
-    public boolean registro(String usuario, String clave) 
-    {
+    public boolean registro(String usuario, String clave) {
         if (!usuarios.containsKey(usuario)) {
-            Usuario tmp=new Usuario(usuario,clave);
+            Usuario tmp = new Usuario(usuario, clave);
             usuarios.put(usuario, tmp);
             return true;
         }
         return false;
     }
-    
+
     @Override
-    public void mostrarUsuarios()
-    {
-       
-        Iterator<String> itr=usuarios.keySet().iterator();
-        while(itr.hasNext()){
-            System.out.println(itr.next());
+    public void mostrarUsuarios() {
+        for (Map.Entry<String, Usuario> entry : usuarios.entrySet()) {
+            System.out.println(entry.getValue().getNombre());
+            
+            
         }
-        
+
     }
-    
-    
-    public Usuario buscarUsuario(String usuario)
-    {
+
+    public Usuario buscarUsuario(String usuario) {
         //Falta meter excepciones y tal 
         return usuarios.get(usuario);
-        
+
     }
 
     @Override
     public boolean registro(UsuarioDTO usuario) {
-         if (!usuarios.containsKey(usuario.getNombre())) {
-            Usuario tmp=new Usuario(usuario.getNombre(),usuario.getContraseña());
+        if (!usuarios.containsKey(usuario.getNombre())) {
+            Usuario tmp = new Usuario(usuario.getNombre(), usuario.getContraseña());
             usuarios.put(usuario.getNombre(), tmp);
             return true;
         }

@@ -19,6 +19,7 @@ public class Usuario {
 
     private String nombre;
     private String contraseña;
+    private int token;
 
     private List<Evento> eventosInscritos;
     private List<Evento> eventosCreados;

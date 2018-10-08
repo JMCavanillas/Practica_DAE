@@ -38,7 +38,7 @@ public class Cliente {
     public void run() {
         ServiciosUsuario servicioUsuario = (ServiciosUsuario) context.getBean("gestionUsuarios");
         ServiciosEvento servicioEvento = (ServiciosEvento) context.getBean("gestionEventos");
-
+/*
         while (select != 0) {
             try {
                 System.out.print("Elige opción:\n"
@@ -133,11 +133,11 @@ public class Cliente {
             }
 
         }
-
-        /*
+*/
+        
         System.out.println("Registro de usuarios y creación de eventos");
         UsuarioDTO usuario = new UsuarioDTO("juan", "abc");
-        UsuarioDTO usuario2 = new UsuarioDTO("javi, qwer");
+        UsuarioDTO usuario2 = new UsuarioDTO("javi", "qwer");
         servicioUsuario.registro(usuario);
         servicioUsuario.registro(usuario2);
 
@@ -224,7 +224,7 @@ public class Cliente {
             eventoDTOString(l7.get(i));
         }
 
-         */
+         
     }
 
     void restringirAcceso() {

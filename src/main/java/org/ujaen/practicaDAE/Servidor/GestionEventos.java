@@ -10,7 +10,10 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ujaen.practicaDAE.Servidor.DTOs.EventoDTO;
@@ -29,27 +32,30 @@ public class GestionEventos implements ServiciosEvento {
     GestionUsuarios gestionusuarios;
     private static final DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 
-    List<Evento> eventos = new ArrayList<>();
+    Map<Integer, Evento> eventos;
+    // List<Evento> eventos = new ArrayList<>();
+
+    public GestionEventos() {
+        eventos = new TreeMap<>();
+    }
 
     public Evento obtenerEvento(int id) {
-        for (Evento evento : eventos) {
-            if (evento.getId() == id) {
-                return evento;
-            }
-        }
-        return null;
+
+        return eventos.get(id);
+
     }
 
     @Override
     public List<EventoDTO> buscarEventoTipo(Evento.Tipo tipo) {
 
         List<EventoDTO> tmp = new ArrayList<>();
+        for (Map.Entry<Integer, Evento> entry : eventos.entrySet()) {
+           
+                if (entry.getValue().getTipo().equals(tipo)) {
 
-        for (Evento evento : eventos) {
-            if (evento.getTipo().equals(tipo)) {
-
-                tmp.add(evento.toDTO());
-            }
+                    tmp.add(entry.getValue().toDTO());
+                }
+            
         }
 
         return tmp;
@@ -62,14 +68,13 @@ public class GestionEventos implements ServiciosEvento {
         //A lo mejor se podria cambiar para las primeras
         //posiciones de la lista la ocupen los eventos
         //que tengan mas coincidencias de palabras clave
-        for (Evento evento : eventos) {
+        for (Map.Entry<Integer, Evento> entry : eventos.entrySet()) {
             for (String palabra : palabras) {
-                if (evento.getDescripcion().toLowerCase().contains(palabra)) {
+                if (entry.getValue().getDescripcion().toLowerCase().contains(palabra)) {
 
-                    tmp.add(evento.toDTO());
+                    tmp.add(entry.getValue().toDTO());
                 }
             }
-
         }
 
         return tmp;
@@ -89,7 +94,7 @@ public class GestionEventos implements ServiciosEvento {
         Evento nuevo_evento = gestionusuarios.buscarUsuario(usuario.getNombre())
                 .creaEvento(evento);
 
-        eventos.add(nuevo_evento);
+        eventos.put(nuevo_evento.getId(), nuevo_evento);
 
         return nuevo_evento.toDTO();
     }
@@ -102,15 +107,13 @@ public class GestionEventos implements ServiciosEvento {
         Evento resultado = r_usuario.cancelaEvento(r_evento);
 
         if (resultado != null) {
-            
-            
-            for(int i=0;i<r_evento.usuariosInscritos.size();i++){
-                 r_evento.usuariosInscritos.get(i).cancelarSuscripcion(r_evento);
+
+            for (int i = 0; i < r_evento.usuariosInscritos.size(); i++) {
+                r_evento.usuariosInscritos.get(i).cancelarSuscripcion(r_evento);
             }
- 
-            
-            eventos.remove(r_evento);
-            
+
+            eventos.remove(r_evento.getId());
+
         }
 
         return resultado != null;
@@ -128,7 +131,6 @@ public class GestionEventos implements ServiciosEvento {
 
     @Override
     public boolean cancelarInscripcionEvento(EventoDTO evento, UsuarioDTO usuario) {
-       
 
         Usuario r_usuario = gestionusuarios.buscarUsuario(usuario.getNombre());
         Evento r_evento = obtenerEvento(evento.getId());
@@ -210,8 +212,6 @@ public class GestionEventos implements ServiciosEvento {
         String tmp = "Evento:" + e.getId() + e.getFecha() + e.getLugar() + e.getTipo() + e.getDescripcion() + e.getOrganizador() + e.getNumeroMaxAsistentes();
         return tmp;
     }
-
-
 
     @Override
     public void mostrarEventos() {
