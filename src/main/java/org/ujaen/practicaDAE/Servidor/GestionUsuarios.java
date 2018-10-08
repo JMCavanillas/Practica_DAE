@@ -7,6 +7,7 @@ package org.ujaen.practicaDAE.Servidor;
 
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Random;
 import java.util.TreeMap;
 import org.springframework.stereotype.Component;
 import org.ujaen.practicaDAE.Servidor.DTOs.UsuarioDTO;
@@ -21,13 +22,20 @@ public class GestionUsuarios implements ServiciosUsuario {
 
     Map<String, Usuario> usuarios = new TreeMap<>();
 
+    /*
+    Devuelve -1 si el usuario no está registrado o un número aleatorio entre 0 y 999 si lo está
+    */
     @Override
-    public boolean login(String usuario, String clave) 
+    public int login(String usuario, String clave) 
     {
-        if (usuarios.get(usuario).equals(clave)) {
-            return true;
+        int token=-1;
+        if (usuarios.get(usuario).getContraseña().equals(clave)) {
+            Random aleatorio = new Random(System.currentTimeMillis());
+            token=aleatorio.nextInt(1000);
+            return token;
+            
         }
-        return false;
+        return token;
 
     }
 

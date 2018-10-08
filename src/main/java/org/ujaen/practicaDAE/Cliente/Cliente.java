@@ -10,6 +10,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Scanner;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.ApplicationContext;
 import org.ujaen.practicaDAE.Servidor.DTOs.EventoDTO;
@@ -25,6 +26,10 @@ import org.ujaen.practicaDAE.Servidor.Interfaces.ServiciosUsuario;
 public class Cliente {
 
     ApplicationContext context;
+    static Scanner scanner = new Scanner(System.in);
+    static int select = -1;
+
+    int token = -1;
 
     public Cliente(ApplicationContext context) {
         this.context = context;
@@ -34,6 +39,102 @@ public class Cliente {
         ServiciosUsuario servicioUsuario = (ServiciosUsuario) context.getBean("gestionUsuarios");
         ServiciosEvento servicioEvento = (ServiciosEvento) context.getBean("gestionEventos");
 
+        while (select != 0) {
+            try {
+                System.out.print("Elige opción:\n"
+                        + "1.- Registro \n"
+                        + "2.- Login \n"
+                        + "3.- Crear evento \n"
+                        + "4.- Cancelar evento \n"
+                        + "5.- Inscribirse Evento \n"
+                        + "6.- Cancelar inscripción evento \n "
+                        + "7.- Ver eventos organizados celebrados \n"
+                        + "8.- Ver eventos organizados futuros \n"
+                        + "9.- Ver eventos inscritos celebrados \n"
+                        + "10.- Ver eventos inscritos futuros \n"
+                        + "11.- Buscar eventos por tipo \n"
+                        + "12.- Buscar eventos por palabras clave \n"
+                        + "\n: ");
+
+                select = Integer.parseInt(scanner.nextLine());
+                Scanner sc = new Scanner(System.in);
+
+                switch (select) {
+                    case 1:
+
+                        System.out.println("Introduzca un nombre de usuario:");
+                        String nombre = sc.nextLine();
+                        System.out.println("Introduzca una contraseña");
+                        String pwd = sc.nextLine();
+                        UsuarioDTO usuario = new UsuarioDTO(nombre, pwd);
+                        if (servicioUsuario.registro(usuario)) {
+                            System.out.println("Usuario creado correctamente");
+                        } else {
+                            System.out.println("No se pudo registrar el usuario1");
+                        }
+
+                        break;
+                    case 2:
+
+                        System.out.println("Introduzca un nombre de usuario:");
+                        String nombrelogin = sc.nextLine();
+                        System.out.println("Introduzca una contraseña");
+                        String pwdlogin = sc.nextLine();
+                        token=servicioUsuario.login(nombrelogin, pwdlogin);
+                        if(token==-1){
+                            System.out.println("Login fallido");
+                        }else{
+                            System.out.println("Login correcto");
+                        }
+
+                       // System.out.println(2);
+                        break;
+                    case 3:
+                        restringirAcceso();
+                        break;
+                    case 4:
+                        restringirAcceso();
+                        System.out.println(4);
+                        break;
+                    case 5:
+                        restringirAcceso();
+                        System.out.println(5);
+                        break;
+                    case 6:
+                        restringirAcceso();
+                        System.out.println(6);
+                        break;
+                    case 7:
+                        restringirAcceso();
+                        System.out.println(1);
+                        break;
+                    case 8:
+                        restringirAcceso();
+                        System.out.println(1);
+                        break;
+                    case 9:
+                        restringirAcceso();
+                        System.out.println(1);
+                        break;
+                    case 10:
+                        restringirAcceso();
+                        System.out.println(1);
+                        break;
+                    case 11:
+                        System.out.println(1);
+                        break;
+                    case 12:
+                        System.out.println(1);
+                        break;
+
+                }
+            } catch (Exception e) {
+                System.out.println("Uoop! Error! " + e.toString());
+            }
+
+        }
+
+        /*
         System.out.println("Registro de usuarios y creación de eventos");
         UsuarioDTO usuario = new UsuarioDTO("juan", "abc");
         UsuarioDTO usuario2 = new UsuarioDTO("javi, qwer");
@@ -121,6 +222,14 @@ public class Cliente {
         List<EventoDTO> l7 = servicioEvento.buscarEventoTipo(Evento.Tipo.CURSO);
         for (int i = 0; i < l7.size(); i++) {
             eventoDTOString(l7.get(i));
+        }
+
+         */
+    }
+
+    void restringirAcceso() {
+        if (token == -1) {
+            System.out.println("Debe estar registrado para acceder a esta funcionalidad");
         }
     }
 

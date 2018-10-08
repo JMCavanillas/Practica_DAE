@@ -13,7 +13,7 @@ import org.ujaen.practicaDAE.Servidor.DTOs.UsuarioDTO;
  */
 public interface ServiciosUsuario{
     
-    boolean login(String usuario, String clave);
+    int login(String usuario, String clave);
     
     boolean registro(String usuario, String clave);
     
