@@ -5,12 +5,10 @@
  */
 package org.ujaen.practicaDAE.Servidor;
 
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
 import java.util.TreeMap;
 import org.springframework.stereotype.Component;
-import org.ujaen.practicaDAE.Servidor.DTOs.UsuarioDTO;
 import org.ujaen.practicaDAE.Servidor.Interfaces.ServiciosUsuario;
 
 /**
@@ -21,21 +19,76 @@ import org.ujaen.practicaDAE.Servidor.Interfaces.ServiciosUsuario;
 public class GestionUsuarios implements ServiciosUsuario {
 
     Map<String, Usuario> usuarios = new TreeMap<>();
+    
+    Map<Integer, Usuario> registroTokens = new TreeMap<>();
 
-    /*
-    Devuelve -1 si el usuario no está registrado o un número aleatorio entre 0 y 999 si lo está
+    /**
+     * Busca un usuario por identificador o nombre
+     * 
+     * @param usuario Nombre o identificador del usuario
+     * @return usuario
      */
+    protected Usuario buscarUsuario(String usuario) 
+    {
+        // Falta meter excepciones y tal 
+        return usuarios.get(usuario);
+    }
+    
+    /**
+     * Devuelve el usuario al que pertenece el token en caso de que este sea
+     * válido y esté registrado, en otro caso lanza una excepción
+     * 
+     * @param token Token a verificar
+     * @return usuario
+     * @throws Exception Si el token indicado no está registrado
+     */
+    protected Usuario verificaToken(int token) throws Exception
+    {
+        Usuario usuario = registroTokens.get(token);
+        
+        // TODO - Tunear Excepción ¿Estática o en Runtime?
+        if (usuario == null)
+            throw new Exception("Token Invalido");
+        
+        return usuario;
+    }
+    
     @Override
-    public int login(String usuario, String clave) {
+    public int login(String usuario, String clave) 
+    {
         int token = -1;
-        if (usuarios.get(usuario).getClave().equals(clave)) {
-            Random aleatorio = new Random(System.currentTimeMillis());
-            token = aleatorio.nextInt(1000);
+        Usuario r_usuario = usuarios.get(usuario);
+        
+        // Si no existe el usuario devuelve -1
+        if (r_usuario == null)
             return token;
-
+        
+        if (r_usuario.getClave().equals(clave)) 
+        {
+            Random aleatorio = new Random(System.currentTimeMillis());
+            token = aleatorio.nextInt(Integer.MAX_VALUE);
+            
+            // Genera token hasta que haya uno nuevo
+            while (registroTokens.containsKey(token))
+                token = aleatorio.nextInt(Integer.MAX_VALUE);
+            
+            registroTokens.put(token, r_usuario);
+            
+            // Ahora hay que ver si el token anterior esta en el registro 
+            // y darlo de baja
+            
+            if (registroTokens.containsKey(r_usuario.getToken()))
+                registroTokens.remove(r_usuario.getToken());
+            
+            // Asignamos el nuevo Token
+            r_usuario.setToken(token);
+            
+            return token;
         }
+        
+        // Si la clave no existe, retorna codigo -2, ¿devolver excepción?
+        token = -2;
         return token;
-
     }
 
     @Override
@@ -48,31 +101,20 @@ public class GestionUsuarios implements ServiciosUsuario {
         return false;
     }
 
-    @Override
-    public void mostrarUsuarios() {
-        for (Map.Entry<String, Usuario> entry : usuarios.entrySet()) {
-            System.out.println(entry.getValue().getNombre());
-            
-            
-        }
+//    public void mostrarUsuarios() {
+//        for (Map.Entry<String, Usuario> entry : usuarios.entrySet()) 
+//            System.out.println(entry.getValue().getNombre());      
+//    }
 
-    }
-
-    @Override
-    public Usuario buscarUsuario(String usuario) {
-        //Falta meter excepciones y tal 
-        return usuarios.get(usuario);
-
-    }
-
-    @Override
-    public boolean registro(UsuarioDTO usuario) {
-        if (!usuarios.containsKey(usuario.getNombre())) {
-            Usuario tmp = new Usuario(usuario.getNombre(), usuario.getClave());
-            usuarios.put(usuario.getNombre(), tmp);
-            return true;
-        }
-        return false;
-    }
+//
+//    @Override
+//    public boolean registro(UsuarioDTO usuario) {
+//        if (!usuarios.containsKey(usuario.getNombre())) {
+//            Usuario tmp = new Usuario(usuario.getNombre(), usuario.getClave());
+//            usuarios.put(usuario.getNombre(), tmp);
+//            return true;
+//        }
+//        return false;
+//    }
 
 }

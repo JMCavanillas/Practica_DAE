@@ -7,17 +7,14 @@ package org.ujaen.practicaDAE.Servidor;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ujaen.practicaDAE.Servidor.DTOs.EventoDTO;
-import org.ujaen.practicaDAE.Servidor.DTOs.UsuarioDTO;
 import org.ujaen.practicaDAE.Servidor.Interfaces.ServiciosEvento;
 
 /**
@@ -30,23 +27,28 @@ public class GestionEventos implements ServiciosEvento {
 
     @Autowired
     GestionUsuarios gestionusuarios;
-    private static final DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+    
+    private static final DateFormat sdf = 
+            new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 
     Map<Integer, Evento> eventos;
-    // List<Evento> eventos = new ArrayList<>();
 
-    public GestionEventos() {
+    /**
+     * Constructor por defecto
+     */
+    public GestionEventos() 
+    {
         eventos = new TreeMap<>();
     }
 
-    public Evento obtenerEvento(int id) {
-
+    protected Evento obtenerEvento(int id) 
+    {
         return eventos.get(id);
-
     }
 
     @Override
-    public List<EventoDTO> buscarEventoTipo(Evento.Tipo tipo) {
+    public List<EventoDTO> buscarEventoTipo(Evento.Tipo tipo) 
+    {
 
         List<EventoDTO> tmp = new ArrayList<>();
         for (Map.Entry<Integer, Evento> entry : eventos.entrySet()) {
@@ -62,7 +64,8 @@ public class GestionEventos implements ServiciosEvento {
     }
 
     @Override
-    public List<EventoDTO> buscarEventoPalabrasClave(String[] palabras) {
+    public List<EventoDTO> buscarEventoPalabrasClave(String[] palabras) 
+    {
         List<EventoDTO> tmp = new ArrayList<>();
 
         //A lo mejor se podria cambiar para las primeras
@@ -70,28 +73,21 @@ public class GestionEventos implements ServiciosEvento {
         //que tengan mas coincidencias de palabras clave
         for (Map.Entry<Integer, Evento> entry : eventos.entrySet()) {
             for (String palabra : palabras) {
-                if (entry.getValue().getDescripcion().toLowerCase().contains(palabra.toLowerCase())) {
-
+                if (entry.getValue().getDescripcion().toLowerCase()
+                        .contains(palabra.toLowerCase()))                
                     tmp.add(entry.getValue().toDTO());
-                }
             }
         }
 
         return tmp;
     }
 
-    /**
-     * Crea un nuevo Evento
-     *
-     * @param evento
-     * @param usuario
-     * @return Un DTO con el evento creado, un evento nulo en caso de que no se
-     * haya creado
-     */
     @Override
-    public EventoDTO crearEvento(EventoDTO evento, UsuarioDTO usuario) {
+    public EventoDTO crearEvento(EventoDTO evento, int sec_token)
+            throws Exception
+    {
         //Añade el evento creado a la lista de eventos creados del usuario
-        Evento nuevo_evento = gestionusuarios.buscarUsuario(usuario.getNombre())
+        Evento nuevo_evento = gestionusuarios.verificaToken(sec_token)
                 .creaEvento(evento);
 
         eventos.put(nuevo_evento.getId(), nuevo_evento);
@@ -100,8 +96,10 @@ public class GestionEventos implements ServiciosEvento {
     }
 
     @Override
-    public boolean cancelarEvento(EventoDTO evento, UsuarioDTO usuario) {
-        Usuario r_usuario = gestionusuarios.buscarUsuario(usuario.getNombre());
+    public boolean cancelarEvento(EventoDTO evento, int sec_token) 
+            throws Exception
+    {
+        Usuario r_usuario = gestionusuarios.verificaToken(sec_token);
         Evento r_evento = obtenerEvento(evento.getId());
 
         Evento resultado = r_usuario.cancelaEvento(r_evento);
@@ -120,9 +118,11 @@ public class GestionEventos implements ServiciosEvento {
     }
 
     @Override
-    public boolean inscribirseEvento(EventoDTO evento, UsuarioDTO usuario) {
+    public boolean inscribirseEvento(EventoDTO evento, int sec_token) 
+            throws Exception
+    {
 
-        Usuario r_usuario = gestionusuarios.buscarUsuario(usuario.getNombre());
+        Usuario r_usuario = gestionusuarios.verificaToken(sec_token);
         Evento r_evento = obtenerEvento(evento.getId());
 
         return r_usuario.inscribirseEvento(r_evento);
@@ -130,9 +130,11 @@ public class GestionEventos implements ServiciosEvento {
     }
 
     @Override
-    public boolean cancelarInscripcionEvento(EventoDTO evento, UsuarioDTO usuario) {
+    public boolean cancelarInscripcionEvento(EventoDTO evento, int sec_token) 
+            throws Exception
+    {
 
-        Usuario r_usuario = gestionusuarios.buscarUsuario(usuario.getNombre());
+        Usuario r_usuario = gestionusuarios.verificaToken(sec_token);
         Evento r_evento = obtenerEvento(evento.getId());
 
         return r_usuario.cancelarSuscripcion(r_evento);
@@ -140,8 +142,10 @@ public class GestionEventos implements ServiciosEvento {
     }
 
     @Override
-    public List<EventoDTO> verEventosInscritosCelebrados(UsuarioDTO usuario) {
-        Usuario r_usuario = gestionusuarios.buscarUsuario(usuario.getNombre());
+    public List<EventoDTO> verEventosInscritosCelebrados(int sec_token) 
+            throws Exception
+    {
+        Usuario r_usuario = gestionusuarios.verificaToken(sec_token);
         List<Evento> eventos_inscritos = r_usuario.getEventosInscritos();
         List<EventoDTO> eventos_inscritos_celebrados = new ArrayList<>();
         Date fecha_actual = new Date();
@@ -156,8 +160,10 @@ public class GestionEventos implements ServiciosEvento {
     }
 
     @Override
-    public List<EventoDTO> verEventosInscritosFuturos(UsuarioDTO usuario) {
-        Usuario r_usuario = gestionusuarios.buscarUsuario(usuario.getNombre());
+    public List<EventoDTO> verEventosInscritosFuturos(int sec_token) 
+            throws Exception
+    {
+        Usuario r_usuario = gestionusuarios.verificaToken(sec_token);
         List<Evento> eventos_inscritos = r_usuario.getEventosInscritos();
         List<EventoDTO> eventos_inscritos_futuros = new ArrayList<>();
         Date fecha_actual = new Date();
@@ -172,8 +178,10 @@ public class GestionEventos implements ServiciosEvento {
     }
 
     @Override
-    public List<EventoDTO> verEventosOrganizados(UsuarioDTO usuario) {
-        Usuario r_usuario = gestionusuarios.buscarUsuario(usuario.getNombre());
+    public List<EventoDTO> verEventosOrganizados(int sec_token) 
+            throws Exception
+    {
+        Usuario r_usuario = gestionusuarios.verificaToken(sec_token);
         List<Evento> eventos_organizados = r_usuario.getEventosCreados();
 
         List<EventoDTO> eventos_organizados_celebrados = new ArrayList<>();
@@ -193,8 +201,10 @@ public class GestionEventos implements ServiciosEvento {
     }
 
     @Override
-    public List<EventoDTO> verEventosOrganizadosFuturos(UsuarioDTO usuario) {
-        Usuario r_usuario = gestionusuarios.buscarUsuario(usuario.getNombre());
+    public List<EventoDTO> verEventosOrganizadosFuturos(int sec_token) 
+            throws Exception
+    {
+        Usuario r_usuario = gestionusuarios.verificaToken(sec_token);
         List<Evento> eventos_organizados = r_usuario.getEventosCreados();
         List<EventoDTO> eventos_organizados_futuros = new ArrayList<>();
         Date fecha_actual = new Date();
@@ -208,16 +218,19 @@ public class GestionEventos implements ServiciosEvento {
         return eventos_organizados_futuros;
     }
 
-    public String eventoString(Evento e) {
-        String tmp = "Evento:" + e.getId() + e.getFecha() + e.getLugar() + e.getTipo() + e.getDescripcion() + e.getOrganizador() + e.getNumeroMaxAsistentes();
-        return tmp;
-    }
+//    public String eventoString(Evento e) 
+//    {
+//        String tmp = "Evento:" + e.getId() + e.getFecha() + e.getLugar() 
+//                + e.getTipo() + e.getDescripcion() + e.getOrganizador() 
+//                + e.getNumeroMaxAsistentes();
+//        return tmp;
+//    }
 
-    @Override
-    public void mostrarEventos() {
-        for (int i = 0; i < eventos.size(); i++) {
-            System.out.println(eventoString(eventos.get(i)));
-        }
-    }
+//    @Override
+//    public void mostrarEventos() {
+//        for (int i = 0; i < eventos.size(); i++) {
+//            System.out.println(eventoString(eventos.get(i)));
+//        }
+//    }
 
 }

@@ -169,4 +169,20 @@ public class Usuario {
         }
         return false;
     }
+
+    /**
+     * @return the token
+     */
+    public int getToken()
+    {
+        return token;
+    }
+
+    /**
+     * @param token the token to set
+     */
+    public void setToken(int token)
+    {
+        this.token = token;
+    }
 }

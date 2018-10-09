@@ -5,6 +5,13 @@
  */
 package org.ujaen.practicaDAE.Servidor.DTOs;
 
+
+/*
+ * Por las características del diseño actual, en estos momentos esta clase no 
+ * está siendo utilizada, sin embargo, hemos decidido mantenerla hasta estar
+ * seguros de que no la necesitaremos en etapas más avanzadas del proyecto.
+ */
+
 /**
  *
  * @author javier

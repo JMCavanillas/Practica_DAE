@@ -5,11 +5,8 @@
  */
 package org.ujaen.practicaDAE.Servidor.Interfaces;
 
-import java.util.Date;
 import java.util.List;
 import org.ujaen.practicaDAE.Servidor.DTOs.EventoDTO;
-import org.ujaen.practicaDAE.Servidor.DTOs.UsuarioDTO;
-import org.ujaen.practicaDAE.Servidor.Evento;
 import org.ujaen.practicaDAE.Servidor.Evento.Tipo;
 
 /**
@@ -22,23 +19,32 @@ public interface ServiciosEvento {
 
     List<EventoDTO> buscarEventoPalabrasClave(String[] palabras);
 
-    EventoDTO crearEvento(EventoDTO evento, UsuarioDTO usuario);
-
-    boolean cancelarEvento(EventoDTO evento, UsuarioDTO usuario);
-
-    boolean inscribirseEvento(EventoDTO evento, UsuarioDTO usuario);
-
-    boolean cancelarInscripcionEvento(EventoDTO evento, UsuarioDTO usuario);
-
-    List<EventoDTO> verEventosInscritosCelebrados(UsuarioDTO usuario);
-
-    List<EventoDTO> verEventosInscritosFuturos(UsuarioDTO usuario);
-
-    List<EventoDTO> verEventosOrganizados(UsuarioDTO usuario);
-
-    List<EventoDTO> verEventosOrganizadosFuturos(UsuarioDTO usuario);
+    // TODO - Tunear Excepciones
     
-    //Para depurar
-    void mostrarEventos();
+    EventoDTO crearEvento(EventoDTO evento, int sec_token)
+            throws Exception;
+
+    boolean cancelarEvento(EventoDTO evento, int sec_token)
+            throws Exception;
+
+    boolean inscribirseEvento(EventoDTO evento, int sec_token)
+            throws Exception;
+
+    boolean cancelarInscripcionEvento(EventoDTO evento, int sec_token)
+            throws Exception;
+
+    List<EventoDTO> verEventosInscritosCelebrados(int sec_token)
+            throws Exception;
+
+    List<EventoDTO> verEventosInscritosFuturos(int sec_token)
+            throws Exception;
+
+    List<EventoDTO> verEventosOrganizados(int sec_token)
+            throws Exception;
+
+    List<EventoDTO> verEventosOrganizadosFuturos(int sec_token)
+            throws Exception;
+    
+//    void mostrarEventos();
 
 }
