@@ -171,7 +171,7 @@ public class Cliente {
 
                         break;
                     case 12:
-                        System.out.println(1);
+                        
                         System.out.println("Introduzca las palabras utilizando - para separarlas");
                         String palabrasBuscadas = sc.nextLine();
                         String[] partes = palabrasBuscadas.split("\\s*-\\s*");

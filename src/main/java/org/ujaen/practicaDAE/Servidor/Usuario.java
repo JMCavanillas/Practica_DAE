@@ -18,7 +18,7 @@ import org.ujaen.practicaDAE.Servidor.DTOs.UsuarioDTO;
 public class Usuario {
 
     private String nombre;
-    private String contraseña;
+    private String clave;
     private int token;
 
     private List<Evento> eventosInscritos;
@@ -27,7 +27,7 @@ public class Usuario {
     public Usuario(String nombre, String contraseña) 
     {
         this.nombre = nombre;
-        this.contraseña = contraseña;
+        this.clave = contraseña;
         
         this.eventosCreados = new ArrayList<>();
         this.eventosInscritos = new ArrayList<>();
@@ -50,19 +50,19 @@ public class Usuario {
     }
 
     /**
-     * @return the contraseña
+     * @return the clave
      */
-    public String getContraseña() 
+    public String getClave() 
     {
-        return contraseña;
+        return clave;
     }
 
     /**
-     * @param contraseña the contraseña to set
+     * @param clave the clave to set
      */
-    public void setContraseña(String contraseña) 
+    public void setClave(String clave) 
     {
-        this.contraseña = contraseña;
+        this.clave = clave;
     }
 
     /**

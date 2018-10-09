@@ -28,7 +28,7 @@ public class GestionUsuarios implements ServiciosUsuario {
     @Override
     public int login(String usuario, String clave) {
         int token = -1;
-        if (usuarios.get(usuario).getContraseña().equals(clave)) {
+        if (usuarios.get(usuario).getClave().equals(clave)) {
             Random aleatorio = new Random(System.currentTimeMillis());
             token = aleatorio.nextInt(1000);
             return token;
