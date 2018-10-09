@@ -58,6 +58,7 @@ public class GestionUsuarios implements ServiciosUsuario {
 
     }
 
+    @Override
     public Usuario buscarUsuario(String usuario) {
         //Falta meter excepciones y tal 
         return usuarios.get(usuario);

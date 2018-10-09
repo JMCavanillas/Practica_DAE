@@ -6,6 +6,7 @@
 package org.ujaen.practicaDAE.Servidor.Interfaces;
 
 import org.ujaen.practicaDAE.Servidor.DTOs.UsuarioDTO;
+import org.ujaen.practicaDAE.Servidor.Usuario;
 
 /**
  *
@@ -18,6 +19,8 @@ public interface ServiciosUsuario{
     boolean registro(String usuario, String clave);
     
     boolean registro(UsuarioDTO usuario);
+    
+    Usuario buscarUsuario(String usuario);
     
     //------------------------
     //^Para depurar

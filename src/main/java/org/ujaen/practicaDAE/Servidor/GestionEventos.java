@@ -62,7 +62,7 @@ public class GestionEventos implements ServiciosEvento {
     }
 
     @Override
-    public List<EventoDTO> buscarEventoPalabrasClave(List<String> palabras) {
+    public List<EventoDTO> buscarEventoPalabrasClave(String[] palabras) {
         List<EventoDTO> tmp = new ArrayList<>();
 
         //A lo mejor se podria cambiar para las primeras
@@ -70,7 +70,7 @@ public class GestionEventos implements ServiciosEvento {
         //que tengan mas coincidencias de palabras clave
         for (Map.Entry<Integer, Evento> entry : eventos.entrySet()) {
             for (String palabra : palabras) {
-                if (entry.getValue().getDescripcion().toLowerCase().contains(palabra)) {
+                if (entry.getValue().getDescripcion().toLowerCase().contains(palabra.toLowerCase())) {
 
                     tmp.add(entry.getValue().toDTO());
                 }

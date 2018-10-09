@@ -20,7 +20,7 @@ public interface ServiciosEvento {
 
     List<EventoDTO> buscarEventoTipo(Tipo tipo);
 
-    List<EventoDTO> buscarEventoPalabrasClave(List<String> palabras);
+    List<EventoDTO> buscarEventoPalabrasClave(String[] palabras);
 
     EventoDTO crearEvento(EventoDTO evento, UsuarioDTO usuario);
 
