@@ -90,7 +90,6 @@ public class Cliente {
                             usuario = servicioUsuario.buscarUsuario(nombrelogin).toDTO();
                         }
 
-                        // System.out.println(2);
                         break;
                     case 3:
                         restringirAcceso();
@@ -123,7 +122,13 @@ public class Cliente {
                         break;
                     case 4:
                         restringirAcceso();
-                        System.out.println(4);
+                        List<EventoDTO> eventos=verEventosOrganizadosFuturos(servicioEvento, usuario);
+                        System.out.println("Seleccione la posición del evento que quiere borrar");
+                        int pos = sc.nextInt();
+                        servicioEvento.cancelarEvento(eventos.get(pos-1), usuario);
+                        
+                        
+                        
                         break;
                     case 5:
                         restringirAcceso();
@@ -142,10 +147,9 @@ public class Cliente {
                         break;
                     case 8:
                         restringirAcceso();
-                        List<EventoDTO> evtosOrgFuturos = servicioEvento.verEventosOrganizadosFuturos(usuario);
-                        for (int i = 0; i < evtosOrgFuturos.size(); i++) {
-                            eventoDTOString(evtosOrgFuturos.get(i));
-                        }
+                        verEventosOrganizadosFuturos(servicioEvento, usuario);
+                        System.out.println("Introduzca la posición del evento que quiere borrar");
+                        
                         break;
                     case 9:
                         restringirAcceso();
@@ -171,7 +175,7 @@ public class Cliente {
 
                         break;
                     case 12:
-                        
+
                         System.out.println("Introduzca las palabras utilizando - para separarlas");
                         String palabrasBuscadas = sc.nextLine();
                         String[] partes = palabrasBuscadas.split("\\s*-\\s*");
@@ -187,7 +191,7 @@ public class Cliente {
             }
 
         }
-      
+
     }
 
     void restringirAcceso() {
@@ -209,8 +213,7 @@ public class Cliente {
                 + "3- Actividad deportiva \n"
                 + "4- Visita cultural \n");
         int seleccionarTipo = Integer.parseInt(scanner.nextLine());
-                
-                
+
         Evento.Tipo tipo = null;
         switch (seleccionarTipo) {
             case 1:
@@ -227,6 +230,15 @@ public class Cliente {
                 break;
         }
         return tipo;
+    }
+
+    List<EventoDTO> verEventosOrganizadosFuturos(ServiciosEvento servicioEvento, UsuarioDTO usuario) {
+        List<EventoDTO> evtosOrgFuturos = servicioEvento.verEventosOrganizadosFuturos(usuario);
+        for (int i = 0; i < evtosOrgFuturos.size(); i++) {
+            eventoDTOString(evtosOrgFuturos.get(i));
+        }
+        
+        return evtosOrgFuturos;
     }
 
 }
