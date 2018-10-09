@@ -68,7 +68,7 @@ public class GestionUsuarios implements ServiciosUsuario {
     @Override
     public boolean registro(UsuarioDTO usuario) {
         if (!usuarios.containsKey(usuario.getNombre())) {
-            Usuario tmp = new Usuario(usuario.getNombre(), usuario.getContraseña());
+            Usuario tmp = new Usuario(usuario.getNombre(), usuario.getClave());
             usuarios.put(usuario.getNombre(), tmp);
             return true;
         }

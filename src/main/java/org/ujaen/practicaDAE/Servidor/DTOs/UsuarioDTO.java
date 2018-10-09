@@ -11,29 +11,24 @@ package org.ujaen.practicaDAE.Servidor.DTOs;
  */
 public class UsuarioDTO {
 
-    /**
-     * @return the contraseña
-     */
-    public String getContraseña() {
-        return contraseña;
-    }
-    
     private String nombre;
-    private String contraseña;
-    
+    private String clave;
+
     /**
      * Constructor
+     *
      * @param nombre
-     * @param contraseña 
+     * @param contraseña
      */
     public UsuarioDTO(String nombre, String contraseña) {
         this.nombre = nombre;
-        this.contraseña = contraseña;
+        this.clave = contraseña;
     }
-    
+
     /**
      * Constructor solo nombre
-     * @param nombre 
+     *
+     * @param nombre
      */
     public UsuarioDTO(String nombre) {
         this.nombre = nombre;
@@ -42,25 +37,29 @@ public class UsuarioDTO {
     /**
      * @return the nombre
      */
-    public String getNombre()
-    {
+    public String getNombre() {
         return nombre;
     }
 
     /**
      * @param nombre the nombre to set
      */
-    public void setNombre(String nombre)
-    {
+    public void setNombre(String nombre) {
         this.nombre = nombre;
     }
 
     /**
-     * @param contraseña the contraseña to set
+     * @param clave the clave to set
      */
-    public void setContraseña(String contraseña)
-    {
-        this.contraseña = contraseña;
+    public void setClave(String clave) {
+        this.clave = clave;
+    }
+
+    /**
+     * @return the clave
+     */
+    public String getClave() {
+        return clave;
     }
 
 }
