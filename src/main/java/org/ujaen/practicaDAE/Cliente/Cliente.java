@@ -67,8 +67,8 @@ public class Cliente {
                         String nombre = sc.nextLine();
                         System.out.println("Introduzca una contraseña");
                         String pwd = sc.nextLine();
-                        UsuarioDTO usuarioReg = new UsuarioDTO(nombre, pwd);
-                        if (servicioUsuario.registro(usuarioReg)) {
+
+                        if (servicioUsuario.registro(nombre, pwd)) {
                             System.out.println("Usuario creado correctamente");
                         } else {
                             System.out.println("No se pudo registrar el usuario1");
@@ -83,88 +83,146 @@ public class Cliente {
                         String pwdlogin = sc.nextLine();
                         token = servicioUsuario.login(nombrelogin, pwdlogin);
 
-                        if (token == -1) {
+                        if (token == -1 || token == -2) {
                             System.out.println("Login fallido");
                         } else {
                             System.out.println("Login correcto");
-                            usuario = servicioUsuario.buscarUsuario(nombrelogin).toDTO();
+
                         }
 
                         break;
                     case 3:
-                        restringirAcceso();
+                        if (token == -1 || token == -2) {
+                            System.out.println("Debe estar logueado en el sistema para acceder a esta funcionalidad");
+                        } else {
+                            System.out.println("Introduzca el año:");
+                            int y = Integer.parseInt(sc.nextLine());
+                            System.out.println("Introduzca el mes:");
+                            int m = Integer.parseInt(sc.nextLine());
+                            System.out.println("Introduzca el día:");
+                            int d = Integer.parseInt(sc.nextLine());
+                            System.out.println("Introduzca la hora:");
+                            int h = Integer.parseInt(sc.nextLine());
+                            System.out.println("Introduzca los minutos:");
+                            int min = Integer.parseInt(sc.nextLine());
 
-                        System.out.println("Introduzca el año:");
-                        int y = sc.nextInt();
-                        System.out.println("Introduzca el mes:");
-                        int m = sc.nextInt();
-                        System.out.println("Introduzca el día:");
-                        int d = sc.nextInt();
-                        System.out.println("Introduzca la hora:");
-                        int h = sc.nextInt();
-                        System.out.println("Introduzca los minutos:");
-                        int min = sc.nextInt();
+                            Calendar calendario = new GregorianCalendar(y, m - 1, d, h, min);
+                            Date fecha = calendario.getTime();
+                            System.out.println("Introduzca el lugar");
+                            String lugar = sc.nextLine();
+                            System.out.println("Introduzca una descripción");
+                            String descripcion = sc.nextLine();
+                            System.out.println("Introduzca el número máximo de asistentes");
+                            int numMaxAsistentes = sc.nextInt();
 
-                        Calendar calendario = new GregorianCalendar(y, m - 1, d, h, min);
-                        Date fecha = calendario.getTime();
-                        System.out.println("Introduzca el lugar");
-                        String lugar = sc.nextLine();
-                        System.out.println("Introduzca una descripción");
-                        String descripcion = sc.nextLine();
-                        System.out.println("Introduzca el número máximo de asistentes");
-                        int numMaxAsistentes = sc.nextInt();
+                            Evento.Tipo tipo = seleccionarTipo();
 
-                        Evento.Tipo tipo = seleccionarTipo();
-
-                        EventoDTO evento = new EventoDTO(fecha, lugar, tipo, descripcion, numMaxAsistentes);
-                        servicioEvento.crearEvento(evento, usuario);
-                        System.out.println("Evento creado");
+                            EventoDTO evento = new EventoDTO(fecha, lugar, tipo, descripcion, numMaxAsistentes);
+                            servicioEvento.crearEvento(evento, token);
+                            System.out.println("Evento creado");
+                        }
                         break;
                     case 4:
-                        restringirAcceso();
-                        List<EventoDTO> eventos=verEventosOrganizadosFuturos(servicioEvento, usuario);
-                        System.out.println("Seleccione la posición del evento que quiere borrar");
-                        int pos = sc.nextInt();
-                        servicioEvento.cancelarEvento(eventos.get(pos-1), usuario);
-                        
-                        
-                        
+                        if (token == -1 || token == -2) {
+                            System.out.println("Debe estar logueado en el sistema para acceder a esta funcionalidad");
+                        } else {
+                            List<EventoDTO> eventos = verEventosOrganizadosFuturos(servicioEvento, token);
+                            System.out.println("Seleccione la posición del evento que quiere borrar");
+                            int pos = sc.nextInt();
+
+                            servicioEvento.cancelarEvento(eventos.get(pos), token);
+                        }
                         break;
                     case 5:
-                        restringirAcceso();
-                        System.out.println(5);
+                        if (token == -1 || token == -2) {
+                            System.out.println("Debe estar logueado en el sistema para acceder a esta funcionalidad");
+                        } else {
+
+                            System.out.print("Elija un tipo de búsqueda: \n"
+                                    + "1- Tipo \n"
+                                    + "2- Palabras \n");
+                            int seleccionarBusqueda = Integer.parseInt(scanner.nextLine());
+                            switch (seleccionarBusqueda) {
+                                case 1:
+                                    Evento.Tipo tmp = seleccionarTipo();
+                                    List<EventoDTO> listaEventosTipo = servicioEvento.buscarEventoTipo(tmp);
+                                    for (int i = 0; i < listaEventosTipo.size(); i++) {
+                                        eventoDTOString(listaEventosTipo.get(i));
+                                    }
+                                    System.out.println("Seleccione la posición del evento en el que quiere inscribirse");
+                                    int pos = sc.nextInt();
+
+                                    servicioEvento.inscribirseEvento(listaEventosTipo.get(pos), token);
+                                    System.out.println("Inscripción realizada con éxito");
+                                    break;
+                                case 2:
+                                    System.out.println("Introduzca las palabras utilizando - para separarlas");
+                                    String palabrasBuscadas = sc.nextLine();
+                                    String[] partes = palabrasBuscadas.split("\\s*-\\s*");
+                                    List<EventoDTO> listaEventosPalabrasClave = servicioEvento.buscarEventoPalabrasClave(partes);
+                                    for (int i = 0; i < listaEventosPalabrasClave.size(); i++) {
+                                        eventoDTOString(listaEventosPalabrasClave.get(i));
+                                    }
+
+                                    System.out.println("Seleccione la posición del evento en el que quiere inscribirse");
+                                    int pos2 = sc.nextInt();
+
+                                    servicioEvento.inscribirseEvento(listaEventosPalabrasClave.get(pos2), token);
+                                    System.out.println("Inscripción realizada con éxito");
+
+                                    break;
+                            }
+                        }
                         break;
+
                     case 6:
-                        restringirAcceso();
-                        System.out.println(6);
+
+                        if (token == -1 || token == -2) {
+                            System.out.println("Debe estar logueado en el sistema para acceder a esta funcionalidad");
+                        } else {
+                            List<EventoDTO> eventos = verEventosInscritosFuturos(servicioEvento, token);
+                            System.out.println("Seleccione la posición del evento que quiere cancelar la inscripción");
+                            int pos = sc.nextInt();
+
+                            servicioEvento.cancelarEvento(eventos.get(pos), token);
+
+                        }
                         break;
                     case 7:
-                        restringirAcceso();
-                        List<EventoDTO> evtosOrgCeleb = servicioEvento.verEventosOrganizados(usuario);
-                        for (int i = 0; i < evtosOrgCeleb.size(); i++) {
-                            eventoDTOString(evtosOrgCeleb.get(i));
+                        if (token == -1 || token == -2) {
+                            System.out.println("Debe estar logueado en el sistema para acceder a esta funcionalidad");
+                        } else {
+                            List<EventoDTO> evtosOrgCeleb = servicioEvento.verEventosOrganizados(token);
+                            for (int i = 0; i < evtosOrgCeleb.size(); i++) {
+                                eventoDTOString(evtosOrgCeleb.get(i));
+                            }
                         }
                         break;
                     case 8:
-                        restringirAcceso();
-                        verEventosOrganizadosFuturos(servicioEvento, usuario);
-                        System.out.println("Introduzca la posición del evento que quiere borrar");
-                        
+
+                        if (token == -1 || token == -2) {
+                            System.out.println("Debe estar logueado en el sistema para acceder a esta funcionalidad");
+                        } else {
+                            verEventosOrganizadosFuturos(servicioEvento, token);
+
+                        }
                         break;
                     case 9:
-                        restringirAcceso();
-                        List<EventoDTO> evtosInscritosCelebrados = servicioEvento.verEventosInscritosCelebrados(usuario);
-                        for (int i = 0; i < evtosInscritosCelebrados.size(); i++) {
-                            eventoDTOString(evtosInscritosCelebrados.get(i));
+                        if (token == -1 || token == -2) {
+                            System.out.println("Debe estar logueado en el sistema para acceder a esta funcionalidad");
+                        } else {
+                            List<EventoDTO> evtosInscritosCelebrados = servicioEvento.verEventosInscritosCelebrados(token);
+                            for (int i = 0; i < evtosInscritosCelebrados.size(); i++) {
+                                eventoDTOString(evtosInscritosCelebrados.get(i));
+                            }
                         }
                         break;
                     case 10:
-                        restringirAcceso();
-                        List<EventoDTO> evtosInscritosFuturos = servicioEvento.verEventosInscritosFuturos(usuario);
-                        for (int i = 0; i < evtosInscritosFuturos.size(); i++) {
-                            eventoDTOString(evtosInscritosFuturos.get(i));
+                        if (token == -1 || token == -2) {
+                            System.out.println("Debe estar logueado en el sistema para acceder a esta funcionalidad");
+                        } else {
+
                         }
-                        System.out.println(1);
                         break;
                     case 11:
                         Evento.Tipo tmp = seleccionarTipo();
@@ -176,10 +234,7 @@ public class Cliente {
                         break;
                     case 12:
 
-                        System.out.println("Introduzca las palabras utilizando - para separarlas");
-                        String palabrasBuscadas = sc.nextLine();
-                        String[] partes = palabrasBuscadas.split("\\s*-\\s*");
-                        List<EventoDTO> listaEventosPalabrasClave = servicioEvento.buscarEventoPalabrasClave(partes);
+                        List<EventoDTO> listaEventosPalabrasClave=busquedaPalabras(servicioEvento, sc);
                         for (int i = 0; i < listaEventosPalabrasClave.size(); i++) {
                             eventoDTOString(listaEventosPalabrasClave.get(i));
                         }
@@ -195,12 +250,14 @@ public class Cliente {
     }
 
     void restringirAcceso() {
-        if (token == -1) {
-            System.out.println("Debe estar registrado para acceder a esta funcionalidad");
+        if (token == -1 || token == -2) {
+            System.out.println("Debe estar logueado para acceder a esta funcionalidad");
+
         }
     }
 
-    void eventoDTOString(EventoDTO e) {
+    void eventoDTOString(EventoDTO e
+    ) {
         String tmp = "Evento:" + e.getId() + e.getFecha() + e.getLugar() + e.getTipo() + e.getDescripcion() + e.getNumeroMaxAsistentes();
         System.out.println(tmp);
     }
@@ -232,13 +289,39 @@ public class Cliente {
         return tipo;
     }
 
-    List<EventoDTO> verEventosOrganizadosFuturos(ServiciosEvento servicioEvento, UsuarioDTO usuario) {
-        List<EventoDTO> evtosOrgFuturos = servicioEvento.verEventosOrganizadosFuturos(usuario);
-        for (int i = 0; i < evtosOrgFuturos.size(); i++) {
-            eventoDTOString(evtosOrgFuturos.get(i));
+    List<EventoDTO> verEventosOrganizadosFuturos(ServiciosEvento servicioEvento, int token
+    ) {
+
+        try {
+            List<EventoDTO> evtosOrgFuturos = servicioEvento.verEventosOrganizadosFuturos(token);
+            for (int i = 0; i < evtosOrgFuturos.size(); i++) {
+                eventoDTOString(evtosOrgFuturos.get(i));
+            }
+            return evtosOrgFuturos;
+        } catch (Exception e) {
+            System.out.println("Uoop! Error! " + e.toString());
         }
-        
-        return evtosOrgFuturos;
+        return null;
     }
 
+    List<EventoDTO> verEventosInscritosFuturos(ServiciosEvento servicioEvento, int token
+    ) {
+        try {
+            List<EventoDTO> evtosInscritosFuturos = servicioEvento.verEventosInscritosFuturos(token);
+            for (int i = 0; i < evtosInscritosFuturos.size(); i++) {
+                eventoDTOString(evtosInscritosFuturos.get(i));
+            }
+        } catch (Exception e) {
+            System.out.println("Uoop! Error! " + e.toString());
+        }
+        return null;
+    }
+
+    List<EventoDTO> busquedaPalabras(ServiciosEvento servicioEvento, Scanner sc) {
+        System.out.println("Introduzca las palabras utilizando - para separarlas");
+        String palabrasBuscadas = sc.nextLine();
+        String[] partes = palabrasBuscadas.split("\\s*-\\s*");
+        List<EventoDTO> listaEventosPalabrasClave = servicioEvento.buscarEventoPalabrasClave(partes);
+        return listaEventosPalabrasClave;
+    }
 }
