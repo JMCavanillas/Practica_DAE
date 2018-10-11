@@ -70,10 +70,7 @@ public class Cliente {
 
                         if (servicioUsuario.registro(nombre, pwd)) {
                             System.out.println("Usuario creado correctamente");
-                        } else {
-                            System.out.println("No se pudo registrar el usuario1");
                         }
-
                         break;
                     case 2:
 
@@ -221,7 +218,10 @@ public class Cliente {
                         if (token == -1 || token == -2) {
                             System.out.println("Debe estar logueado en el sistema para acceder a esta funcionalidad");
                         } else {
-
+                            List<EventoDTO> evtosInscritosFuturos = servicioEvento.verEventosInscritosFuturos(token);
+                            for (int i = 0; i < evtosInscritosFuturos.size(); i++) {
+                                eventoDTOString(evtosInscritosFuturos.get(i));
+                            }
                         }
                         break;
                     case 11:

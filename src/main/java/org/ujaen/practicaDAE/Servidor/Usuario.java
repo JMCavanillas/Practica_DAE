@@ -153,12 +153,14 @@ public class Usuario {
                 evento.listaEspera.add(this);
             
             return true;
+        }else{
+            
         }
         
         return false;
     }
     
-    public boolean cancelarSuscripcion(Evento evento)
+    public boolean cancelarInscripcion(Evento evento)
     {
         if (eventosInscritos.remove(evento))
         {

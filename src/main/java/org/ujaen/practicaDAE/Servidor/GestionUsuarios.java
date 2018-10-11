@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.TreeMap;
 import org.springframework.stereotype.Component;
+import org.ujaen.practicaDAE.Excepciones.ExcepcionUsuarioYaRegistrado;
 import org.ujaen.practicaDAE.Servidor.Interfaces.ServiciosUsuario;
 
 /**
@@ -97,8 +98,10 @@ public class GestionUsuarios implements ServiciosUsuario {
             Usuario tmp = new Usuario(usuario, clave);
             usuarios.put(usuario, tmp);
             return true;
+        }else {
+            throw new ExcepcionUsuarioYaRegistrado();
         }
-        return false;
+       
     }
 
 //    public void mostrarUsuarios() {
