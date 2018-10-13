@@ -27,7 +27,7 @@ public interface ServiciosEvento {
     boolean cancelarEvento(EventoDTO evento, int sec_token)
             throws Exception;
 
-    boolean inscribirseEvento(EventoDTO evento, int sec_token)
+    void inscribirseEvento(EventoDTO evento, int sec_token)
             throws Exception;
 
     boolean cancelarInscripcionEvento(EventoDTO evento, int sec_token)

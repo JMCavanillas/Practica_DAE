@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.TreeMap;
 import org.springframework.stereotype.Component;
+import org.ujaen.practicaDAE.Excepciones.ExcepcionTokenInvalido;
 import org.ujaen.practicaDAE.Excepciones.ExcepcionUsuarioYaRegistrado;
 import org.ujaen.practicaDAE.Servidor.Interfaces.ServiciosUsuario;
 
@@ -41,15 +42,14 @@ public class GestionUsuarios implements ServiciosUsuario {
      * 
      * @param token Token a verificar
      * @return usuario
-     * @throws Exception Si el token indicado no está registrado
      */
-    protected Usuario verificaToken(int token) throws Exception
+    protected Usuario verificaToken(int token)
     {
         Usuario usuario = registroTokens.get(token);
         
         // TODO - Tunear Excepción ¿Estática o en Runtime?
         if (usuario == null)
-            throw new Exception("Token Invalido");
+            throw new ExcepcionTokenInvalido();
         
         return usuario;
     }
@@ -103,21 +103,5 @@ public class GestionUsuarios implements ServiciosUsuario {
         }
        
     }
-
-//    public void mostrarUsuarios() {
-//        for (Map.Entry<String, Usuario> entry : usuarios.entrySet()) 
-//            System.out.println(entry.getValue().getNombre());      
-//    }
-
-//
-//    @Override
-//    public boolean registro(UsuarioDTO usuario) {
-//        if (!usuarios.containsKey(usuario.getNombre())) {
-//            Usuario tmp = new Usuario(usuario.getNombre(), usuario.getClave());
-//            usuarios.put(usuario.getNombre(), tmp);
-//            return true;
-//        }
-//        return false;
-//    }
 
 }

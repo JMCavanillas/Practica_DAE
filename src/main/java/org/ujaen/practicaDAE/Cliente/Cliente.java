@@ -38,7 +38,6 @@ public class Cliente {
     public void run() {
         ServiciosUsuario servicioUsuario = (ServiciosUsuario) context.getBean("gestionUsuarios");
         ServiciosEvento servicioEvento = (ServiciosEvento) context.getBean("gestionEventos");
-        UsuarioDTO usuario = null;
 
         while (select != 0) {
             try {
@@ -124,10 +123,14 @@ public class Cliente {
                             System.out.println("Debe estar logueado en el sistema para acceder a esta funcionalidad");
                         } else {
                             List<EventoDTO> eventos = verEventosOrganizadosFuturos(servicioEvento, token);
-                            System.out.println("Seleccione la posición del evento que quiere borrar");
-                            int pos = sc.nextInt();
+                            if (eventos.isEmpty()) {
+                                System.out.println("No hay eventos");
+                            } else {
+                                System.out.println("Seleccione la posición del evento que quiere borrar");
+                                int pos = sc.nextInt();
 
-                            servicioEvento.cancelarEvento(eventos.get(pos), token);
+                                servicioEvento.cancelarEvento(eventos.get(pos), token);
+                            }
                         }
                         break;
                     case 5:
@@ -146,11 +149,15 @@ public class Cliente {
                                     for (int i = 0; i < listaEventosTipo.size(); i++) {
                                         eventoDTOString(listaEventosTipo.get(i));
                                     }
-                                    System.out.println("Seleccione la posición del evento en el que quiere inscribirse");
-                                    int pos = sc.nextInt();
+                                    if (listaEventosTipo.isEmpty()) {
+                                        System.out.println("No hay eventos");
+                                    } else {
+                                        System.out.println("Seleccione la posición del evento en el que quiere inscribirse");
+                                        int pos = sc.nextInt();
 
-                                    servicioEvento.inscribirseEvento(listaEventosTipo.get(pos), token);
-                                    System.out.println("Inscripción realizada con éxito");
+                                        servicioEvento.inscribirseEvento(listaEventosTipo.get(pos), token);
+                                        System.out.println("Inscripción realizada con éxito");
+                                    }
                                     break;
                                 case 2:
                                     System.out.println("Introduzca las palabras utilizando - para separarlas");
@@ -160,13 +167,15 @@ public class Cliente {
                                     for (int i = 0; i < listaEventosPalabrasClave.size(); i++) {
                                         eventoDTOString(listaEventosPalabrasClave.get(i));
                                     }
+                                    if (listaEventosPalabrasClave.isEmpty()) {
+                                        System.out.println("No hay eventos");
+                                    } else {
+                                        System.out.println("Seleccione la posición del evento en el que quiere inscribirse");
+                                        int pos2 = sc.nextInt();
 
-                                    System.out.println("Seleccione la posición del evento en el que quiere inscribirse");
-                                    int pos2 = sc.nextInt();
-
-                                    servicioEvento.inscribirseEvento(listaEventosPalabrasClave.get(pos2), token);
-                                    System.out.println("Inscripción realizada con éxito");
-
+                                        servicioEvento.inscribirseEvento(listaEventosPalabrasClave.get(pos2), token);
+                                        System.out.println("Inscripción realizada con éxito");
+                                    }
                                     break;
                             }
                         }
@@ -178,11 +187,14 @@ public class Cliente {
                             System.out.println("Debe estar logueado en el sistema para acceder a esta funcionalidad");
                         } else {
                             List<EventoDTO> eventos = verEventosInscritosFuturos(servicioEvento, token);
-                            System.out.println("Seleccione la posición del evento que quiere cancelar la inscripción");
-                            int pos = sc.nextInt();
+                            if (eventos.isEmpty()) {
+                                System.out.println("No hay eventos");
+                            } else {
+                                System.out.println("Seleccione la posición del evento que quiere cancelar la inscripción");
+                                int pos = sc.nextInt();
 
-                            servicioEvento.cancelarEvento(eventos.get(pos), token);
-
+                                servicioEvento.cancelarEvento(eventos.get(pos), token);
+                            }
                         }
                         break;
                     case 7:
@@ -190,8 +202,12 @@ public class Cliente {
                             System.out.println("Debe estar logueado en el sistema para acceder a esta funcionalidad");
                         } else {
                             List<EventoDTO> evtosOrgCeleb = servicioEvento.verEventosOrganizados(token);
-                            for (int i = 0; i < evtosOrgCeleb.size(); i++) {
-                                eventoDTOString(evtosOrgCeleb.get(i));
+                            if (evtosOrgCeleb.isEmpty()) {
+                                System.out.println("No hay eventos");
+                            } else {
+                                for (int i = 0; i < evtosOrgCeleb.size(); i++) {
+                                    eventoDTOString(evtosOrgCeleb.get(i));
+                                }
                             }
                         }
                         break;
@@ -234,7 +250,7 @@ public class Cliente {
                         break;
                     case 12:
 
-                        List<EventoDTO> listaEventosPalabrasClave=busquedaPalabras(servicioEvento, sc);
+                        List<EventoDTO> listaEventosPalabrasClave = busquedaPalabras(servicioEvento, sc);
                         for (int i = 0; i < listaEventosPalabrasClave.size(); i++) {
                             eventoDTOString(listaEventosPalabrasClave.get(i));
                         }
@@ -247,13 +263,6 @@ public class Cliente {
 
         }
 
-    }
-
-    void restringirAcceso() {
-        if (token == -1 || token == -2) {
-            System.out.println("Debe estar logueado para acceder a esta funcionalidad");
-
-        }
     }
 
     void eventoDTOString(EventoDTO e
@@ -294,8 +303,13 @@ public class Cliente {
 
         try {
             List<EventoDTO> evtosOrgFuturos = servicioEvento.verEventosOrganizadosFuturos(token);
-            for (int i = 0; i < evtosOrgFuturos.size(); i++) {
-                eventoDTOString(evtosOrgFuturos.get(i));
+            if (evtosOrgFuturos.isEmpty()) {
+                System.out.println("No hay eventos");
+
+            } else {
+                for (int i = 0; i < evtosOrgFuturos.size(); i++) {
+                    eventoDTOString(evtosOrgFuturos.get(i));
+                }
             }
             return evtosOrgFuturos;
         } catch (Exception e) {

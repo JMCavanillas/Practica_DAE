@@ -83,8 +83,13 @@ public class GestionEventos implements ServiciosEvento {
     }
 
     @Override
-    public EventoDTO crearEvento(EventoDTO evento, int sec_token)
-            throws Exception {
+    public EventoDTO crearEvento(EventoDTO evento, int sec_token) {
+
+        Date fecha_actual = new Date();
+        if (evento.getFecha().before(fecha_actual)) {
+            throw new ExcepcionEventoYaCelebrado();
+        }
+
         //Añade el evento creado a la lista de eventos creados del usuario
         Evento nuevo_evento = gestionusuarios.verificaToken(sec_token)
                 .creaEvento(evento);
@@ -95,13 +100,12 @@ public class GestionEventos implements ServiciosEvento {
     }
 
     @Override
-    public boolean cancelarEvento(EventoDTO evento, int sec_token)
-            throws Exception {
+    public boolean cancelarEvento(EventoDTO evento, int sec_token) {
         Date fecha_actual = new Date();
         if (evento.getFecha().before(fecha_actual)) {
             throw new ExcepcionEventoYaCelebrado();
         }
-        
+
         Usuario r_usuario = gestionusuarios.verificaToken(sec_token);
         Evento r_evento = obtenerEvento(evento.getId());
 
@@ -123,8 +127,7 @@ public class GestionEventos implements ServiciosEvento {
     }
 
     @Override
-    public boolean inscribirseEvento(EventoDTO evento, int sec_token)
-            throws Exception {
+    public void inscribirseEvento(EventoDTO evento, int sec_token) {
         Date fecha_actual = new Date();
         if (evento.getFecha().before(fecha_actual)) {
             throw new ExcepcionEventoYaCelebrado();
@@ -133,17 +136,15 @@ public class GestionEventos implements ServiciosEvento {
         Usuario r_usuario = gestionusuarios.verificaToken(sec_token);
         Evento r_evento = obtenerEvento(evento.getId());
 
-        if (r_usuario.inscribirseEvento(r_evento)) {
-            return true;
-        } else {
+        if (!r_usuario.inscribirseEvento(r_evento)) {
             throw new ExcepcionUsuarioYaInscritoEvento();
+
         }
 
     }
 
     @Override
-    public boolean cancelarInscripcionEvento(EventoDTO evento, int sec_token)
-            throws Exception {
+    public boolean cancelarInscripcionEvento(EventoDTO evento, int sec_token) {
 
         Usuario r_usuario = gestionusuarios.verificaToken(sec_token);
         Evento r_evento = obtenerEvento(evento.getId());
@@ -153,8 +154,7 @@ public class GestionEventos implements ServiciosEvento {
     }
 
     @Override
-    public List<EventoDTO> verEventosInscritosCelebrados(int sec_token)
-            throws Exception {
+    public List<EventoDTO> verEventosInscritosCelebrados(int sec_token) {
         Usuario r_usuario = gestionusuarios.verificaToken(sec_token);
         List<Evento> eventos_inscritos = r_usuario.getEventosInscritos();
         List<EventoDTO> eventos_inscritos_celebrados = new ArrayList<>();
@@ -170,8 +170,7 @@ public class GestionEventos implements ServiciosEvento {
     }
 
     @Override
-    public List<EventoDTO> verEventosInscritosFuturos(int sec_token)
-            throws Exception {
+    public List<EventoDTO> verEventosInscritosFuturos(int sec_token) {
         Usuario r_usuario = gestionusuarios.verificaToken(sec_token);
         List<Evento> eventos_inscritos = r_usuario.getEventosInscritos();
         List<EventoDTO> eventos_inscritos_futuros = new ArrayList<>();
@@ -187,8 +186,7 @@ public class GestionEventos implements ServiciosEvento {
     }
 
     @Override
-    public List<EventoDTO> verEventosOrganizados(int sec_token)
-            throws Exception {
+    public List<EventoDTO> verEventosOrganizados(int sec_token) {
         Usuario r_usuario = gestionusuarios.verificaToken(sec_token);
         List<Evento> eventos_organizados = r_usuario.getEventosCreados();
 
@@ -209,8 +207,7 @@ public class GestionEventos implements ServiciosEvento {
     }
 
     @Override
-    public List<EventoDTO> verEventosOrganizadosFuturos(int sec_token)
-            throws Exception {
+    public List<EventoDTO> verEventosOrganizadosFuturos(int sec_token) {
         Usuario r_usuario = gestionusuarios.verificaToken(sec_token);
         List<Evento> eventos_organizados = r_usuario.getEventosCreados();
         List<EventoDTO> eventos_organizados_futuros = new ArrayList<>();
@@ -225,17 +222,4 @@ public class GestionEventos implements ServiciosEvento {
         return eventos_organizados_futuros;
     }
 
-//    public String eventoString(Evento e) 
-//    {
-//        String tmp = "Evento:" + e.getId() + e.getFecha() + e.getLugar() 
-//                + e.getTipo() + e.getDescripcion() + e.getOrganizador() 
-//                + e.getNumeroMaxAsistentes();
-//        return tmp;
-//    }
-//    @Override
-//    public void mostrarEventos() {
-//        for (int i = 0; i < eventos.size(); i++) {
-//            System.out.println(eventoString(eventos.get(i)));
-//        }
-//    }
 }

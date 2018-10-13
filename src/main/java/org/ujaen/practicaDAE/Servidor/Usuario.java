@@ -153,8 +153,6 @@ public class Usuario {
                 evento.listaEspera.add(this);
             
             return true;
-        }else{
-            
         }
         
         return false;
