@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.ujaen.practicaDAE.Servidor.DTOs;
 
 import java.util.Date;
@@ -10,7 +5,8 @@ import org.ujaen.practicaDAE.Servidor.Evento;
 
 /**
  *
- * @author javier
+ * @author Javier Martínez Cavanillas
+ * @author Juan Antonio Béjar Martos
  */
 public class EventoDTO {
 
@@ -22,7 +18,8 @@ public class EventoDTO {
     private String descripcion;
     private int numeroMaxAsistentes;
 
-    public EventoDTO(int id, Date fecha, String lugar, Evento.Tipo tipo, String descripcion, int numeroMaxAsistente) {
+    public EventoDTO(int id, Date fecha, String lugar, Evento.Tipo tipo, 
+            String descripcion, int numeroMaxAsistente) {
         this.id = id;
         this.fecha = fecha;
         this.lugar = lugar;
@@ -31,7 +28,8 @@ public class EventoDTO {
         this.numeroMaxAsistentes = numeroMaxAsistente;
     }
 
-    public EventoDTO(Date fecha, String lugar, Evento.Tipo tipo, String descripcion, int numeroMaxAsistente) {
+    public EventoDTO(Date fecha, String lugar, Evento.Tipo tipo, 
+            String descripcion, int numeroMaxAsistente) {
         id=secuenciaID;
         secuenciaID++;
         this.fecha = fecha;
@@ -126,7 +124,8 @@ public class EventoDTO {
     }
 
     public String eventoDTOString(EventoDTO e) {
-        String tmp = "Evento:" + e.getId() + e.getFecha() + e.getLugar() + e.getTipo() + e.getDescripcion() + e.getNumeroMaxAsistentes();
+        String tmp = "Evento:" + e.getId() + e.getFecha() + e.getLugar() 
+                + e.getTipo() + e.getDescripcion() + e.getNumeroMaxAsistentes();
         return tmp;
     }
 

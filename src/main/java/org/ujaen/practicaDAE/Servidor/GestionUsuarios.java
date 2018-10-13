@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.ujaen.practicaDAE.Servidor;
 
 import java.util.Map;
@@ -15,7 +10,8 @@ import org.ujaen.practicaDAE.Servidor.Interfaces.ServiciosUsuario;
 
 /**
  *
- * @author macosx
+ * @author Javier Martínez Cavanillas
+ * @author Juan Antonio Béjar Martos
  */
 @Component
 public class GestionUsuarios implements ServiciosUsuario {
@@ -47,7 +43,6 @@ public class GestionUsuarios implements ServiciosUsuario {
     {
         Usuario usuario = registroTokens.get(token);
         
-        // TODO - Tunear Excepción ¿Estática o en Runtime?
         if (usuario == null)
             throw new ExcepcionTokenInvalido();
         
@@ -87,7 +82,7 @@ public class GestionUsuarios implements ServiciosUsuario {
             return token;
         }
         
-        // Si la clave no existe, retorna codigo -2, ¿devolver excepción?
+        // Si la clave no existe, retorna codigo -2
         token = -2;
         return token;
     }

@@ -38,7 +38,4 @@ public interface ServiciosUsuario
      */
     boolean registro(String usuario, String clave);
     
-//    boolean registro(UsuarioDTO usuario);   
-//    void mostrarUsuarios();
-    
 }

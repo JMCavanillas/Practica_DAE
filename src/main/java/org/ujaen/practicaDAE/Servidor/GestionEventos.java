@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.ujaen.practicaDAE.Servidor;
 
 import java.text.DateFormat;
@@ -23,7 +18,8 @@ import org.ujaen.practicaDAE.Servidor.Interfaces.ServiciosEvento;
 /**
  * Clase que gestiona una coleccion de eventos y sus servicios relacionados
  *
- * @author macosx
+ * @author Javier Martínez Cavanillas
+ * @author Juan Antonio Béjar Martos
  */
 @Component
 public class GestionEventos implements ServiciosEvento {
@@ -100,7 +96,7 @@ public class GestionEventos implements ServiciosEvento {
     }
 
     @Override
-    public boolean cancelarEvento(EventoDTO evento, int sec_token) {
+    public void cancelarEvento(EventoDTO evento, int sec_token) {
         Date fecha_actual = new Date();
         if (evento.getFecha().before(fecha_actual)) {
             throw new ExcepcionEventoYaCelebrado();
@@ -118,7 +114,6 @@ public class GestionEventos implements ServiciosEvento {
             }
 
             eventos.remove(r_evento.getId());
-            return true;
 
         } else {
             throw new ExcepcionCancelarEventoNoOrganizado();
@@ -145,7 +140,6 @@ public class GestionEventos implements ServiciosEvento {
 
     @Override
     public boolean cancelarInscripcionEvento(EventoDTO evento, int sec_token) {
-
         Usuario r_usuario = gestionusuarios.verificaToken(sec_token);
         Evento r_evento = obtenerEvento(evento.getId());
 
@@ -156,6 +150,7 @@ public class GestionEventos implements ServiciosEvento {
     @Override
     public List<EventoDTO> verEventosInscritosCelebrados(int sec_token) {
         Usuario r_usuario = gestionusuarios.verificaToken(sec_token);
+        
         List<Evento> eventos_inscritos = r_usuario.getEventosInscritos();
         List<EventoDTO> eventos_inscritos_celebrados = new ArrayList<>();
         Date fecha_actual = new Date();
@@ -172,6 +167,7 @@ public class GestionEventos implements ServiciosEvento {
     @Override
     public List<EventoDTO> verEventosInscritosFuturos(int sec_token) {
         Usuario r_usuario = gestionusuarios.verificaToken(sec_token);
+        
         List<Evento> eventos_inscritos = r_usuario.getEventosInscritos();
         List<EventoDTO> eventos_inscritos_futuros = new ArrayList<>();
         Date fecha_actual = new Date();
@@ -193,12 +189,10 @@ public class GestionEventos implements ServiciosEvento {
         List<EventoDTO> eventos_organizados_celebrados = new ArrayList<>();
 
         Date fecha_actual = new Date();
-        //System.out.println(sdf.format(fecha_actual));
 
         for (Evento evento : eventos_organizados) {
 
             if (evento.getFecha().before(fecha_actual)) {
-                System.out.println("true");
                 eventos_organizados_celebrados.add(evento.toDTO());
             }
         }
@@ -209,6 +203,7 @@ public class GestionEventos implements ServiciosEvento {
     @Override
     public List<EventoDTO> verEventosOrganizadosFuturos(int sec_token) {
         Usuario r_usuario = gestionusuarios.verificaToken(sec_token);
+        
         List<Evento> eventos_organizados = r_usuario.getEventosCreados();
         List<EventoDTO> eventos_organizados_futuros = new ArrayList<>();
         Date fecha_actual = new Date();

@@ -1,27 +1,20 @@
 package org.ujaen.practicaDAE.Cliente;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Scanner;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.ApplicationContext;
 import org.ujaen.practicaDAE.Servidor.DTOs.EventoDTO;
-import org.ujaen.practicaDAE.Servidor.DTOs.UsuarioDTO;
 import org.ujaen.practicaDAE.Servidor.Evento;
 import org.ujaen.practicaDAE.Servidor.Interfaces.ServiciosEvento;
 import org.ujaen.practicaDAE.Servidor.Interfaces.ServiciosUsuario;
 
 /**
  *
- * @author javier
+ * @author Javier Martínez Cavanillas
+ * @author Juan Antonio Béjar Martos
  */
 public class Cliente {
 
@@ -42,6 +35,7 @@ public class Cliente {
         while (select != 0) {
             try {
                 System.out.print("Elige opción:\n"
+                        + "0.- Salir \n"
                         + "1.- Registro \n"
                         + "2.- Login \n"
                         + "3.- Crear evento \n"
@@ -257,7 +251,7 @@ public class Cliente {
                         break;
 
                 }
-            } catch (Exception e) {
+            } catch (RuntimeException e) {
                 System.out.println("Uoop! Error! " + e.toString());
             }
 

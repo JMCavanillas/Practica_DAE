@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.ujaen.practicaDAE.Servidor;
 
 import java.util.ArrayList;
@@ -13,7 +8,8 @@ import org.ujaen.practicaDAE.Servidor.DTOs.UsuarioDTO;
 
 /**
  *
- * @author macosx
+ * @author Javier Martínez Cavanillas
+ * @author Juan Antonio Béjar Martos
  */
 public class Usuario {
 
@@ -158,6 +154,13 @@ public class Usuario {
         return false;
     }
     
+    /**
+     * Cancela la inscripción a un evento
+     * 
+     * @param evento
+     * @return True si se ha cancelado con exito
+     *         False en otro caso
+     */
     public boolean cancelarInscripcion(Evento evento)
     {
         if (eventosInscritos.remove(evento))

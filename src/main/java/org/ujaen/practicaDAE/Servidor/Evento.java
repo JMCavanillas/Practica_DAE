@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.ujaen.practicaDAE.Servidor;
 
 import java.util.ArrayList;
@@ -12,7 +7,9 @@ import org.ujaen.practicaDAE.Servidor.DTOs.EventoDTO;
 
 /**
  * Clase que encapsula el comportamiento de un evento
- * @author macosx
+ * 
+ * @author Javier Martínez Cavanillas
+ * @author Juan Antonio Béjar Martos
  */
 public class Evento {
 
@@ -181,9 +178,6 @@ public class Evento {
                 descripcion, numeroMaxAsistentes);
     }
     
-
-    
-
     /**
      * @return the organizador
      */

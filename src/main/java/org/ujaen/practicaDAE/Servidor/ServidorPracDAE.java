@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.ujaen.practicaDAE.Servidor;
 
 import org.springframework.boot.SpringApplication;
@@ -11,8 +6,10 @@ import org.springframework.context.ApplicationContext;
 import org.ujaen.practicaDAE.Cliente.Cliente;
 
 /**
- *
- * @author javier
+ * Clase principal de incio de la aplicación Spring
+ * 
+ * @author Javier Martínez Cavanillas
+ * @author Juan Antonio Béjar Martos
  */
 @SpringBootApplication
 public class ServidorPracDAE 
