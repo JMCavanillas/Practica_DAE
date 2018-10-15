@@ -1,7 +1,7 @@
 package org.ujaen.practicaDAE.Servidor.DTOs;
 
 import java.util.Date;
-import org.ujaen.practicaDAE.Servidor.Evento;
+import org.ujaen.practicaDAE.Servidor.Entidades.Evento;
 
 /**
  *

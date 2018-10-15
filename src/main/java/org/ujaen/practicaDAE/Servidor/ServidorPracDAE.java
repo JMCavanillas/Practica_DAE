@@ -2,6 +2,7 @@ package org.ujaen.practicaDAE.Servidor;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.ApplicationContext;
 import org.ujaen.practicaDAE.Cliente.Cliente;
 
@@ -12,6 +13,8 @@ import org.ujaen.practicaDAE.Cliente.Cliente;
  * @author Juan Antonio Béjar Martos
  */
 @SpringBootApplication
+@EntityScan(basePackages="org.ujaen.practicaDAE.Servidor.Entidades")
+
 public class ServidorPracDAE 
 {
     public static void main(String[] args) throws Exception

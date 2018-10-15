@@ -1,5 +1,7 @@
 package org.ujaen.practicaDAE.Servidor;
 
+import org.ujaen.practicaDAE.Servidor.Entidades.Usuario;
+import org.ujaen.practicaDAE.Servidor.Entidades.Evento;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.DateTimeException;
@@ -115,8 +117,8 @@ public class GestionEventos implements ServiciosEvento {
 
         if (resultado != null) {
 
-            for (int i = 0; i < r_evento.usuariosInscritos.size(); i++) {
-                r_evento.usuariosInscritos.get(i).cancelarInscripcion(r_evento);
+            for (int i = 0; i < r_evento.getUsuariosInscritos().size(); i++) {
+                r_evento.getUsuariosInscritos().get(i).cancelarInscripcion(r_evento);
             }
 
             eventos.remove(r_evento.getId());
@@ -231,7 +233,7 @@ public class GestionEventos implements ServiciosEvento {
         List<EventoDTO> eventos_inscritos_lista_espera = new ArrayList<>();
 
         for (Evento evento : eventos_inscritos) {
-            if (evento.listaEspera.contains(r_usuario)) {
+            if (evento.getListaEspera().contains(r_usuario)) {
                 eventos_inscritos_lista_espera.add(evento.toDTO());
             }
         }

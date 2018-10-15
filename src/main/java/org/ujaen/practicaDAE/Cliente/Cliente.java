@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Scanner;
 import org.springframework.context.ApplicationContext;
 import org.ujaen.practicaDAE.Servidor.DTOs.EventoDTO;
-import org.ujaen.practicaDAE.Servidor.Evento;
+import org.ujaen.practicaDAE.Servidor.Entidades.Evento;
 import org.ujaen.practicaDAE.Servidor.Interfaces.ServiciosEvento;
 import org.ujaen.practicaDAE.Servidor.Interfaces.ServiciosUsuario;
 

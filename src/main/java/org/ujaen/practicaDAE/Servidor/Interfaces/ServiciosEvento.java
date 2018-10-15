@@ -2,7 +2,7 @@ package org.ujaen.practicaDAE.Servidor.Interfaces;
 
 import java.util.List;
 import org.ujaen.practicaDAE.Servidor.DTOs.EventoDTO;
-import org.ujaen.practicaDAE.Servidor.Evento.Tipo;
+import org.ujaen.practicaDAE.Servidor.Entidades.Evento.Tipo;
 
 /**
  *
