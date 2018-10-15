@@ -95,5 +95,14 @@ public interface ServiciosEvento {
      * @return Lista de eventos organizados por celebrar
      */
     List<EventoDTO> verEventosOrganizadosFuturos(int sec_token);
+    
+    
+    /**
+     * Lista los eventos en los que el usuario está en lista de espera
+     * 
+     * @param sec_token Token de seguridad identificativo del usuario
+     * @return  Lista de eventos organizados por celebrar
+     */
+    List<EventoDTO> verEventosListaEspera(int sec_token);
 
 }

@@ -48,6 +48,7 @@ public class Cliente {
                         + "10.- Ver eventos inscritos futuros \n"
                         + "11.- Buscar eventos por tipo \n"
                         + "12.- Buscar eventos por palabras clave \n"
+                        + "13.- Ver eventos en lista de espera\n"
                         + "\n: ");
 
                 select = Integer.parseInt(scanner.nextLine());
@@ -249,6 +250,15 @@ public class Cliente {
                             eventoDTOString(listaEventosPalabrasClave.get(i));
                         }
                         break;
+                    case 13:
+                        if (token == -1 || token == -2) {
+                            System.out.println("Debe estar logueado en el sistema para acceder a esta funcionalidad");
+                        } else {
+                            List<EventoDTO> evtosInscritosListaEspera = servicioEvento.verEventosListaEspera(token);
+                            for (int i = 0; i < evtosInscritosListaEspera.size(); i++) {
+                                eventoDTOString(evtosInscritosListaEspera.get(i));
+                            }
+                        }
 
                 }
             } catch (RuntimeException e) {

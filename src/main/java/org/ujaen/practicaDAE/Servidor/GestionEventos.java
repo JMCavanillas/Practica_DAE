@@ -217,4 +217,20 @@ public class GestionEventos implements ServiciosEvento {
         return eventos_organizados_futuros;
     }
 
+    @Override
+    public List<EventoDTO> verEventosListaEspera(int sec_token) {
+        Usuario r_usuario = gestionusuarios.verificaToken(sec_token);
+        List<Evento> eventos_inscritos=r_usuario.getEventosInscritos();
+        
+        List<EventoDTO> eventos_inscritos_lista_espera=new ArrayList<>();
+        
+        for(Evento evento : eventos_inscritos){
+            if(evento.listaEspera.contains(r_usuario)){
+                eventos_inscritos_lista_espera.add(evento.toDTO());
+            }
+        }
+        
+        return eventos_inscritos_lista_espera;
+    }
+
 }
