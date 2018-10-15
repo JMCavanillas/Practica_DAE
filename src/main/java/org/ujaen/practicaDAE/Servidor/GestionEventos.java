@@ -2,8 +2,12 @@ package org.ujaen.practicaDAE.Servidor;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.DateTimeException;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -81,6 +85,8 @@ public class GestionEventos implements ServiciosEvento {
     @Override
     public EventoDTO crearEvento(EventoDTO evento, int sec_token) {
 
+
+
         Date fecha_actual = new Date();
         if (evento.getFecha().before(fecha_actual)) {
             throw new ExcepcionEventoYaCelebrado();
@@ -150,7 +156,7 @@ public class GestionEventos implements ServiciosEvento {
     @Override
     public List<EventoDTO> verEventosInscritosCelebrados(int sec_token) {
         Usuario r_usuario = gestionusuarios.verificaToken(sec_token);
-        
+
         List<Evento> eventos_inscritos = r_usuario.getEventosInscritos();
         List<EventoDTO> eventos_inscritos_celebrados = new ArrayList<>();
         Date fecha_actual = new Date();
@@ -167,7 +173,7 @@ public class GestionEventos implements ServiciosEvento {
     @Override
     public List<EventoDTO> verEventosInscritosFuturos(int sec_token) {
         Usuario r_usuario = gestionusuarios.verificaToken(sec_token);
-        
+
         List<Evento> eventos_inscritos = r_usuario.getEventosInscritos();
         List<EventoDTO> eventos_inscritos_futuros = new ArrayList<>();
         Date fecha_actual = new Date();
@@ -203,7 +209,7 @@ public class GestionEventos implements ServiciosEvento {
     @Override
     public List<EventoDTO> verEventosOrganizadosFuturos(int sec_token) {
         Usuario r_usuario = gestionusuarios.verificaToken(sec_token);
-        
+
         List<Evento> eventos_organizados = r_usuario.getEventosCreados();
         List<EventoDTO> eventos_organizados_futuros = new ArrayList<>();
         Date fecha_actual = new Date();
@@ -220,17 +226,19 @@ public class GestionEventos implements ServiciosEvento {
     @Override
     public List<EventoDTO> verEventosListaEspera(int sec_token) {
         Usuario r_usuario = gestionusuarios.verificaToken(sec_token);
-        List<Evento> eventos_inscritos=r_usuario.getEventosInscritos();
-        
-        List<EventoDTO> eventos_inscritos_lista_espera=new ArrayList<>();
-        
-        for(Evento evento : eventos_inscritos){
-            if(evento.listaEspera.contains(r_usuario)){
+        List<Evento> eventos_inscritos = r_usuario.getEventosInscritos();
+
+        List<EventoDTO> eventos_inscritos_lista_espera = new ArrayList<>();
+
+        for (Evento evento : eventos_inscritos) {
+            if (evento.listaEspera.contains(r_usuario)) {
                 eventos_inscritos_lista_espera.add(evento.toDTO());
             }
         }
-        
+
         return eventos_inscritos_lista_espera;
     }
+
+
 
 }

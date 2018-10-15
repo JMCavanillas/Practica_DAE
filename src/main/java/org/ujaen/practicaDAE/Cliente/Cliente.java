@@ -96,9 +96,14 @@ public class Cliente {
                             int h = Integer.parseInt(sc.nextLine());
                             System.out.println("Introduzca los minutos:");
                             int min = Integer.parseInt(sc.nextLine());
+                            Calendar calendario = new GregorianCalendar();
+                            calendario.setLenient(false);
+                            calendario = new GregorianCalendar(y, m, d, h, min);
+                           
 
-                            Calendar calendario = new GregorianCalendar(y, m - 1, d, h, min);
                             Date fecha = calendario.getTime();
+                            
+
                             System.out.println("Introduzca el lugar");
                             String lugar = sc.nextLine();
                             System.out.println("Introduzca una descripción");
@@ -250,15 +255,6 @@ public class Cliente {
                             eventoDTOString(listaEventosPalabrasClave.get(i));
                         }
                         break;
-                    case 13:
-                        if (token == -1 || token == -2) {
-                            System.out.println("Debe estar logueado en el sistema para acceder a esta funcionalidad");
-                        } else {
-                            List<EventoDTO> evtosInscritosListaEspera = servicioEvento.verEventosListaEspera(token);
-                            for (int i = 0; i < evtosInscritosListaEspera.size(); i++) {
-                                eventoDTOString(evtosInscritosListaEspera.get(i));
-                            }
-                        }
 
                 }
             } catch (RuntimeException e) {
@@ -342,4 +338,6 @@ public class Cliente {
         List<EventoDTO> listaEventosPalabrasClave = servicioEvento.buscarEventoPalabrasClave(partes);
         return listaEventosPalabrasClave;
     }
+
+
 }
