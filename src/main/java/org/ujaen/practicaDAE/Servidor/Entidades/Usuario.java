@@ -4,6 +4,8 @@ import org.ujaen.practicaDAE.Servidor.Entidades.Evento;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import org.ujaen.practicaDAE.Servidor.DTOs.EventoDTO;
 import org.ujaen.practicaDAE.Servidor.DTOs.UsuarioDTO;
 
@@ -12,6 +14,7 @@ import org.ujaen.practicaDAE.Servidor.DTOs.UsuarioDTO;
  * @author Javier Martínez Cavanillas
  * @author Juan Antonio Béjar Martos
  */
+
 public class Usuario {
 
     private String nombre;

@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 import org.ujaen.practicaDAE.Servidor.DTOs.EventoDTO;
 
 /**
@@ -27,6 +28,7 @@ public class Evento {
     static int secuenciaID = 0;
     @Id
     private int id;
+    @Transient
     private Usuario organizador;
     private Date fecha;
     private String lugar;
@@ -34,7 +36,9 @@ public class Evento {
     private String descripcion;
     private int numeroMaxAsistentes;
 
+    @Transient
     protected List<Usuario> usuariosInscritos;
+    @Transient
     protected List<Usuario> listaEspera;
 
     /**
