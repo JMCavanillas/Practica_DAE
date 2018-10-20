@@ -5,6 +5,12 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import org.ujaen.practicaDAE.Servidor.DTOs.EventoDTO;
 
@@ -24,21 +30,24 @@ public class Evento {
     public enum Tipo {
         CHARLA, CURSO, ACTIVIDAD_DEPORTIVA, VISITA_CULTURAL
     }
-
+    
     static int secuenciaID = 0;
     @Id
     private int id;
-    @Transient
+    
+    @ManyToOne
     private Usuario organizador;
+    
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fecha;
     private String lugar;
     private Tipo tipo;
     private String descripcion;
     private int numeroMaxAsistentes;
 
-    @Transient
+    @ManyToMany
     protected List<Usuario> usuariosInscritos;
-    @Transient
+    @ManyToMany
     protected List<Usuario> listaEspera;
 
     /**

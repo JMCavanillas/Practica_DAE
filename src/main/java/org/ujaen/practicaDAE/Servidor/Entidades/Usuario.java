@@ -5,7 +5,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 import org.ujaen.practicaDAE.Servidor.DTOs.EventoDTO;
 import org.ujaen.practicaDAE.Servidor.DTOs.UsuarioDTO;
 
@@ -15,13 +19,21 @@ import org.ujaen.practicaDAE.Servidor.DTOs.UsuarioDTO;
  * @author Juan Antonio Béjar Martos
  */
 
+@Entity
 public class Usuario {
 
+    @Id
     private String nombre;
     private String clave;
     private int token;
 
+    @ManyToMany(mappedBy="usuariosInscritos")
     private List<Evento> eventosInscritos;
+    
+    @ManyToMany(mappedBy="listaEspera")
+    private List<Evento> eventosInscritosEspera;
+    
+    @OneToMany(mappedBy="organizador")
     private List<Evento> eventosCreados;
 
     public Usuario(String nombre, String contraseña) 
@@ -143,15 +155,19 @@ public class Usuario {
      */
     public boolean inscribirseEvento(Evento evento)
     {
-        if (!eventosInscritos.contains(evento))
+        if (!eventosInscritos.contains(evento) && !eventosInscritosEspera.contains(evento))
         {
-            eventosInscritos.add(evento);
+            //eventosInscritos.add(evento);
             
             if (evento.getUsuariosInscritos().size() < evento.getNumeroMaxAsistentes())
+            {
+                eventosInscritos.add(evento);
                 evento.getUsuariosInscritos().add(this);
-            else
+            } else
+            {    
+                getEventosInscritosEspera().add(evento);
                 evento.getListaEspera().add(this);
-            
+            }
             return true;
         }
         
@@ -167,15 +183,30 @@ public class Usuario {
      */
     public boolean cancelarInscripcion(Evento evento)
     {
-        if (eventosInscritos.remove(evento))
-        {
-            if(!evento.usuariosInscritos.remove(this))
-                return evento.getListaEspera().remove(this);
+        if(eventosInscritos.remove(evento)){
+            evento.usuariosInscritos.remove(this);
             
+             return true;
+            
+        }else if(getEventosInscritosEspera().remove(evento)){
+            evento.listaEspera.remove(this);
             return true;
         }
+       
         return false;
+        
+        
+//        
+//        if (eventosInscritos.remove(evento))
+//        {
+//            if(!evento.usuariosInscritos.remove(this))
+//                return evento.getListaEspera().remove(this);
+//            
+//            return true;
+//        }
+//        return false;
     }
+
 
     /**
      * @return the token
@@ -191,5 +222,12 @@ public class Usuario {
     public void setToken(int token)
     {
         this.token = token;
+    }
+
+    /**
+     * @return the eventosInscritosEspera
+     */
+    public List<Evento> getEventosInscritosEspera() {
+        return eventosInscritosEspera;
     }
 }

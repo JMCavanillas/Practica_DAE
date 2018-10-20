@@ -151,8 +151,15 @@ public class GestionEventos implements ServiciosEvento {
         Usuario r_usuario = gestionusuarios.verificaToken(sec_token);
         Evento r_evento = obtenerEvento(evento.getId());
 
-        return r_usuario.cancelarInscripcion(r_evento);
-
+        if(r_usuario.cancelarInscripcion(r_evento)){
+            if(!r_evento.getListaEspera().isEmpty()){
+                Usuario tmp=r_evento.getListaEspera().get(0);
+                tmp.inscribirseEvento(r_evento);
+            }
+            
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -228,17 +235,23 @@ public class GestionEventos implements ServiciosEvento {
     @Override
     public List<EventoDTO> verEventosListaEspera(int sec_token) {
         Usuario r_usuario = gestionusuarios.verificaToken(sec_token);
-        List<Evento> eventos_inscritos = r_usuario.getEventosInscritos();
-
-        List<EventoDTO> eventos_inscritos_lista_espera = new ArrayList<>();
-
-        for (Evento evento : eventos_inscritos) {
-            if (evento.getListaEspera().contains(r_usuario)) {
-                eventos_inscritos_lista_espera.add(evento.toDTO());
-            }
+        List<Evento> eventos_inscritos_lista_espera = r_usuario.getEventosInscritosEspera();
+        List<EventoDTO> eventos_inscritos_lista_espera_DTO = new ArrayList<>();
+        
+        for (Evento evento : eventos_inscritos_lista_espera) {
+            eventos_inscritos_lista_espera_DTO.add(evento.toDTO());
         }
+        
 
-        return eventos_inscritos_lista_espera;
+//        List<EventoDTO> eventos_inscritos_lista_espera = new ArrayList<>();
+//
+//        for (Evento evento : eventos_inscritos) {
+//            if (evento.getListaEspera().contains(r_usuario)) {
+//                eventos_inscritos_lista_espera.add(evento.toDTO());
+//            }
+//        }
+
+        return eventos_inscritos_lista_espera_DTO;
     }
 
 
