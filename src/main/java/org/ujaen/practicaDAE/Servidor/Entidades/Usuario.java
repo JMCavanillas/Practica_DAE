@@ -30,10 +30,10 @@ public class Usuario {
     @ManyToMany(mappedBy="usuariosInscritos")
     private List<Evento> eventosInscritos;
     
-    @ManyToMany(mappedBy="listaEspera")
+    @ManyToMany(mappedBy="listaEspera", fetch=FetchType.LAZY)
     private List<Evento> eventosInscritosEspera;
     
-    @OneToMany(mappedBy="organizador")
+    @OneToMany(mappedBy="organizador", fetch=FetchType.LAZY)
     private List<Evento> eventosCreados;
 
     public Usuario(String nombre, String contraseña) 
