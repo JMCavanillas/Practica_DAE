@@ -4,7 +4,9 @@ import org.ujaen.practicaDAE.Servidor.Entidades.Usuario;
 import java.util.Map;
 import java.util.Random;
 import java.util.TreeMap;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.ujaen.practicaDAE.Servidor.DAOs.UsuarioDAO;
 import org.ujaen.practicaDAE.Excepciones.ExcepcionTokenInvalido;
 import org.ujaen.practicaDAE.Excepciones.ExcepcionUsuarioYaRegistrado;
 import org.ujaen.practicaDAE.Servidor.Interfaces.ServiciosUsuario;
@@ -16,8 +18,11 @@ import org.ujaen.practicaDAE.Servidor.Interfaces.ServiciosUsuario;
  */
 @Component
 public class GestionUsuarios implements ServiciosUsuario {
+    
+    @Autowired
+    UsuarioDAO usuarioDAO;
 
-    Map<String, Usuario> usuarios = new TreeMap<>();
+    //Map<String, Usuario> usuarios = new TreeMap<>();
     
     Map<Integer, Usuario> registroTokens = new TreeMap<>();
 
@@ -29,8 +34,9 @@ public class GestionUsuarios implements ServiciosUsuario {
      */
     protected Usuario buscarUsuario(String usuario) 
     {
-        // Falta meter excepciones y tal 
-        return usuarios.get(usuario);
+        return usuarioDAO.buscarUsuario(usuario);
+        
+        
     }
     
     /**
@@ -54,7 +60,7 @@ public class GestionUsuarios implements ServiciosUsuario {
     public int login(String usuario, String clave) 
     {
         int token = -1;
-        Usuario r_usuario = usuarios.get(usuario);
+        Usuario r_usuario = usuarioDAO.buscarUsuario(usuario);
         
         // Si no existe el usuario devuelve -1
         if (r_usuario == null)
@@ -90,9 +96,10 @@ public class GestionUsuarios implements ServiciosUsuario {
 
     @Override
     public boolean registro(String usuario, String clave) {
-        if (!usuarios.containsKey(usuario)) {
+        if (buscarUsuario(usuario)==null) {
             Usuario tmp = new Usuario(usuario, clave);
-            usuarios.put(usuario, tmp);
+            usuarioDAO.registrarUsuario(tmp);
+            
             return true;
         }else {
             throw new ExcepcionUsuarioYaRegistrado();

@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.ujaen.practicaDAE.Servidor.DAOs.UsuarioDAO;
 import org.ujaen.practicaDAE.Excepciones.ExcepcionCancelarEventoNoOrganizado;
 import org.ujaen.practicaDAE.Excepciones.ExcepcionEventoYaCelebrado;
 import org.ujaen.practicaDAE.Excepciones.ExcepcionUsuarioYaInscritoEvento;
@@ -29,6 +30,7 @@ import org.ujaen.practicaDAE.Servidor.Interfaces.ServiciosEvento;
  */
 @Component
 public class GestionEventos implements ServiciosEvento {
+
 
     @Autowired
     GestionUsuarios gestionusuarios;
@@ -86,8 +88,6 @@ public class GestionEventos implements ServiciosEvento {
 
     @Override
     public EventoDTO crearEvento(EventoDTO evento, int sec_token) {
-
-
 
         Date fecha_actual = new Date();
         if (evento.getFecha().before(fecha_actual)) {
@@ -151,12 +151,12 @@ public class GestionEventos implements ServiciosEvento {
         Usuario r_usuario = gestionusuarios.verificaToken(sec_token);
         Evento r_evento = obtenerEvento(evento.getId());
 
-        if(r_usuario.cancelarInscripcion(r_evento)){
-            if(!r_evento.getListaEspera().isEmpty()){
-                Usuario tmp=r_evento.getListaEspera().get(0);
+        if (r_usuario.cancelarInscripcion(r_evento)) {
+            if (!r_evento.getListaEspera().isEmpty()) {
+                Usuario tmp = r_evento.getListaEspera().get(0);
                 tmp.inscribirseEvento(r_evento);
             }
-            
+
             return true;
         }
         return false;
@@ -237,11 +237,10 @@ public class GestionEventos implements ServiciosEvento {
         Usuario r_usuario = gestionusuarios.verificaToken(sec_token);
         List<Evento> eventos_inscritos_lista_espera = r_usuario.getEventosInscritosEspera();
         List<EventoDTO> eventos_inscritos_lista_espera_DTO = new ArrayList<>();
-        
+
         for (Evento evento : eventos_inscritos_lista_espera) {
             eventos_inscritos_lista_espera_DTO.add(evento.toDTO());
         }
-        
 
 //        List<EventoDTO> eventos_inscritos_lista_espera = new ArrayList<>();
 //
@@ -250,10 +249,7 @@ public class GestionEventos implements ServiciosEvento {
 //                eventos_inscritos_lista_espera.add(evento.toDTO());
 //            }
 //        }
-
         return eventos_inscritos_lista_espera_DTO;
     }
-
-
 
 }

@@ -3,12 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.ujaen.practicaDAE.DAOs;
+package org.ujaen.practicaDAE.Servidor.DAOs;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import org.springframework.stereotype.Repository;
+
 import org.ujaen.practicaDAE.Servidor.Entidades.Usuario;
 
 /**
