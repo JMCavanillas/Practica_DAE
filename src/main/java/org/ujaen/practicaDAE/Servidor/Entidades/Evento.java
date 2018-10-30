@@ -17,11 +17,10 @@ import org.ujaen.practicaDAE.Servidor.DTOs.EventoDTO;
 
 /**
  * Clase que encapsula el comportamiento de un evento
- * 
+ *
  * @author Javier Martínez Cavanillas
  * @author Juan Antonio Béjar Martos
  */
-
 @Entity
 public class Evento {
 
@@ -31,14 +30,14 @@ public class Evento {
     public enum Tipo {
         CHARLA, CURSO, ACTIVIDAD_DEPORTIVA, VISITA_CULTURAL
     }
-    
+
     static int secuenciaID = 0;
     @Id
     private int id;
-    
+
     @ManyToOne
     private Usuario organizador;
-    
+
     @Temporal(TemporalType.TIMESTAMP)
     private Date fecha;
     private String lugar;
@@ -48,22 +47,22 @@ public class Evento {
 
     @ManyToMany
     protected List<Usuario> usuariosInscritos;
-    
+
     @ManyToMany
     protected List<Usuario> listaEspera;
 
     /**
      * Constructor orientado a DTOs
+     *
      * @param id
      * @param fecha
      * @param lugar
      * @param tipo
      * @param descripcion
-     * @param numeroMaxAsistentes 
+     * @param numeroMaxAsistentes
      */
-    public Evento(int id, Date fecha, String lugar, Tipo tipo, 
-            String descripcion, int numeroMaxAsistentes) 
-    {
+    public Evento(int id, Date fecha, String lugar, Tipo tipo,
+            String descripcion, int numeroMaxAsistentes) {
         this.id = id;
         this.fecha = fecha;
         this.lugar = lugar;
@@ -75,17 +74,17 @@ public class Evento {
 
     /**
      * Constructor por defecto
+     *
      * @param organizador
      * @param fecha
      * @param lugar
      * @param tipo
      * @param descripcion
-     * @param numeroMaxAsistentes 
+     * @param numeroMaxAsistentes
      */
-    public Evento(Usuario organizador, Date fecha, String lugar, Tipo tipo, 
-            String descripcion, int numeroMaxAsistentes) 
-    {
-        id=secuenciaID;
+    public Evento(Usuario organizador, Date fecha, String lugar, Tipo tipo,
+            String descripcion, int numeroMaxAsistentes) {
+        id = secuenciaID;
         secuenciaID++;
         this.organizador = organizador;
         this.fecha = fecha;
@@ -93,116 +92,117 @@ public class Evento {
         this.tipo = tipo;
         this.descripcion = descripcion;
         this.numeroMaxAsistentes = numeroMaxAsistentes;
-        
+
         // Inicializamos las listas de usuarios
         this.usuariosInscritos = new ArrayList<>();
         this.listaEspera = new ArrayList<>();
 
     }
 
+    public Evento(EventoDTO eventoDTO) {
+        this.organizador = null;
+        this.fecha = eventoDTO.getFecha();
+        this.lugar = eventoDTO.getLugar();
+        this.tipo = eventoDTO.getTipo();
+        this.descripcion = eventoDTO.getDescripcion();
+        this.numeroMaxAsistentes = eventoDTO.getNumeroMaxAsistentes();
+
+        // Inicializamos las listas de usuarios
+        this.usuariosInscritos = new ArrayList<>();
+        this.listaEspera = new ArrayList<>();
+    }
+
     /**
      * @return the fecha
      */
-    public Date getFecha() 
-    {
+    public Date getFecha() {
         return fecha;
     }
 
     /**
      * @param fecha the fecha to set
      */
-    public void setFecha(Date fecha) 
-    {
+    public void setFecha(Date fecha) {
         this.fecha = fecha;
     }
 
     /**
      * @return the lugar
      */
-    public String getLugar() 
-    {
+    public String getLugar() {
         return lugar;
     }
 
     /**
      * @param lugar the lugar to set
      */
-    public void setLugar(String lugar) 
-    {
+    public void setLugar(String lugar) {
         this.lugar = lugar;
     }
 
     /**
      * @return the tipo
      */
-    public Tipo getTipo() 
-    {
+    public Tipo getTipo() {
         return tipo;
     }
 
     /**
      * @param tipo the tipo to set
      */
-    public void setTipo(Tipo tipo) 
-    {
+    public void setTipo(Tipo tipo) {
         this.tipo = tipo;
     }
 
     /**
      * @return the numeroMaxAsistentes
      */
-    public int getNumeroMaxAsistentes() 
-    {
+    public int getNumeroMaxAsistentes() {
         return numeroMaxAsistentes;
     }
 
     /**
      * @param numeroMaxAsistentes the numeroMaxAsistentes to set
      */
-    public void setNumeroMaxAsistentes(int numeroMaxAsistentes) 
-    {
+    public void setNumeroMaxAsistentes(int numeroMaxAsistentes) {
         this.numeroMaxAsistentes = numeroMaxAsistentes;
     }
 
     /**
      * @return the descripcion
      */
-    public String getDescripcion() 
-    {
+    public String getDescripcion() {
         return descripcion;
     }
 
     /**
      * @param descripcion the descripcion to set
      */
-    public void setDescripcion(String descripcion) 
-    {
+    public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
 
     /**
      * @return the id
      */
-    public int getId() 
-    {
+    public int getId() {
         return id;
     }
 
     /**
      * Genera un DTO a partir del evento
-     * @return 
+     *
+     * @return
      */
-    public EventoDTO toDTO() 
-    {
+    public EventoDTO toDTO() {
         return new EventoDTO(id, fecha, lugar, tipo,
                 descripcion, numeroMaxAsistentes);
     }
-    
+
     /**
      * @return the organizador
      */
-    public Usuario getOrganizador()
-    {
+    public Usuario getOrganizador() {
         return organizador;
     }
 
@@ -210,15 +210,15 @@ public class Evento {
      * @return the usuariosInscritos
      */
     public List<Usuario> getUsuariosInscritos() {
-        
-       return new ArrayList(usuariosInscritos);
+
+        return new ArrayList(usuariosInscritos);
     }
 
     /**
      * @return the listaEspera
      */
     public List<Usuario> getListaEspera() {
-         return new ArrayList(listaEspera);
+        return new ArrayList(listaEspera);
     }
 
 }

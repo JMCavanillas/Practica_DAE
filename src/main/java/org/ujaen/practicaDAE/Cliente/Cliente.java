@@ -1,5 +1,7 @@
 package org.ujaen.practicaDAE.Cliente;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -163,7 +165,10 @@ public class Cliente {
                                     System.out.println("Introduzca las palabras utilizando - para separarlas");
                                     String palabrasBuscadas = sc.nextLine();
                                     String[] partes = palabrasBuscadas.split("\\s*-\\s*");
-                                    List<EventoDTO> listaEventosPalabrasClave = servicioEvento.buscarEventoPalabrasClave(partes);
+                                    List<String> palabras=Arrays.asList(partes);
+                                    
+                                    List<EventoDTO> listaEventosPalabrasClave = servicioEvento.buscarEventoPalabrasClave(palabras);
+                                    
                                     for (int i = 0; i < listaEventosPalabrasClave.size(); i++) {
                                         eventoDTOString(listaEventosPalabrasClave.get(i));
                                     }
@@ -335,7 +340,10 @@ public class Cliente {
         System.out.println("Introduzca las palabras utilizando - para separarlas");
         String palabrasBuscadas = sc.nextLine();
         String[] partes = palabrasBuscadas.split("\\s*-\\s*");
-        List<EventoDTO> listaEventosPalabrasClave = servicioEvento.buscarEventoPalabrasClave(partes);
+        
+        List<String> palabras=Arrays.asList(partes);
+        
+        List<EventoDTO> listaEventosPalabrasClave = servicioEvento.buscarEventoPalabrasClave(palabras);
         return listaEventosPalabrasClave;
     }
 

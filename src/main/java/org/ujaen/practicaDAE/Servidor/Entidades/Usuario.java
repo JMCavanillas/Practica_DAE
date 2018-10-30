@@ -120,6 +120,7 @@ public class Usuario {
         
         return evento;
     }
+ 
     
     /**
      * Crea un nuevo evento a partir de un DTO
@@ -196,15 +197,7 @@ public class Usuario {
         return false;
         
         
-//        
-//        if (eventosInscritos.remove(evento))
-//        {
-//            if(!evento.usuariosInscritos.remove(this))
-//                return evento.getListaEspera().remove(this);
-//            
-//            return true;
-//        }
-//        return false;
+
     }
 
 

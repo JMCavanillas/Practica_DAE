@@ -19,6 +19,7 @@ import org.ujaen.practicaDAE.Servidor.DAOs.UsuarioDAO;
 import org.ujaen.practicaDAE.Excepciones.ExcepcionCancelarEventoNoOrganizado;
 import org.ujaen.practicaDAE.Excepciones.ExcepcionEventoYaCelebrado;
 import org.ujaen.practicaDAE.Excepciones.ExcepcionUsuarioYaInscritoEvento;
+import org.ujaen.practicaDAE.Servidor.DAOs.EventoDAO;
 import org.ujaen.practicaDAE.Servidor.DTOs.EventoDTO;
 import org.ujaen.practicaDAE.Servidor.Interfaces.ServiciosEvento;
 
@@ -31,63 +32,53 @@ import org.ujaen.practicaDAE.Servidor.Interfaces.ServiciosEvento;
 @Component
 public class GestionEventos implements ServiciosEvento {
 
-
     @Autowired
     GestionUsuarios gestionusuarios;
+
+    @Autowired
+    EventoDAO eventoDAO;
 
     private static final DateFormat sdf
             = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 
-    Map<Integer, Evento> eventos;
-
+    // Map<Integer, Evento> eventos;
     /**
      * Constructor por defecto
      */
     public GestionEventos() {
-        eventos = new TreeMap<>();
+        //eventos = new TreeMap<>();
     }
 
     protected Evento obtenerEvento(int id) {
-        return eventos.get(id);
+        //return eventos.get(id);
+        return null;
     }
 
     @Override
     public List<EventoDTO> buscarEventoTipo(Evento.Tipo tipo) {
-
-        List<EventoDTO> tmp = new ArrayList<>();
-        for (Map.Entry<Integer, Evento> entry : eventos.entrySet()) {
-
-            if (entry.getValue().getTipo().equals(tipo)) {
-
-                tmp.add(entry.getValue().toDTO());
-            }
-
+        List<EventoDTO> eventosDTO = new ArrayList<>();
+        List<Evento> eventos = eventoDAO.buscarEventoTipo(tipo);
+        for (Evento e : eventos) {
+            eventosDTO.add(e.toDTO());
         }
 
-        return tmp;
+        return eventosDTO;
+
     }
 
     @Override
-    public List<EventoDTO> buscarEventoPalabrasClave(String[] palabras) {
-        List<EventoDTO> tmp = new ArrayList<>();
-
-        //A lo mejor se podria cambiar para las primeras
-        //posiciones de la lista la ocupen los eventos
-        //que tengan mas coincidencias de palabras clave
-        for (Map.Entry<Integer, Evento> entry : eventos.entrySet()) {
-            for (String palabra : palabras) {
-                if (entry.getValue().getDescripcion().toLowerCase()
-                        .contains(palabra.toLowerCase())) {
-                    tmp.add(entry.getValue().toDTO());
-                }
-            }
+    public List<EventoDTO> buscarEventoPalabrasClave(List<String> palabras) {
+        List<EventoDTO> eventosDTO = new ArrayList<>();
+        List<Evento> eventos = eventoDAO.buscarEventoPalabraClave(palabras);
+        for (Evento e : eventos) {
+            eventosDTO.add(e.toDTO());
         }
 
-        return tmp;
+        return eventosDTO;
     }
 
     @Override
-    public EventoDTO crearEvento(EventoDTO evento, int sec_token) {
+    public Boolean crearEvento(EventoDTO evento, int sec_token) {
 
         Date fecha_actual = new Date();
         if (evento.getFecha().before(fecha_actual)) {
@@ -95,12 +86,12 @@ public class GestionEventos implements ServiciosEvento {
         }
 
         //Añade el evento creado a la lista de eventos creados del usuario
-        Evento nuevo_evento = gestionusuarios.verificaToken(sec_token)
-                .creaEvento(evento);
+        
+        Usuario usuario=gestionusuarios.verificaToken(sec_token);
+        //Evento nuevo_evento = usuario.creaEvento(evento);
+        eventoDAO.crearEvento(evento.getFecha(),evento.getLugar(),evento.getTipo(),evento.getDescripcion(),evento.getNumeroMaxAsistentes(), usuario.getNombre());
 
-        eventos.put(nuevo_evento.getId(), nuevo_evento);
-
-        return nuevo_evento.toDTO();
+        return true;
     }
 
     @Override
@@ -121,7 +112,7 @@ public class GestionEventos implements ServiciosEvento {
                 r_evento.getUsuariosInscritos().get(i).cancelarInscripcion(r_evento);
             }
 
-            eventos.remove(r_evento.getId());
+            eventoDAO.borraEvento(r_evento);
 
         } else {
             throw new ExcepcionCancelarEventoNoOrganizado();
@@ -143,6 +134,7 @@ public class GestionEventos implements ServiciosEvento {
             throw new ExcepcionUsuarioYaInscritoEvento();
 
         }
+        
 
     }
 

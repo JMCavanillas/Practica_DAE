@@ -27,7 +27,7 @@ public interface ServiciosEvento {
      * @param palabras Conjunto de palabras clave
      * @return Lista de eventos
      */
-    List<EventoDTO> buscarEventoPalabrasClave(String[] palabras);
+    List<EventoDTO> buscarEventoPalabrasClave(List<String> palabras);
     
     /**
      * Crea un nuevo evento
@@ -36,7 +36,7 @@ public interface ServiciosEvento {
      * @param sec_token Token de seguridad identificativo del usuario
      * @return El evento creado en caso positivo
      */
-    EventoDTO crearEvento(EventoDTO evento, int sec_token);
+    Boolean crearEvento(EventoDTO evento, int sec_token);
 
     /**
      * Cancela un evento
