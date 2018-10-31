@@ -86,10 +86,9 @@ public class GestionEventos implements ServiciosEvento {
         }
 
         //Añade el evento creado a la lista de eventos creados del usuario
-        
-        Usuario usuario=gestionusuarios.verificaToken(sec_token);
+        Usuario usuario = gestionusuarios.verificaToken(sec_token);
         //Evento nuevo_evento = usuario.creaEvento(evento);
-        eventoDAO.crearEvento(evento.getFecha(),evento.getLugar(),evento.getTipo(),evento.getDescripcion(),evento.getNumeroMaxAsistentes(), usuario.getNombre());
+        eventoDAO.crearEvento(evento.getFecha(), evento.getLugar(), evento.getTipo(), evento.getDescripcion(), evento.getNumeroMaxAsistentes(), usuario.getNombre());
 
         return true;
     }
@@ -112,8 +111,7 @@ public class GestionEventos implements ServiciosEvento {
                 r_evento.getUsuariosInscritos().get(i).cancelarInscripcion(r_evento);
             }
 
-            eventoDAO.borraEvento(r_evento);
-
+            //eventoDAO.borraEvento(r_evento);
         } else {
             throw new ExcepcionCancelarEventoNoOrganizado();
         }
@@ -132,9 +130,9 @@ public class GestionEventos implements ServiciosEvento {
 
         if (!r_usuario.inscribirseEvento(r_evento)) {
             throw new ExcepcionUsuarioYaInscritoEvento();
-
+        } else {
+            gestionusuarios.getUsuarioDAO().actualizarUsuario(r_usuario);
         }
-        
 
     }
 
@@ -144,9 +142,13 @@ public class GestionEventos implements ServiciosEvento {
         Evento r_evento = obtenerEvento(evento.getId());
 
         if (r_usuario.cancelarInscripcion(r_evento)) {
+            gestionusuarios.getUsuarioDAO().actualizarUsuario(r_usuario);
+
             if (!r_evento.getListaEspera().isEmpty()) {
                 Usuario tmp = r_evento.getListaEspera().get(0);
                 tmp.inscribirseEvento(r_evento);
+
+                gestionusuarios.getUsuarioDAO().actualizarUsuario(tmp);
             }
 
             return true;

@@ -30,10 +30,10 @@ public class Usuario {
     @ManyToMany(mappedBy="usuariosInscritos")
     private List<Evento> eventosInscritos;
     
-    @ManyToMany(mappedBy="listaEspera", fetch=FetchType.LAZY)
+    @ManyToMany(mappedBy="listaEspera")
     private List<Evento> eventosInscritosEspera;
     
-    @OneToMany(mappedBy="organizador", fetch=FetchType.LAZY)
+    @OneToMany(mappedBy="organizador")
     private List<Evento> eventosCreados;
 
     public Usuario(String nombre, String contraseña) 
@@ -43,6 +43,10 @@ public class Usuario {
         
         this.eventosCreados = new ArrayList<>();
         this.eventosInscritos = new ArrayList<>();
+    }
+    
+    public Usuario(){
+        
     }
 
     /**
@@ -186,6 +190,8 @@ public class Usuario {
     {
         if(eventosInscritos.remove(evento)){
             evento.usuariosInscritos.remove(this);
+            
+            
             
              return true;
             

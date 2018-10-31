@@ -18,77 +18,76 @@ import org.ujaen.practicaDAE.Servidor.Interfaces.ServiciosUsuario;
  */
 @Component
 public class GestionUsuarios implements ServiciosUsuario {
-    
+
     @Autowired
-    UsuarioDAO usuarioDAO;
+    private UsuarioDAO usuarioDAO;
 
     //Map<String, Usuario> usuarios = new TreeMap<>();
-    
     Map<Integer, Usuario> registroTokens = new TreeMap<>();
 
     /**
      * Busca un usuario por identificador o nombre
-     * 
+     *
      * @param usuario Nombre o identificador del usuario
      * @return usuario
      */
-    protected Usuario buscarUsuario(String usuario) 
-    {
-        return usuarioDAO.buscarUsuario(usuario);
-        
-        
+    protected Usuario buscarUsuario(String usuario) {
+        return getUsuarioDAO().buscarUsuario(usuario);
+
     }
-    
+
     /**
      * Devuelve el usuario al que pertenece el token en caso de que este sea
      * válido y esté registrado, en otro caso lanza una excepción
-     * 
+     *
      * @param token Token a verificar
      * @return usuario
      */
-    protected Usuario verificaToken(int token)
-    {
+    protected Usuario verificaToken(int token) {
         Usuario usuario = registroTokens.get(token);
-        
-        if (usuario == null)
+
+        if (usuario == null) {
             throw new ExcepcionTokenInvalido();
-        
+        }
+
         return usuario;
     }
-    
+
     @Override
-    public int login(String usuario, String clave) 
-    {
+    public int login(String usuario, String clave) {
         int token = -1;
-        Usuario r_usuario = usuarioDAO.buscarUsuario(usuario);
-        
+        Usuario r_usuario = getUsuarioDAO().buscarUsuario(usuario);
+
         // Si no existe el usuario devuelve -1
-        if (r_usuario == null)
+        if (r_usuario == null) {
             return token;
-        
-        if (r_usuario.getClave().equals(clave)) 
-        {
+        }
+
+        if (r_usuario.getClave().equals(clave)) {
             Random aleatorio = new Random(System.currentTimeMillis());
             token = aleatorio.nextInt(Integer.MAX_VALUE);
-            
+
             // Genera token hasta que haya uno nuevo
-            while (registroTokens.containsKey(token))
+            while (registroTokens.containsKey(token)) {
                 token = aleatorio.nextInt(Integer.MAX_VALUE);
-            
+            }
+
             registroTokens.put(token, r_usuario);
-            
+
             // Ahora hay que ver si el token anterior esta en el registro 
             // y darlo de baja
-            
-            if (registroTokens.containsKey(r_usuario.getToken()))
+            if (registroTokens.containsKey(r_usuario.getToken())) {
                 registroTokens.remove(r_usuario.getToken());
-            
+            }
+
             // Asignamos el nuevo Token
             r_usuario.setToken(token);
-            
+            usuarioDAO.actualizarUsuario(r_usuario);
             return token;
         }
         
+        
+
         // Si la clave no existe, retorna codigo -2
         token = -2;
         return token;
@@ -96,15 +95,21 @@ public class GestionUsuarios implements ServiciosUsuario {
 
     @Override
     public boolean registro(String usuario, String clave) {
-        if (buscarUsuario(usuario)==null) {
+        if (buscarUsuario(usuario) == null) {
             Usuario tmp = new Usuario(usuario, clave);
-            usuarioDAO.registrarUsuario(tmp);
-            
+            getUsuarioDAO().registrarUsuario(tmp);
+
             return true;
-        }else {
+        } else {
             throw new ExcepcionUsuarioYaRegistrado();
         }
-       
+
     }
 
+    /**
+     * @return the usuarioDAO
+     */
+    public UsuarioDAO getUsuarioDAO() {
+        return usuarioDAO;
+    }
 }

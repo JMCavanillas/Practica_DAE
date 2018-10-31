@@ -71,6 +71,10 @@ public class Evento {
         this.numeroMaxAsistentes = numeroMaxAsistentes;
 
     }
+    
+    public Evento(){
+        
+    }
 
     /**
      * Constructor por defecto

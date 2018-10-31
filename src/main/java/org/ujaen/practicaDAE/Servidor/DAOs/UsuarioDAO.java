@@ -32,4 +32,8 @@ public class UsuarioDAO {
     public void registrarUsuario(Usuario usuario) {
         em.persist(usuario);
     }
+    
+    public void actualizarUsuario(Usuario usuario){
+        em.merge(usuario);
+    }
 }

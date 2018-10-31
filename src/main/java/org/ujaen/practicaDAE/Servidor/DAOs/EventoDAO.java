@@ -72,7 +72,10 @@ public class EventoDAO {
         em.persist(evento);                                                                     //Almacenamos el evento en la BD
     }
     
-    public void borraEvento(Evento evento){
+    public void borraEvento(Evento evento, String nombre){
+        Usuario usuario=em.find(Usuario.class, nombre);
+        usuario.cancelaEvento(evento);
+        
         em.remove(evento);
     }
     
@@ -80,9 +83,15 @@ public class EventoDAO {
        Evento evento=em.find(Evento.class, id);
        return evento;
    }
-    
-   public void inscribirEvento(Evento evento, Usuario usuario){
+
+   
+   public boolean cancelarInscripcion(Evento evento, String nombre){
+       Usuario usuario=em.find(Usuario.class, nombre);
        
+       //Lo dejamos junto para que sea transactional
+       
+
+       return false;
    }
    
 }
