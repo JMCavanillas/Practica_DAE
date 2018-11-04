@@ -34,8 +34,9 @@ public interface ServiciosUsuario
      * 
      * @param usuario id del nuevo usuario
      * @param clave clave del nuevo usuario
+     * @param correo correo del usuario
      * @return Boolean indicando se la operación se ha realizado con exito o no
      */
-    boolean registro(String usuario, String clave);
+    boolean registro(String usuario, String clave, String correo);
     
 }

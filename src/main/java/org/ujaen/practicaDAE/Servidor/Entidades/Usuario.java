@@ -24,6 +24,7 @@ public class Usuario {
     @Id
     private String nombre;
     private String clave;
+    private String correo;
     private int token;
 
     @ManyToMany(mappedBy = "usuariosInscritos")
@@ -35,10 +36,10 @@ public class Usuario {
     @OneToMany(mappedBy = "organizador")
     private List<Evento> eventosCreados;
 
-    public Usuario(String nombre, String contraseña) {
+    public Usuario(String nombre, String contraseña, String correo) {
         this.nombre = nombre;
         this.clave = contraseña;
-
+        this.correo = correo;
         this.eventosCreados = new ArrayList<>();
         this.eventosInscritos = new ArrayList<>();
     }
@@ -46,48 +47,7 @@ public class Usuario {
     public Usuario() {
 
     }
-
-    /**
-     * @return the nombre
-     */
-    public String getNombre() {
-        return nombre;
-    }
-
-    /**
-     * @param nombre the nombre to set
-     */
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    /**
-     * @return the clave
-     */
-    public String getClave() {
-        return clave;
-    }
-
-    /**
-     * @param clave the clave to set
-     */
-    public void setClave(String clave) {
-        this.clave = clave;
-    }
-
-    /**
-     * @return the eventosInscritos
-     */
-    public List<Evento> getEventosInscritos() {
-        return eventosInscritos;
-    }
-
-    /**
-     * @return the eventosCreados
-     */
-    public List<Evento> getEventosCreados() {
-        return eventosCreados;
-    }
+    
 
     /**
      * Genera un DTO a partir del usuario
@@ -135,7 +95,7 @@ public class Usuario {
      * @return el evento cancelado, null si no se puede cancelar
      */
     public Evento cancelaEvento(Evento evento) {
-        if (evento.getOrganizador().getNombre().equals(nombre)){
+        if (evento.getOrganizador().getNombre().equals(nombre)) {
             this.eventosCreados.remove(evento);
             return evento;
         }
@@ -190,6 +150,70 @@ public class Usuario {
     }
 
     /**
+     *
+     * @param id el id del evento que se quiere comprobar
+     * @return false si ya está inscrito en el evento, true en caso contrario
+     */
+    private boolean comprobarInscripcion(int id) {
+        for (Evento e : eventosInscritos) {
+            if (e.getId() == id) {
+                return false;
+            }
+        }
+
+        for (Evento eEspera : eventosInscritosEspera) {
+            if (eEspera.getId() == id) {
+                return false;
+            }
+        }
+
+        return true;
+
+    }
+
+    /**
+     * @return the nombre
+     */
+    public String getNombre() {
+        return nombre;
+    }
+
+    /**
+     * @param nombre the nombre to set
+     */
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    /**
+     * @return the clave
+     */
+    public String getClave() {
+        return clave;
+    }
+
+    /**
+     * @param clave the clave to set
+     */
+    public void setClave(String clave) {
+        this.clave = clave;
+    }
+
+    /**
+     * @return the eventosInscritos
+     */
+    public List<Evento> getEventosInscritos() {
+        return eventosInscritos;
+    }
+
+    /**
+     * @return the eventosCreados
+     */
+    public List<Evento> getEventosCreados() {
+        return eventosCreados;
+    }
+
+    /**
      * @return the token
      */
     public int getToken() {
@@ -209,28 +233,18 @@ public class Usuario {
     public List<Evento> getEventosInscritosEspera() {
         return eventosInscritosEspera;
     }
-    
+
     /**
-     * 
-     * @param id el id del evento que se quiere comprobar
-     * @return false si ya está inscrito en el evento, true 
-     * en caso contrario
+     * @return the correo
      */
+    public String getCorreo() {
+        return correo;
+    }
 
-    private boolean comprobarInscripcion(int id) {
-        for (Evento e : eventosInscritos) {
-            if (e.getId() == id) {
-                return false;
-            }
-        }
-
-        for (Evento eEspera : eventosInscritosEspera) {
-            if (eEspera.getId() == id) {
-                return false;
-            }
-        }
-        
-        return true;
-
+    /**
+     * @param correo the correo to set
+     */
+    public void setCorreo(String correo) {
+        this.correo = correo;
     }
 }

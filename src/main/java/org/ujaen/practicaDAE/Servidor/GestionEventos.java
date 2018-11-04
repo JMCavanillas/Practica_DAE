@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import org.ujaen.practicaDAE.Excepciones.ExcepcionCancelarEventoNoOrganizado;
 import org.ujaen.practicaDAE.Excepciones.ExcepcionEventoYaCelebrado;
 import org.ujaen.practicaDAE.Excepciones.ExcepcionUsuarioYaInscritoEvento;
+import org.ujaen.practicaDAE.Servidor.Correo.ServicioCorreo;
 import org.ujaen.practicaDAE.Servidor.DAOs.EventoDAO;
 import org.ujaen.practicaDAE.Servidor.DTOs.EventoDTO;
 import org.ujaen.practicaDAE.Servidor.Interfaces.ServiciosEvento;
@@ -30,6 +31,9 @@ public class GestionEventos implements ServiciosEvento {
 
     @Autowired
     EventoDAO eventoDAO;
+
+    @Autowired
+    private ServicioCorreo servicioCorreo;
 
     private static final DateFormat sdf
             = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
@@ -135,6 +139,9 @@ public class GestionEventos implements ServiciosEvento {
                 tmp.inscribirseEvento(r_evento);
 
                 gestionusuarios.getUsuarioDAO().actualizarUsuario(tmp);
+                
+                servicioCorreo.sendSimpleMessage(tmp.getCorreo(), "Inscripción evento", tmp.getNombre(), r_evento.getDescripcion(),
+                        r_evento.getFecha(), r_evento.getLugar());
             }
 
             return true;

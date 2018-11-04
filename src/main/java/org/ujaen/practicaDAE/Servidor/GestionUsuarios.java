@@ -1,5 +1,6 @@
 package org.ujaen.practicaDAE.Servidor;
 
+import java.util.Date;
 import org.ujaen.practicaDAE.Servidor.Entidades.Usuario;
 import java.util.Map;
 import java.util.Random;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Component;
 import org.ujaen.practicaDAE.Servidor.DAOs.UsuarioDAO;
 import org.ujaen.practicaDAE.Excepciones.ExcepcionTokenInvalido;
 import org.ujaen.practicaDAE.Excepciones.ExcepcionUsuarioYaRegistrado;
+import org.ujaen.practicaDAE.Servidor.Correo.ServicioCorreo;
 import org.ujaen.practicaDAE.Servidor.Interfaces.ServiciosUsuario;
 
 /**
@@ -21,6 +23,10 @@ public class GestionUsuarios implements ServiciosUsuario {
 
     @Autowired
     private UsuarioDAO usuarioDAO;
+    
+    @Autowired
+    private ServicioCorreo servicioCorreo;
+    
 
     //Map<String, Usuario> usuarios = new TreeMap<>();
     Map<Integer, Usuario> registroTokens = new TreeMap<>();
@@ -94,10 +100,11 @@ public class GestionUsuarios implements ServiciosUsuario {
     }
 
     @Override
-    public boolean registro(String usuario, String clave) {
+    public boolean registro(String usuario, String clave, String correo) {
         if (buscarUsuario(usuario) == null) {
-            Usuario tmp = new Usuario(usuario, clave);
+            Usuario tmp = new Usuario(usuario, clave,correo);
             getUsuarioDAO().registrarUsuario(tmp);
+            servicioCorreo.sendSimpleMessage(correo, "Hola", usuario, "algo", new Date(), "Jaén");
 
             return true;
         } else {

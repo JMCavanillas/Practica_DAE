@@ -63,8 +63,10 @@ public class Cliente {
                         String nombre = sc.nextLine();
                         System.out.println("Introduzca una contraseña");
                         String pwd = sc.nextLine();
+                        System.out.println("Introduzca un correo");
+                        String correo= sc.nextLine();
 
-                        if (servicioUsuario.registro(nombre, pwd)) {
+                        if (servicioUsuario.registro(nombre, pwd, correo)) {
                             System.out.println("Usuario creado correctamente");
                         }
                         break;
