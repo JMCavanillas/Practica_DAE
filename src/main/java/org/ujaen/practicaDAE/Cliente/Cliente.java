@@ -130,7 +130,7 @@ public class Cliente {
                             } else {
                                 System.out.println("Seleccione la posición del evento que quiere borrar");
                                 int pos = sc.nextInt();
-
+                                int a=30;
                                 servicioEvento.cancelarEvento(eventos.get(pos), token);
                             }
                         }

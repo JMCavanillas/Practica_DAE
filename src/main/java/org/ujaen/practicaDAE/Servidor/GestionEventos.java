@@ -97,12 +97,7 @@ public class GestionEventos implements ServiciosEvento {
         Evento resultado = r_usuario.cancelaEvento(r_evento);
 
         if (resultado != null) {
-
-            for (int i = 0; i < r_evento.getUsuariosInscritos().size(); i++) {
-                r_evento.getUsuariosInscritos().get(i).cancelarInscripcion(r_evento);
-            }
-
-            //eventoDAO.borraEvento(r_evento);
+            eventoDAO.borraEvento(r_evento);
         } else {
             throw new ExcepcionCancelarEventoNoOrganizado();
         }

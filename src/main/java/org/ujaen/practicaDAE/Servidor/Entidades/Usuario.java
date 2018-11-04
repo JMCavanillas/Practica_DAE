@@ -18,7 +18,6 @@ import org.ujaen.practicaDAE.Servidor.DTOs.UsuarioDTO;
  * @author Javier Martínez Cavanillas
  * @author Juan Antonio Béjar Martos
  */
-
 @Entity
 public class Usuario {
 
@@ -27,199 +26,180 @@ public class Usuario {
     private String clave;
     private int token;
 
-    @ManyToMany(mappedBy="usuariosInscritos")
+    @ManyToMany(mappedBy = "usuariosInscritos")
     private List<Evento> eventosInscritos;
-    
-    @ManyToMany(mappedBy="listaEspera")
+
+    @ManyToMany(mappedBy = "listaEspera")
     private List<Evento> eventosInscritosEspera;
-    
-    @OneToMany(mappedBy="organizador")
+
+    @OneToMany(mappedBy = "organizador")
     private List<Evento> eventosCreados;
 
-    public Usuario(String nombre, String contraseña) 
-    {
+    public Usuario(String nombre, String contraseña) {
         this.nombre = nombre;
         this.clave = contraseña;
-        
+
         this.eventosCreados = new ArrayList<>();
         this.eventosInscritos = new ArrayList<>();
     }
-    
-    public Usuario(){
-        
+
+    public Usuario() {
+
     }
 
     /**
      * @return the nombre
      */
-    public String getNombre() 
-    {
+    public String getNombre() {
         return nombre;
     }
 
     /**
      * @param nombre the nombre to set
      */
-    public void setNombre(String nombre) 
-    {
+    public void setNombre(String nombre) {
         this.nombre = nombre;
     }
 
     /**
      * @return the clave
      */
-    public String getClave() 
-    {
+    public String getClave() {
         return clave;
     }
 
     /**
      * @param clave the clave to set
      */
-    public void setClave(String clave) 
-    {
+    public void setClave(String clave) {
         this.clave = clave;
     }
 
     /**
      * @return the eventosInscritos
      */
-    public List<Evento> getEventosInscritos() 
-    {
+    public List<Evento> getEventosInscritos() {
         return eventosInscritos;
     }
 
     /**
      * @return the eventosCreados
      */
-    public List<Evento> getEventosCreados() 
-    {
+    public List<Evento> getEventosCreados() {
         return eventosCreados;
     }
 
     /**
      * Genera un DTO a partir del usuario
-     * @return 
+     *
+     * @return
      */
-    public UsuarioDTO toDTO() 
-    {
+    public UsuarioDTO toDTO() {
         return new UsuarioDTO(nombre);
     }
 
     /**
      * Crea un evento nuevo
+     *
      * @param fecha
      * @param lugar
      * @param tipo_evento
      * @param descripcion
      * @param max_asistentes
-     * @return 
+     * @return
      */
-    public Evento creaEvento(Date fecha, String lugar, Evento.Tipo tipo_evento, 
-            String descripcion, int max_asistentes)
-    {
+    public Evento creaEvento(Date fecha, String lugar, Evento.Tipo tipo_evento,
+            String descripcion, int max_asistentes) {
         Evento evento = new Evento(this, fecha, lugar, tipo_evento, descripcion,
                 max_asistentes);
         eventosCreados.add(evento);
-        
+
         return evento;
     }
- 
-    
+
     /**
      * Crea un nuevo evento a partir de un DTO
-     * @param evento 
-     * @return  
+     *
+     * @param evento
+     * @return
      */
-    public Evento creaEvento(EventoDTO evento)
-    {
-        return creaEvento(evento.getFecha(), evento.getLugar(), evento.getTipo(), 
+    public Evento creaEvento(EventoDTO evento) {
+        return creaEvento(evento.getFecha(), evento.getLugar(), evento.getTipo(),
                 evento.getDescripcion(), evento.getNumeroMaxAsistentes());
     }
-    
+
     /**
      * Cancela un evento si es organizador de este
+     *
      * @param evento
      * @return el evento cancelado, null si no se puede cancelar
      */
-    public Evento cancelaEvento(Evento evento)
-    {
-        if (evento.getOrganizador() == this)
-        {
+    public Evento cancelaEvento(Evento evento) {
+        if (evento.getOrganizador().getNombre().equals(nombre)){
             this.eventosCreados.remove(evento);
             return evento;
         }
-        
+
         return null;
     }
-    
+
     /**
      * Inscribe un usuario, en un evento
+     *
      * @param evento
-     * @return 
+     * @return
      */
-    public boolean inscribirseEvento(Evento evento)
-    {
-        if (!eventosInscritos.contains(evento) && !eventosInscritosEspera.contains(evento))
-        {
+    public boolean inscribirseEvento(Evento evento) {
+        if (!comprobarInscripcion(evento.getId())) {
+            return false;
+
+        } else {
             //eventosInscritos.add(evento);
-            
-            if (evento.getUsuariosInscritos().size() < evento.getNumeroMaxAsistentes())
-            {
+
+            if (evento.getUsuariosInscritos().size() < evento.getNumeroMaxAsistentes()) {
                 eventosInscritos.add(evento);
                 evento.getUsuariosInscritos().add(this);
-            } else
-            {    
+            } else {
                 getEventosInscritosEspera().add(evento);
                 evento.getListaEspera().add(this);
             }
             return true;
         }
-        
-        return false;
+
     }
-    
+
     /**
      * Cancela la inscripción a un evento
-     * 
+     *
      * @param evento
-     * @return True si se ha cancelado con exito
-     *         False en otro caso
+     * @return True si se ha cancelado con exito False en otro caso
      */
-    public boolean cancelarInscripcion(Evento evento)
-    {
-        if(eventosInscritos.remove(evento)){
+    public boolean cancelarInscripcion(Evento evento) {
+        if (eventosInscritos.remove(evento)) {
             evento.usuariosInscritos.remove(this);
-            
-            
-            
-             return true;
-            
-        }else if(getEventosInscritosEspera().remove(evento)){
+
+            return true;
+
+        } else if (getEventosInscritosEspera().remove(evento)) {
             evento.listaEspera.remove(this);
             return true;
         }
-       
+
         return false;
-        
-        
 
     }
-
 
     /**
      * @return the token
      */
-    public int getToken()
-    {
+    public int getToken() {
         return token;
     }
 
     /**
      * @param token the token to set
      */
-    public void setToken(int token)
-    {
+    public void setToken(int token) {
         this.token = token;
     }
 
@@ -228,5 +208,29 @@ public class Usuario {
      */
     public List<Evento> getEventosInscritosEspera() {
         return eventosInscritosEspera;
+    }
+    
+    /**
+     * 
+     * @param id el id del evento que se quiere comprobar
+     * @return false si ya está inscrito en el evento, true 
+     * en caso contrario
+     */
+
+    private boolean comprobarInscripcion(int id) {
+        for (Evento e : eventosInscritos) {
+            if (e.getId() == id) {
+                return false;
+            }
+        }
+
+        for (Evento eEspera : eventosInscritosEspera) {
+            if (eEspera.getId() == id) {
+                return false;
+            }
+        }
+        
+        return true;
+
     }
 }
