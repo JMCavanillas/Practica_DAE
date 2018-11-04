@@ -215,14 +215,14 @@ public class Evento {
      */
     public List<Usuario> getUsuariosInscritos() {
 
-        return new ArrayList(usuariosInscritos);
+        return usuariosInscritos;
     }
 
     /**
      * @return the listaEspera
      */
     public List<Usuario> getListaEspera() {
-        return new ArrayList(listaEspera);
+        return listaEspera;
     }
 
 }

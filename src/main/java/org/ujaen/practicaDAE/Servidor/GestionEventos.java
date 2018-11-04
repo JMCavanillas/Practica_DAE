@@ -4,18 +4,11 @@ import org.ujaen.practicaDAE.Servidor.Entidades.Usuario;
 import org.ujaen.practicaDAE.Servidor.Entidades.Evento;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.DateTimeException;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.ujaen.practicaDAE.Servidor.DAOs.UsuarioDAO;
 import org.ujaen.practicaDAE.Excepciones.ExcepcionCancelarEventoNoOrganizado;
 import org.ujaen.practicaDAE.Excepciones.ExcepcionEventoYaCelebrado;
 import org.ujaen.practicaDAE.Excepciones.ExcepcionUsuarioYaInscritoEvento;
@@ -41,7 +34,6 @@ public class GestionEventos implements ServiciosEvento {
     private static final DateFormat sdf
             = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 
-    // Map<Integer, Evento> eventos;
     /**
      * Constructor por defecto
      */
@@ -50,8 +42,7 @@ public class GestionEventos implements ServiciosEvento {
     }
 
     protected Evento obtenerEvento(int id) {
-        //return eventos.get(id);
-        return null;
+        return eventoDAO.buscarEventoID(id);
     }
 
     @Override
@@ -131,7 +122,7 @@ public class GestionEventos implements ServiciosEvento {
         if (!r_usuario.inscribirseEvento(r_evento)) {
             throw new ExcepcionUsuarioYaInscritoEvento();
         } else {
-            gestionusuarios.getUsuarioDAO().actualizarUsuario(r_usuario);
+            eventoDAO.actualizarEvento(r_evento);
         }
 
     }

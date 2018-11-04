@@ -7,14 +7,9 @@ package org.ujaen.practicaDAE.Servidor.DAOs;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.function.Predicate;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 import org.ujaen.practicaDAE.Servidor.Entidades.Evento;
@@ -33,8 +28,8 @@ public class EventoDAO {
     @PersistenceContext
     EntityManager em;
 
-    private static String buscarEventoTipoQuery = "select e from Evento e where e.tipo= :tipo";
-    private static String buscarEventoPalabra = "select e from Evento e where e.descripcion ";
+    private static final String buscarEventoTipoQuery = "select e from Evento e where e.tipo= :tipo";
+    private static final String buscarEventoPalabra = "select e from Evento e where e.descripcion ";
 
     public List<Evento> buscarEventoTipo(Evento.Tipo tipo) {
         List<Evento> eventos = em.createQuery(buscarEventoTipoQuery, Evento.class).setParameter("tipo", tipo).getResultList();
@@ -82,6 +77,11 @@ public class EventoDAO {
    public Evento buscarEventoID(int id){
        Evento evento=em.find(Evento.class, id);
        return evento;
+   }
+   
+   public void actualizarEvento(Evento evento)
+   {
+       em.merge(evento);
    }
 
    
