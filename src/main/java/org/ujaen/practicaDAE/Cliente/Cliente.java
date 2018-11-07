@@ -64,7 +64,7 @@ public class Cliente {
                         System.out.println("Introduzca una contraseña");
                         String pwd = sc.nextLine();
                         System.out.println("Introduzca un correo");
-                        String correo= sc.nextLine();
+                        String correo = sc.nextLine();
 
                         if (servicioUsuario.registro(nombre, pwd, correo)) {
                             System.out.println("Usuario creado correctamente");
@@ -103,10 +103,8 @@ public class Cliente {
                             Calendar calendario = new GregorianCalendar();
                             calendario.setLenient(false);
                             calendario = new GregorianCalendar(y, m, d, h, min);
-                           
 
                             Date fecha = calendario.getTime();
-                            
 
                             System.out.println("Introduzca el lugar");
                             String lugar = sc.nextLine();
@@ -132,7 +130,7 @@ public class Cliente {
                             } else {
                                 System.out.println("Seleccione la posición del evento que quiere borrar");
                                 int pos = sc.nextInt();
-                                int a=30;
+                                int a = 30;
                                 servicioEvento.cancelarEvento(eventos.get(pos), token);
                             }
                         }
@@ -167,10 +165,10 @@ public class Cliente {
                                     System.out.println("Introduzca las palabras utilizando - para separarlas");
                                     String palabrasBuscadas = sc.nextLine();
                                     String[] partes = palabrasBuscadas.split("\\s*-\\s*");
-                                    List<String> palabras=Arrays.asList(partes);
-                                    
+                                    List<String> palabras = Arrays.asList(partes);
+
                                     List<EventoDTO> listaEventosPalabrasClave = servicioEvento.buscarEventoPalabrasClave(palabras);
-                                    
+
                                     for (int i = 0; i < listaEventosPalabrasClave.size(); i++) {
                                         eventoDTOString(listaEventosPalabrasClave.get(i));
                                     }
@@ -193,14 +191,21 @@ public class Cliente {
                         if (token == -1 || token == -2) {
                             System.out.println("Debe estar logueado en el sistema para acceder a esta funcionalidad");
                         } else {
-                            List<EventoDTO> eventos = verEventosInscritosFuturos(servicioEvento, token);
+
+                            List<EventoDTO> eventos = servicioEvento.verEventosInscritosFuturos(token);
+                            //eventos.addAll(servicioEvento.verEventosListaEspera(token));
+
                             if (eventos.isEmpty()) {
                                 System.out.println("No hay eventos");
                             } else {
-                                System.out.println("Seleccione la posición del evento que quiere cancelar la inscripción");
-                                int pos = sc.nextInt();
 
-                                servicioEvento.cancelarEvento(eventos.get(pos), token);
+                                for (int i = 0; i < eventos.size(); i++) {
+                                    eventoDTOString(eventos.get(i));
+                                }
+                                System.out.println("Seleccione la posición del evento que quiere cancelar la inscripción");
+                                int pos = Integer.parseInt(sc.nextLine());
+
+                                servicioEvento.cancelarInscripcionEvento(eventos.get(pos), token);
                             }
                         }
                         break;
@@ -262,6 +267,11 @@ public class Cliente {
                             eventoDTOString(listaEventosPalabrasClave.get(i));
                         }
                         break;
+                    case 13:
+                        List<EventoDTO> listaEventosEspera = servicioEvento.verEventosListaEspera(token);
+                        for (int i = 0; i < listaEventosEspera.size(); i++) {
+                            eventoDTOString(listaEventosEspera.get(i));
+                        }
 
                 }
             } catch (RuntimeException e) {
@@ -332,6 +342,8 @@ public class Cliente {
             for (int i = 0; i < evtosInscritosFuturos.size(); i++) {
                 eventoDTOString(evtosInscritosFuturos.get(i));
             }
+            return evtosInscritosFuturos;
+
         } catch (Exception e) {
             System.out.println("Uoop! Error! " + e.toString());
         }
@@ -342,12 +354,11 @@ public class Cliente {
         System.out.println("Introduzca las palabras utilizando - para separarlas");
         String palabrasBuscadas = sc.nextLine();
         String[] partes = palabrasBuscadas.split("\\s*-\\s*");
-        
-        List<String> palabras=Arrays.asList(partes);
-        
+
+        List<String> palabras = Arrays.asList(partes);
+
         List<EventoDTO> listaEventosPalabrasClave = servicioEvento.buscarEventoPalabrasClave(palabras);
         return listaEventosPalabrasClave;
     }
-
 
 }

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.LockModeType;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import org.springframework.stereotype.Repository;
@@ -59,31 +60,54 @@ public class EventoDAO {
     }
 
     public void crearEvento(Date fecha, String lugar, Evento.Tipo tipo, String descripcion, int numeroMaxAsistentes, String nombre) {
-        
-        
-        Usuario usuario=em.find(Usuario.class, nombre);                                         //Usuario gestionado por la BD
-        Evento evento=usuario.creaEvento(fecha, lugar, tipo, descripcion, numeroMaxAsistentes); //Añadimos el evento a la lista de eventos creados del usuario
-        
+
+        Usuario usuario = em.find(Usuario.class, nombre);                                         //Usuario gestionado por la BD
+        Evento evento = usuario.creaEvento(fecha, lugar, tipo, descripcion, numeroMaxAsistentes); //Añadimos el evento a la lista de eventos creados del usuario
+
         em.persist(evento);                                                                     //Almacenamos el evento en la BD
     }
-    
-    public void borraEvento(Evento evento){
 
-        Evento e=em.find(Evento.class,evento.getId());
-        
+    public void borraEvento(Evento evento) {
+
+        Evento e = em.find(Evento.class, evento.getId());
+
         em.remove(e);
     }
-    
-   public Evento buscarEventoID(int id){
-       Evento evento=em.find(Evento.class, id);
-       return evento;
-   }
-   
-   public void actualizarEvento(Evento evento)
-   {
-       em.merge(evento);
-   }
 
+    public Evento buscarEventoID(int id) {
+        Evento evento = em.find(Evento.class, id);
+        return evento;
+    }
 
-   
+    public void actualizarEvento(Evento evento) {
+        em.merge(evento);
+    }
+
+    public boolean cancelarInscripcion(Evento evento, Usuario usuario, Usuario usuarioEnviarCorreo) {
+
+        System.out.println("Hola");
+        em.merge(usuario);
+        if (usuario.cancelarInscripcion(evento)) {
+
+            em.merge(usuario);
+
+            if (!evento.getListaEspera().isEmpty()) {
+
+                // em.lock(evento, LockModeType.OPTIMISTIC);
+                Usuario tmp = evento.getListaEspera().get(0);
+                tmp.inscribirseEvento(evento);
+
+                em.merge(tmp);
+
+                usuarioEnviarCorreo = tmp;
+
+            }
+
+            return true;
+
+        }
+
+        return false;
+    }
+
 }

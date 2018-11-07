@@ -3,8 +3,14 @@ package org.ujaen.practicaDAE.Servidor.Entidades;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -13,6 +19,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import javax.persistence.UniqueConstraint;
+import javax.persistence.Version;
 import org.ujaen.practicaDAE.Servidor.DTOs.EventoDTO;
 
 /**
@@ -33,6 +41,7 @@ public class Evento {
 
     static int secuenciaID = 0;
     @Id
+    @GeneratedValue
     private int id;
 
     @ManyToOne
@@ -45,11 +54,14 @@ public class Evento {
     private String descripcion;
     private int numeroMaxAsistentes;
 
-    @ManyToMany
-    protected List<Usuario> usuariosInscritos;
+    @Version
+    int version;
 
     @ManyToMany
-    protected List<Usuario> listaEspera;
+    protected Set<Usuario> usuariosInscritos;
+
+    @ManyToMany
+    protected Map<Date, Usuario> listaEspera;
 
     /**
      * Constructor orientado a DTOs
@@ -71,9 +83,9 @@ public class Evento {
         this.numeroMaxAsistentes = numeroMaxAsistentes;
 
     }
-    
-    public Evento(){
-        
+
+    public Evento() {
+
     }
 
     /**
@@ -88,8 +100,9 @@ public class Evento {
      */
     public Evento(Usuario organizador, Date fecha, String lugar, Tipo tipo,
             String descripcion, int numeroMaxAsistentes) {
-        id = secuenciaID;
-        secuenciaID++;
+//        id = secuenciaID;
+//        secuenciaID++;
+
         this.organizador = organizador;
         this.fecha = fecha;
         this.lugar = lugar;
@@ -98,8 +111,8 @@ public class Evento {
         this.numeroMaxAsistentes = numeroMaxAsistentes;
 
         // Inicializamos las listas de usuarios
-        this.usuariosInscritos = new ArrayList<>();
-        this.listaEspera = new ArrayList<>();
+        this.usuariosInscritos = new TreeSet<>();
+        this.listaEspera = new TreeMap<>();
 
     }
 
@@ -112,9 +125,11 @@ public class Evento {
         this.numeroMaxAsistentes = eventoDTO.getNumeroMaxAsistentes();
 
         // Inicializamos las listas de usuarios
-        this.usuariosInscritos = new ArrayList<>();
-        this.listaEspera = new ArrayList<>();
+        this.usuariosInscritos = new TreeSet<>();
+        this.listaEspera = new TreeMap<>();
     }
+
+
 
     /**
      * @return the fecha
@@ -213,7 +228,7 @@ public class Evento {
     /**
      * @return the usuariosInscritos
      */
-    public List<Usuario> getUsuariosInscritos() {
+    public Set<Usuario> getUsuariosInscritos() {
 
         return usuariosInscritos;
     }
@@ -221,7 +236,7 @@ public class Evento {
     /**
      * @return the listaEspera
      */
-    public List<Usuario> getListaEspera() {
+    public Map<Date, Usuario> getListaEspera() {
         return listaEspera;
     }
 
