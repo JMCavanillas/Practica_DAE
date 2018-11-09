@@ -261,4 +261,15 @@ public class Usuario {
     public void setCorreo(String correo) {
         this.correo = correo;
     }
+    
+    /**
+     * @param usuario 
+     */
+    
+    public void asignarDatos(Usuario usuario){
+        this.clave=usuario.clave;
+        this.nombre=usuario.nombre;
+        this.correo=usuario.correo;
+        
+    }
 }

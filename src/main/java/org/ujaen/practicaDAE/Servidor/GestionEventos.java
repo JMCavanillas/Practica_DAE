@@ -138,10 +138,10 @@ public class GestionEventos implements ServiciosEvento {
         Usuario r_usuario = gestionusuarios.verificaToken(sec_token);
         Evento r_evento = obtenerEvento(evento.getId());
         r_usuario = gestionusuarios.getUsuarioDAO().buscarUsuario(r_usuario.getNombre());
-        Usuario usuarioEnviarCorreo = null;
+        Usuario usuarioEnviarCorreo=new Usuario();
 
         if(eventoDAO.cancelarInscripcion(r_evento, r_usuario, usuarioEnviarCorreo)){
-            if(usuarioEnviarCorreo!=null){
+            if(!usuarioEnviarCorreo.getNombre().isEmpty()){
                 servicioCorreo.sendSimpleMessage(usuarioEnviarCorreo.getCorreo(), "Aceptado en el evento "+r_evento.getDescripcion(),
                         usuarioEnviarCorreo.getNombre(), r_evento.getDescripcion(), r_evento.getFecha(), r_evento.getLugar());
             }

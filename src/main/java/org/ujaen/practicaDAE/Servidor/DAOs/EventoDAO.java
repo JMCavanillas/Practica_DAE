@@ -105,8 +105,9 @@ public class EventoDAO {
 
                 tmp.cambiarLista(evento);
                 em.merge(evento);
-
-                usuarioEnviarCorreo=tmp;
+                
+                usuarioEnviarCorreo.asignarDatos(tmp);
+                
 
             }
 
