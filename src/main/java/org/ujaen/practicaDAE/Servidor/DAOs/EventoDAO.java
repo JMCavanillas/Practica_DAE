@@ -47,9 +47,9 @@ public class EventoDAO {
 
         for (int i = 0; i < palabra.size(); i++) {
             if (i == 0) {
-                query += "LIKE %" + palabra.get(i) + "%";
+                query += "LIKE '%" + palabra.get(i) + "%'";
             } else {
-                query += " OR LIKE %" + palabra.get(i) + "%";
+                query += " OR e.descripcion LIKE '%" + palabra.get(i) + "%'";
             }
 
         }
