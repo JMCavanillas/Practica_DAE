@@ -31,7 +31,7 @@ public class Usuario {
     private int token;
 
     @ManyToMany(mappedBy = "usuariosInscritos")
-    private Set<Evento> eventosInscritos;
+    private List<Evento> eventosInscritos;
 
     @ManyToMany(mappedBy = "listaEspera")
     private List<Evento> eventosInscritosEspera;
@@ -44,7 +44,7 @@ public class Usuario {
         this.clave = contraseña;
         this.correo = correo;
         this.eventosCreados = new ArrayList<>();
-        this.eventosInscritos = new TreeSet<>();
+        this.eventosInscritos = new ArrayList<>();
     }
 
     public Usuario() {
@@ -140,70 +140,28 @@ public class Usuario {
     public boolean cancelarInscripcion(Evento evento) {
         
         
-        for(Evento e: eventosInscritos){
-            if(e.getId()==evento.getId()){
-                 eventosInscritos.remove(e);
-                
+        
+        
+        for(Usuario u: evento.usuariosInscritos){
+            if(u.getNombre().equals(this.nombre)){
+                evento.usuariosInscritos.remove(u);
                 return true;
             }
         }
-        
         return false;
-//        if(evento.usuariosInscritos.contains(this)){
-//            evento.usuariosInscritos.remove(this);
-//            return true;
-//        }
-//        return false;
-        
-        
-
-//        Evento tmp = null;
-//        for (Evento e : eventosInscritos) {
-//            if (e.getId() == evento.getId()) {
-//                tmp = e;
-//            }
-//        }
-//        if (tmp != null) {
-//            eventosInscritos.remove(tmp);
-//            tmp.usuariosInscritos.remove(this);
-//        }
-//
-//        for (Evento e2 : eventosInscritosEspera) {
-//            if (e2.getId() == evento.getId()) {
-//                tmp = e2;
-//            }
-//        }
-//        if (tmp != null) {
-//            eventosInscritosEspera.remove(tmp);
-//            Map.Entry<Date,Usuario> entry=tmp.listaEspera.entrySet().iterator().next();
-//            
-//            tmp.listaEspera.remove(entry.getKey());
-//        }
-
-//        if (comprobarInscripcion(evento.getId())) {
-//            return false;
-//
-//        }else{
-//            if (this.eventosInscritos.remove(evento)) {
-//            evento.usuariosInscritos.remove(this);
-//
-//            
-//
-//         } else if (this.eventosInscritosEspera.remove(evento)) {
-//            Map.Entry<Date,Usuario> entry=evento.listaEspera.entrySet().iterator().next();
-//            
-//            evento.listaEspera.remove(entry.getKey());
-//            
-//          }
-//
-//        return true;
-//        }
-//        if (tmp == null) {
-//            return false;
-//        } else {
-//            return true;
-//        }
     }
+        
+    
+    public void cambiarLista(Evento evento){
+        
+        
+        evento.usuariosInscritos.add(this);
+        
+        
+    }
+        
+        
+
 
     /**
      *
@@ -258,7 +216,7 @@ public class Usuario {
     /**
      * @return the eventosInscritos
      */
-    public Set<Evento> getEventosInscritos() {
+    public List<Evento> getEventosInscritos() {
         return eventosInscritos;
     }
 

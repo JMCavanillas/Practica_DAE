@@ -7,7 +7,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
+import java.util.TreeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ujaen.practicaDAE.Excepciones.ExcepcionCancelarEventoNoOrganizado;
@@ -37,14 +40,13 @@ public class GestionEventos implements ServiciosEvento {
     @Autowired
     private ServicioCorreo servicioCorreo;
 
-    private static final DateFormat sdf
-            = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+
 
     /**
      * Constructor por defecto
      */
     public GestionEventos() {
-        //eventos = new TreeMap<>();
+        
     }
 
     protected Evento obtenerEvento(int id) {
@@ -119,6 +121,8 @@ public class GestionEventos implements ServiciosEvento {
 
         Usuario r_usuario = gestionusuarios.verificaToken(sec_token);
         Evento r_evento = obtenerEvento(evento.getId());
+        
+        
 
         if (!r_usuario.inscribirseEvento(r_evento)) {
             throw new ExcepcionUsuarioYaInscritoEvento();
@@ -133,51 +137,28 @@ public class GestionEventos implements ServiciosEvento {
 
         Usuario r_usuario = gestionusuarios.verificaToken(sec_token);
         Evento r_evento = obtenerEvento(evento.getId());
-
+        r_usuario = gestionusuarios.getUsuarioDAO().buscarUsuario(r_usuario.getNombre());
         Usuario usuarioEnviarCorreo = null;
 
-       
-        r_usuario = gestionusuarios.getUsuarioDAO().buscarUsuario(r_usuario.getNombre());
-        if (r_usuario.cancelarInscripcion(r_evento)) {
-            gestionusuarios.getUsuarioDAO().actualizarUsuario(r_usuario);
-            eventoDAO.actualizarEvento(r_evento);
-            if (!r_evento.getListaEspera().isEmpty()) {
-
-                // em.lock(evento, LockModeType.OPTIMISTIC);
-                Usuario tmp = r_evento.getListaEspera().get(0);
-
-                tmp.inscribirseEvento(r_evento);
-                gestionusuarios.getUsuarioDAO().actualizarUsuario(tmp);
-                eventoDAO.actualizarEvento(r_evento);
-
-                usuarioEnviarCorreo = tmp;
-
+        if(eventoDAO.cancelarInscripcion(r_evento, r_usuario, usuarioEnviarCorreo)){
+            if(usuarioEnviarCorreo!=null){
+                servicioCorreo.sendSimpleMessage(usuarioEnviarCorreo.getCorreo(), "Aceptado en el evento "+r_evento.getDescripcion(),
+                        usuarioEnviarCorreo.getNombre(), r_evento.getDescripcion(), r_evento.getFecha(), r_evento.getLugar());
             }
-
+            
             return true;
-
+        }else{
+            throw new ExcepcionCancelarInscripcion();
         }
-
-        return false;
-
+                    
         
-        //----------------
-//        if (eventoDAO.cancelarInscripcion(r_evento, r_usuario, usuarioEnviarCorreo)) {
-//            if (usuarioEnviarCorreo != null) {
-//                servicioCorreo.sendSimpleMessage(usuarioEnviarCorreo.getCorreo(), "Inscripción evento", usuarioEnviarCorreo.getNombre(), r_evento.getDescripcion(),
-//                        r_evento.getFecha(), r_evento.getLugar());
-//            }
-//            return true;
-//        }else{
-//            throw new ExcepcionCancelarInscripcion();
-//        }
     }
 
     @Override
     public List<EventoDTO> verEventosInscritosCelebrados(int sec_token) {
         Usuario r_usuario = gestionusuarios.verificaToken(sec_token);
         r_usuario = gestionusuarios.getUsuarioDAO().buscarUsuario(r_usuario.getNombre());
-        Set<Evento> eventos_inscritos = r_usuario.getEventosInscritos();
+        List<Evento> eventos_inscritos = r_usuario.getEventosInscritos();
         List<EventoDTO> eventos_inscritos_celebrados = new ArrayList<>();
         Date fecha_actual = new Date();
 
@@ -194,7 +175,7 @@ public class GestionEventos implements ServiciosEvento {
     public List<EventoDTO> verEventosInscritosFuturos(int sec_token) {
         Usuario r_usuario = gestionusuarios.verificaToken(sec_token);
         r_usuario = gestionusuarios.getUsuarioDAO().buscarUsuario(r_usuario.getNombre());
-        Set<Evento> eventos_inscritos = r_usuario.getEventosInscritos();
+        List<Evento> eventos_inscritos = r_usuario.getEventosInscritos();
         List<EventoDTO> eventos_inscritos_futuros = new ArrayList<>();
         Date fecha_actual = new Date();
 
@@ -230,7 +211,7 @@ public class GestionEventos implements ServiciosEvento {
     @Override
     public List<EventoDTO> verEventosOrganizadosFuturos(int sec_token) {
         Usuario r_usuario = gestionusuarios.verificaToken(sec_token);
-        r_usuario = gestionusuarios.getUsuarioDAO().buscarUsuario(r_usuario.getNombre());
+       r_usuario = gestionusuarios.getUsuarioDAO().buscarUsuario(r_usuario.getNombre());
         List<Evento> eventos_organizados = r_usuario.getEventosCreados();
         List<EventoDTO> eventos_organizados_futuros = new ArrayList<>();
         Date fecha_actual = new Date();

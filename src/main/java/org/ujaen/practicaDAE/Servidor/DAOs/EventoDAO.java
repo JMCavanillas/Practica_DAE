@@ -8,6 +8,7 @@ package org.ujaen.practicaDAE.Servidor.DAOs;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
 import javax.persistence.PersistenceContext;
@@ -85,21 +86,27 @@ public class EventoDAO {
 
     public boolean cancelarInscripcion(Evento evento, Usuario usuario, Usuario usuarioEnviarCorreo) {
 
-        System.out.println("Hola");
+        //System.out.println("Hola");
+        
         em.merge(usuario);
         if (usuario.cancelarInscripcion(evento)) {
 
-            em.merge(usuario);
+            em.merge(evento);
 
             if (!evento.getListaEspera().isEmpty()) {
 
-                // em.lock(evento, LockModeType.OPTIMISTIC);
-                Usuario tmp = evento.getListaEspera().get(0);
-                tmp.inscribirseEvento(evento);
+               // em.lock(evento, LockModeType.OPTIMISTIC);
+                Usuario tmp = null;
+                for (Map.Entry<Date, Usuario> entry : evento.getListaEspera().entrySet()) {
+                    tmp = entry.getValue();
+                    evento.getListaEspera().remove(entry.getKey());
+                    break;
+                }
 
-                em.merge(tmp);
+                tmp.cambiarLista(evento);
+                em.merge(evento);
 
-                usuarioEnviarCorreo = tmp;
+                usuarioEnviarCorreo=tmp;
 
             }
 
