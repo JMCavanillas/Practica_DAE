@@ -7,8 +7,11 @@ package org.ujaen.practicaDAE.Servidor.DAOs;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import org.ujaen.practicaDAE.Excepciones.ExcepcionActualizarUsuario;
+import org.ujaen.practicaDAE.Excepciones.ExcepcionUsuarioYaRegistrado;
 
 import org.ujaen.practicaDAE.Servidor.Entidades.Usuario;
 
@@ -19,21 +22,32 @@ import org.ujaen.practicaDAE.Servidor.Entidades.Usuario;
  * @author Juan Antonio Béjar Martos
  */
 @Repository
-@Transactional
+@Transactional(propagation=Propagation.SUPPORTS, readOnly=true)
 public class UsuarioDAO {
 
     @PersistenceContext
     EntityManager em;
 
+    @Transactional(propagation=Propagation.SUPPORTS, readOnly=true)
     public Usuario buscarUsuario(String nombre) {
         return (em.find(Usuario.class, nombre));
     }
 
+    @Transactional(propagation=Propagation.REQUIRED, readOnly=false)
     public void registrarUsuario(Usuario usuario) {
-        em.persist(usuario);
+        try {
+            em.persist(usuario);
+        } catch (RuntimeException ex) {
+            throw new ExcepcionUsuarioYaRegistrado();
+        }
     }
     
+    @Transactional(propagation=Propagation.REQUIRED, readOnly=false)
     public void actualizarUsuario(Usuario usuario){
-        em.merge(usuario);
+        try {
+            em.merge(usuario);
+        } catch (RuntimeException ex) {
+            throw new ExcepcionActualizarUsuario();
+        }
     }
 }

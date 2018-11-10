@@ -134,19 +134,19 @@ public class GestionEventos implements ServiciosEvento {
         Evento r_evento = obtenerEvento(evento.getId());
         r_usuario = gestionusuarios.getUsuarioDAO().buscarUsuario(r_usuario.getNombre());
         Usuario usuarioEnviarCorreo=new Usuario();
+        
+        try {
+            eventoDAO.cancelarInscripcion(r_evento, r_usuario, usuarioEnviarCorreo);
 
-        if(eventoDAO.cancelarInscripcion(r_evento, r_usuario, usuarioEnviarCorreo)){
             if(!usuarioEnviarCorreo.getNombre().isEmpty()){
                 servicioCorreo.sendSimpleMessage(usuarioEnviarCorreo.getCorreo(), "Aceptado en el evento "+r_evento.getDescripcion(),
                         usuarioEnviarCorreo.getNombre(), r_evento.getDescripcion(), r_evento.getFecha(), r_evento.getLugar());
             }
-            
-            return true;
-        }else{
-            throw new ExcepcionCancelarInscripcion();
+        } catch (RuntimeException ex){
+            return false;
         }
                     
-        
+        return true;
     }
 
     @Override
