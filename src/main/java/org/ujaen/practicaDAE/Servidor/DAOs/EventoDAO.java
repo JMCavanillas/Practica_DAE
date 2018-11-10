@@ -12,6 +12,7 @@ import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 import org.ujaen.practicaDAE.Servidor.Entidades.Evento;
 import org.ujaen.practicaDAE.Servidor.Entidades.Usuario;
@@ -32,14 +33,26 @@ public class EventoDAO {
     private static final String buscarEventoTipoQuery = "select e from Evento e where e.tipo= :tipo";
     private static final String buscarEventoPalabra = "select e from Evento e where e.descripcion ";
 
+    @Cacheable(value = "eventos")
     public List<Evento> buscarEventoTipo(Evento.Tipo tipo) {
+        slowQuery(5000);
+//        System.out.println("HOLA; NO SOY DE CACHE");
         List<Evento> eventos = em.createQuery(buscarEventoTipoQuery, Evento.class).setParameter("tipo", tipo).getResultList();
 
         return eventos;
-
+    }
+    
+    private void slowQuery(long seconds){
+        try {
+            Thread.sleep(seconds);
+        } catch (InterruptedException e) {
+            throw new IllegalStateException(e);
+        }
     }
 
+    @Cacheable(value = "eventos")
     public List<Evento> buscarEventoPalabraClave(List<String> palabra) {
+        slowQuery(5000);
 
         String query = buscarEventoPalabra;
         List<Evento> eventos = new ArrayList<>();
