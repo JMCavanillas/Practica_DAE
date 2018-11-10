@@ -2,15 +2,9 @@ package org.ujaen.practicaDAE.Servidor;
 
 import org.ujaen.practicaDAE.Servidor.Entidades.Usuario;
 import org.ujaen.practicaDAE.Servidor.Entidades.Evento;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.TreeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ujaen.practicaDAE.Excepciones.ExcepcionCancelarEventoNoOrganizado;
