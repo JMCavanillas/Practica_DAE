@@ -104,7 +104,7 @@ public class GestionUsuarios implements ServiciosUsuario {
         if (buscarUsuario(usuario) == null) {
             Usuario tmp = new Usuario(usuario, clave,correo);
             getUsuarioDAO().registrarUsuario(tmp);
-            servicioCorreo.sendSimpleMessage(correo, "Hola", usuario, "algo", new Date(), "Jaén");
+           // servicioCorreo.sendSimpleMessage(correo, "Hola", usuario, "algo", new Date(), "Jaén");
 
             return true;
         } else {

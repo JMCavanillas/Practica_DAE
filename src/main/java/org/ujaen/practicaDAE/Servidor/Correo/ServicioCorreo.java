@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.ujaen.practicaDAE.Servidor.Correo;
 
 import java.util.Date;
@@ -12,8 +7,10 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
 /**
+ * Clase que gestiona el envio de correos electrónicos
  *
- * @author jabm9
+ * @author Javier Martínez Cavanillas
+ * @author Juan Antonio Béjar Martos
  */
 @Component
 public class ServicioCorreo {

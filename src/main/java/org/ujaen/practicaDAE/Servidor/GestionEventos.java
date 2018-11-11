@@ -78,10 +78,9 @@ public class GestionEventos implements ServiciosEvento {
         if (evento.getFecha().before(fecha_actual)) {
             throw new ExcepcionEventoYaCelebrado();
         }
-
-        //Añade el evento creado a la lista de eventos creados del usuario
         Usuario usuario = gestionusuarios.verificaToken(sec_token);
         //Evento nuevo_evento = usuario.creaEvento(evento);
+        
         eventoDAO.crearEvento(evento.getFecha(), evento.getLugar(), evento.getTipo(), evento.getDescripcion(), evento.getNumeroMaxAsistentes(), usuario.getNombre());
 
         return true;

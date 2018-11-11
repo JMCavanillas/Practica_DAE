@@ -12,6 +12,7 @@ import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
 import javax.persistence.PersistenceContext;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
@@ -79,6 +80,7 @@ public class EventoDAO {
     }
 
     @Transactional(propagation=Propagation.REQUIRED, readOnly=false)
+    @CacheEvict(value="eventos", allEntries = true)
     public void crearEvento(Date fecha, String lugar, Evento.Tipo tipo, String descripcion, int numeroMaxAsistentes, String nombre) {
 
         Usuario usuario = em.find(Usuario.class, nombre);                                         //Usuario gestionado por la BD
@@ -88,6 +90,7 @@ public class EventoDAO {
     }
 
     @Transactional(propagation=Propagation.REQUIRED, readOnly=false)
+    @CacheEvict(value="eventos", allEntries = true)
     public void borraEvento(Evento evento) {
         
         try {
