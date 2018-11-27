@@ -29,6 +29,8 @@ public class Evento {
      */
     public enum Tipo {
         CHARLA, CURSO, ACTIVIDAD_DEPORTIVA, VISITA_CULTURAL
+        
+        
     }
 
     static int secuenciaID = 0;
@@ -207,7 +209,7 @@ public class Evento {
      */
     public EventoDTO toDTO() {
         return new EventoDTO(id, fecha, lugar, tipo,
-                descripcion, numeroMaxAsistentes);
+                descripcion, numeroMaxAsistentes,organizador.getNombre());
     }
 
     /**

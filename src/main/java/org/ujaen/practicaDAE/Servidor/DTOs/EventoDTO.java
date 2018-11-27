@@ -17,27 +17,48 @@ public class EventoDTO {
     private Evento.Tipo tipo;
     private String descripcion;
     private int numeroMaxAsistentes;
+    private String organizador;
 
-    public EventoDTO(int id, Date fecha, String lugar, Evento.Tipo tipo, 
-            String descripcion, int numeroMaxAsistente) {
+    public EventoDTO(int id, Date fecha, String lugar, Evento.Tipo tipo,
+            String descripcion, int numeroMaxAsistente, String organizador) {
         this.id = id;
         this.fecha = fecha;
         this.lugar = lugar;
         this.tipo = tipo;
         this.descripcion = descripcion;
         this.numeroMaxAsistentes = numeroMaxAsistente;
+        this.organizador = organizador;
     }
 
-    public EventoDTO(Date fecha, String lugar, Evento.Tipo tipo, 
-            String descripcion, int numeroMaxAsistente) {
-        id=secuenciaID;
+    public EventoDTO(Date fecha, String lugar, Evento.Tipo tipo,
+            String descripcion, int numeroMaxAsistente, String organizador) {
+        id = secuenciaID;
         secuenciaID++;
         this.fecha = fecha;
         this.lugar = lugar;
         this.tipo = tipo;
         this.descripcion = descripcion;
         this.numeroMaxAsistentes = numeroMaxAsistente;
+        this.organizador = organizador;
     }
+
+    public EventoDTO(String lugar, Evento.Tipo tipo,
+            String descripcion, int numeroMaxAsistente, String organizador) {
+        id = secuenciaID;
+        secuenciaID++;
+        this.fecha = null;
+        this.lugar = lugar;
+        this.tipo = tipo;
+        this.descripcion = descripcion;
+        this.numeroMaxAsistentes = numeroMaxAsistente;
+        this.organizador = organizador;
+    }
+    
+    public EventoDTO(){
+        
+    }
+
+ 
 
     /**
      * @return the fecha
@@ -124,9 +145,23 @@ public class EventoDTO {
     }
 
     public String eventoDTOString(EventoDTO e) {
-        String tmp = "Evento:" + e.getId() + e.getFecha() + e.getLugar() 
+        String tmp = "Evento:" + e.getId() + e.getFecha() + e.getLugar()
                 + e.getTipo() + e.getDescripcion() + e.getNumeroMaxAsistentes();
         return tmp;
+    }
+
+    /**
+     * @return the organizador
+     */
+    public String getOrganizador() {
+        return organizador;
+    }
+
+    /**
+     * @param organizador the organizador to set
+     */
+    public void setOrganizador(String organizador) {
+        this.organizador = organizador;
     }
 
 }

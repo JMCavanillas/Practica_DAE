@@ -10,7 +10,7 @@ import org.springframework.cache.ehcache.EhCacheManagerFactoryBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ClassPathResource;
-import org.ujaen.practicaDAE.Cliente.Cliente;
+//import org.ujaen.practicaDAE.Cliente.Cliente;
 
 /**
  * Clase principal de incio de la aplicación Spring
@@ -28,9 +28,9 @@ public class ServidorPracDAE
     {
         SpringApplication servidor=new SpringApplication(ServidorPracDAE.class);
         ApplicationContext context=servidor.run(args);
-        
-        Cliente cliente=new Cliente(context);
-        cliente.run();
+//        
+//        Cliente cliente=new Cliente(context);
+//        cliente.run();
     }
     
     @Bean

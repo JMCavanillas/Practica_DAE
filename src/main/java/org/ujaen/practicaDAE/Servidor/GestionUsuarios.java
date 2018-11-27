@@ -37,7 +37,7 @@ public class GestionUsuarios implements ServiciosUsuario {
      * @param usuario Nombre o identificador del usuario
      * @return usuario
      */
-    protected Usuario buscarUsuario(String usuario) {
+    public Usuario buscarUsuario(String usuario) {
         return getUsuarioDAO().buscarUsuario(usuario);
 
     }

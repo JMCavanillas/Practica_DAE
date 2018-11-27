@@ -9,6 +9,6 @@ public class ExcepcionTokenInvalido extends RuntimeException {
     
     public ExcepcionTokenInvalido()
     {
-        super("No puede cancelar un evento que no has organizado");
+        super("No eres usuario tio!!!!!!!!!!");
     }
 }

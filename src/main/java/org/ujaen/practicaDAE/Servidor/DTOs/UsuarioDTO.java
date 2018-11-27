@@ -16,16 +16,19 @@ public class UsuarioDTO {
 
     private String nombre;
     private String clave;
+    private String correo;
 
     /**
      * Constructor
      *
      * @param nombre
      * @param contraseña
+     * @param correo
      */
-    public UsuarioDTO(String nombre, String contraseña) {
+    public UsuarioDTO(String nombre, String contraseña, String correo) {
         this.nombre = nombre;
         this.clave = contraseña;
+        this.correo = correo;
     }
 
     /**
@@ -63,6 +66,20 @@ public class UsuarioDTO {
      */
     public String getClave() {
         return clave;
+    }
+
+    /**
+     * @return the correo
+     */
+    public String getCorreo() {
+        return correo;
+    }
+
+    /**
+     * @param correo the correo to set
+     */
+    public void setCorreo(String correo) {
+        this.correo = correo;
     }
 
 }
