@@ -36,6 +36,22 @@ public class GestionUsuariosREST {
         
     }
     
+    @RequestMapping(value="/usuario/login/{nombre}", method=POST, produces="application/json")
+    public boolean login(@PathVariable String nombre,
+            @RequestBody UsuarioDTO usuario)
+    {
+        
+        
+        int autentificacion=gestionUsuarios.login(nombre, usuario.getClave());
+        if(autentificacion==1){
+            return true;
+        }
+        
+      
+        return false;
+        
+    }
+    
     
     @RequestMapping(value="/usuario/{nombre}", method=POST, produces="application/json")
     public boolean registrarUsuario(
@@ -47,6 +63,8 @@ public class GestionUsuariosREST {
       
         
     }
+    
+    
     
 
 }

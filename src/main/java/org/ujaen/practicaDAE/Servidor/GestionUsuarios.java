@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.Random;
 import java.util.TreeMap;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.ujaen.practicaDAE.Servidor.DAOs.UsuarioDAO;
 import org.ujaen.practicaDAE.Excepciones.ExcepcionTokenInvalido;
@@ -61,50 +63,65 @@ public class GestionUsuarios implements ServiciosUsuario {
 
     @Override
     public int login(String usuario, String clave) {
-        int token = -1;
+        //Version login para probar con cliente externo
+        int token=-1;
+  
         Usuario r_usuario = getUsuarioDAO().buscarUsuario(usuario);
-
-        // Si no existe el usuario devuelve -1
-        if (r_usuario == null) {
-            return token;
-        }
-
-        if (r_usuario.getClave().equals(clave)) {
-            Random aleatorio = new Random(System.currentTimeMillis());
-            token = aleatorio.nextInt(Integer.MAX_VALUE);
-
-            // Genera token hasta que haya uno nuevo
-            while (registroTokens.containsKey(token)) {
-                token = aleatorio.nextInt(Integer.MAX_VALUE);
-            }
-
-            registroTokens.put(token, r_usuario);
-
-            // Ahora hay que ver si el token anterior esta en el registro 
-            // y darlo de baja
-            if (registroTokens.containsKey(r_usuario.getToken())) {
-                registroTokens.remove(r_usuario.getToken());
-            }
-
-            // Asignamos el nuevo Token
-            r_usuario.setToken(token);
-            usuarioDAO.actualizarUsuario(r_usuario);
-            return token;
+        
+        if(r_usuario.getClave().equals(clave)){
+            token=1;
         }
         
-        
-
-        // Si la clave no existe, retorna codigo -2
-        token = -2;
         return token;
+        //Version original Login
+//        int token = -1;
+//        Usuario r_usuario = getUsuarioDAO().buscarUsuario(usuario);
+//
+//        // Si no existe el usuario devuelve -1
+//        if (r_usuario == null) {
+//            return token;
+//        }
+//
+//        if (r_usuario.getClave().equals(clave)) {
+//            Random aleatorio = new Random(System.currentTimeMillis());
+//            token = aleatorio.nextInt(Integer.MAX_VALUE);
+//
+//            // Genera token hasta que haya uno nuevo
+//            while (registroTokens.containsKey(token)) {
+//                token = aleatorio.nextInt(Integer.MAX_VALUE);
+//            }
+//
+//            registroTokens.put(token, r_usuario);
+//
+//            // Ahora hay que ver si el token anterior esta en el registro 
+//            // y darlo de baja
+//            if (registroTokens.containsKey(r_usuario.getToken())) {
+//                registroTokens.remove(r_usuario.getToken());
+//            }
+//
+//            // Asignamos el nuevo Token
+//            r_usuario.setToken(token);
+//            usuarioDAO.actualizarUsuario(r_usuario);
+//            return token;
+//        }
+//        
+//        
+//
+//        // Si la clave no existe, retorna codigo -2
+//        token = -2;
+//        return token;
     }
 
     @Override
     public boolean registro(String usuario, String clave, String correo) {
         if (buscarUsuario(usuario) == null) {
+            
+            PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            clave = passwordEncoder.encode(clave);
+            
             Usuario tmp = new Usuario(usuario, clave,correo);
             getUsuarioDAO().registrarUsuario(tmp);
-           // servicioCorreo.sendSimpleMessage(correo, "Hola", usuario, "algo", new Date(), "Jaén");
+            //servicioCorreo.sendSimpleMessage(correo, "Hola", usuario, "algo", new Date(), "Jaén");
 
             return true;
         } else {
