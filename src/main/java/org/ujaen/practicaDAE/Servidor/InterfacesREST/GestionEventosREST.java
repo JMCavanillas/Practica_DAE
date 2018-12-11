@@ -52,20 +52,25 @@ public class GestionEventosREST {
     }
 
     @RequestMapping(value = "/evento/tipo/{tipo}", method = GET, produces = "application/json")
-    public List<EventoDTO> buscarEventoTipo(@PathVariable Evento.Tipo tipo) {
-
+    public Pagina<EventoDTO> buscarEventoTipo(@PathVariable Evento.Tipo tipo, 
+            @RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "5") int size) {
+        
         List<EventoDTO> eventosTipo = gestionEventos.buscarEventoTipo(tipo);
+        
+        Pagina<EventoDTO>  pagina = new Pagina<>(eventosTipo, page, size);
 
-        return eventosTipo;
-
+        return pagina;
     }
 
     @RequestMapping(value = "/evento", method = GET, produces = "application/json")
-    public List<EventoDTO> buscarEventoTipo(@RequestParam List<String> palabras) {
+    public Pagina<EventoDTO> buscarEventoPalabrasClave(@RequestParam List<String> palabras,
+            @RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "5") int size) {
 
         List<EventoDTO> eventosPalabras = gestionEventos.buscarEventoPalabrasClave(palabras);
+        
+        Pagina<EventoDTO>  pagina = new Pagina<>(eventosPalabras, page, size);
 
-        return eventosPalabras;
+        return pagina;
 
     }
 
