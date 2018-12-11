@@ -36,17 +36,26 @@ public class GestionEventosREST {
 
     }
 
-    @RequestMapping(value = "/evento", method = POST, produces = "application/json")
-    public void crearEvento(@RequestBody EventoDTO evento) {
-
-        gestionEventos.crearEvento(evento, evento.getOrganizador());
-
+    @RequestMapping(value = "/usuario/{nombre}/evento", method = POST, produces = "application/json")
+    public boolean crearEvento(@PathVariable String nombre, 
+            @RequestBody EventoDTO evento) {
+        
+        if(!evento.getOrganizador().equals(nombre)){
+            return false;
+        }
+        
+       if(gestionEventos.crearEvento(evento, evento.getOrganizador())){
+           return true;
+       }
+       return false;
     }
 
     @RequestMapping(value = "/evento/{id}", method = DELETE, produces = "application/json")
-    public void cancelarEvento(@PathVariable int id,
-            @RequestBody EventoDTO evento) {
+    public void cancelarEvento(@PathVariable int id) {
 
+        EventoDTO evento=gestionEventos.buscarEventoID(id).toDTO();
+        
+        
         gestionEventos.cancelarEvento(evento, evento.getOrganizador());
 
     }
@@ -61,6 +70,7 @@ public class GestionEventosREST {
 
         return pagina;
     }
+
 
     @RequestMapping(value = "/evento", method = GET, produces = "application/json")
     public Pagina<EventoDTO> buscarEventoPalabrasClave(@RequestParam List<String> palabras,
@@ -100,12 +110,14 @@ public class GestionEventosREST {
     }
 
     @RequestMapping(value = "/usuario/{nombre}/evento/inscrito", method = POST, produces = "application/json")
-    public void inscribirEvento(@PathVariable String nombre,
+    public boolean inscribirEvento(@PathVariable String nombre,
             @RequestBody int id) {
 
         Evento evento = gestionEventos.obtenerEvento(id);
         EventoDTO eventoDTO = evento.toDTO();
         gestionEventos.inscribirseEvento(eventoDTO, nombre);
+       
+        return true;
 
     }
 
@@ -120,7 +132,7 @@ public class GestionEventosREST {
     }
 
     @RequestMapping(value = "/usuario/{nombre}/evento/organizado", method = GET, produces = "application/json")
-    public List<EventoDTO> verEventosCelebrados(@PathVariable String nombre,
+    public List<EventoDTO> verEventosOrganizado(@PathVariable String nombre,
             @RequestParam(value = "tiempo", required = false, defaultValue = "todos") String tiempo) {
 
         List<EventoDTO> eventosOrganizados = new ArrayList<>();

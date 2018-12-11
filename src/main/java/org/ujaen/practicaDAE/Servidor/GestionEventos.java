@@ -242,4 +242,8 @@ public class GestionEventos implements ServiciosEvento {
         return eventos_inscritos_lista_espera_DTO;
     }
 
+    public Evento buscarEventoID(int id){
+       return eventoDAO.buscarEventoID(id);
+    }
+    
 }
