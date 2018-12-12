@@ -146,13 +146,4 @@ public class GestionEventosREST {
         return eventosOrganizados;
     }
 
-//    @RequestMapping(value="/evento", method=POST, produces="application/json")
-//    public boolean crearEvento(@RequestBody EventoDTO evento){
-//        
-//        return gestionEventos.crearEvento(evento, evento.getOrganizador());
-//
-//        
-//        
-//    }
-//      
 }

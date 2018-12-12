@@ -23,3 +23,10 @@ spring.mail.password: pruebapracticaDAE123
 spring.mail.properties.mail.smtp.auth: true
 spring.mail.properties.mail.smtp.starttls.enable: true
 
+
+server.port: 8443
+server.ssl.key-store: classpath:eventos.p12
+server.ssl.key-store-password: jabm0010
+server.ssl.keyStoreType: PKCS12
+server.ssl.keyAlias: tomcat
+
