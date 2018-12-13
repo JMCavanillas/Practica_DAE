@@ -2,6 +2,7 @@ package org.ujaen.practicaDAE.Servidor.InterfacesREST;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,7 +53,7 @@ public class GestionUsuariosREST {
         
     }
     
-    
+    @CrossOrigin
     @RequestMapping(value="/usuario/{nombre}", method=POST, produces="application/json")
     public boolean registrarUsuario(
     @PathVariable String nombre,
