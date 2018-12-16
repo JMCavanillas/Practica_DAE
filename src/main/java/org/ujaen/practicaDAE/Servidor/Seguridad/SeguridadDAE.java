@@ -52,7 +52,7 @@ public class SeguridadDAE extends WebSecurityConfigurerAdapter {
 
         httpSecurity.httpBasic();
 
-        httpSecurity.authorizeRequests().antMatchers("/gestionUsuarios/**").permitAll();
+        //httpSecurity.authorizeRequests().antMatchers("/usuario/**").permitAll();
         httpSecurity.authorizeRequests().antMatchers(HttpMethod.GET, "/evento/**").permitAll();
         httpSecurity.authorizeRequests().antMatchers(HttpMethod.POST, "/evento/**").hasRole("USUARIO");
         httpSecurity.authorizeRequests().antMatchers(HttpMethod.DELETE, "/evento/**").hasRole("USUARIO");

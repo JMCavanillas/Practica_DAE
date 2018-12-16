@@ -34,9 +34,9 @@ public class ServicioDatosUsuario implements UserDetailsService {
             
         }
         
-        UserDetails hola =  User.withUsername(userName).password("{bcrypt}" + usuario.getClave()).roles("USUARIO").build();
+        UserDetails userDetails =  User.withUsername(userName).password("{bcrypt}" + usuario.getClave()).roles("USUARIO").build();
         
-        return hola;
+        return userDetails;
     }
     
 }

@@ -53,12 +53,9 @@ public class ServidorPracDAE {
         return new EhCacheCacheManager(ehCacheCacheManager().getObject());
     }
 
-    @Bean
-    public RestTemplate restTemplate(RestTemplateBuilder builder) {
-        return builder.build();
-    }
 
-       @Bean
+
+    @Bean
     public ServletWebServerFactory servletContainer() {
         TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory() {
             @Override
@@ -75,6 +72,11 @@ public class ServidorPracDAE {
         return tomcat;
     }
 
+    @Bean
+    public RestTemplate restTemplate(RestTemplateBuilder builder) {
+        return builder.build();
+    }
+    
     private Connector redirectConnector() {
         Connector connector = new Connector(
                 TomcatServletWebServerFactory.DEFAULT_PROTOCOL);
@@ -84,5 +86,6 @@ public class ServidorPracDAE {
         connector.setRedirectPort(8443);
         return connector;
     }
+
 
 }

@@ -1,7 +1,8 @@
 package org.ujaen.practicaDAE.Servidor.InterfacesREST;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,54 +19,44 @@ import org.ujaen.practicaDAE.Servidor.GestionUsuarios;
  * @author Javier Martínez Cavanillas
  * @author Juan Antonio Béjar Martos
  */
-
 @RestController
 @RequestMapping("/")
 public class GestionUsuariosREST {
-    
+
     @Autowired
     GestionUsuarios gestionUsuarios;
-    
-    @RequestMapping(value="/usuario/{nombre}", method=GET, produces="application/json")
-    public UsuarioDTO buscarUsuario(@PathVariable String nombre)
-    {
-        Usuario usuario=gestionUsuarios.buscarUsuario(nombre);
+
+    @RequestMapping(value = "/usuario/{nombre}", method = GET, produces = "application/json")
+    public UsuarioDTO buscarUsuario(@PathVariable String nombre) {
+        Usuario usuario = gestionUsuarios.buscarUsuario(nombre);
         UsuarioDTO usuarioDTO = usuario.toDTO();
-        
-      
+
         return usuarioDTO;
-        
+
     }
-    
-    @RequestMapping(value="/usuario/login/{nombre}", method=POST, produces="application/json")
+
+    @RequestMapping(value = "/usuario/login/{nombre}", method = POST, produces = "application/json")
     public boolean login(@PathVariable String nombre,
-            @RequestBody UsuarioDTO usuario)
-    {
-        
-        
-        int autentificacion=gestionUsuarios.login(nombre, usuario.getClave());
-        if(autentificacion==1){
+            @RequestBody UsuarioDTO usuario) {
+
+ 
+        int autentificacion = gestionUsuarios.login(nombre, usuario.getClave());
+        if (autentificacion == 1) {
             return true;
         }
-        
-      
+
         return false;
-        
+
     }
-    
+
     @CrossOrigin
-    @RequestMapping(value="/usuario/{nombre}", method=POST, produces="application/json")
+    @RequestMapping(value = "/usuario/{nombre}", method = POST, produces = "application/json")
     public boolean registrarUsuario(
-    @PathVariable String nombre,
-            @RequestBody UsuarioDTO usuario){
-        
-        
+            @PathVariable String nombre,
+            @RequestBody UsuarioDTO usuario) {
+
         return gestionUsuarios.registro(nombre, usuario.getClave(), usuario.getCorreo());
-      
-        
+
     }
-    
-    
-    
 
 }

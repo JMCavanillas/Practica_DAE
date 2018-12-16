@@ -109,9 +109,8 @@ public class GestionEventosREST {
         return eventosInscritos;
     }
 
-    @RequestMapping(value = "/usuario/{nombre}/evento/inscrito", method = POST, produces = "application/json")
-    public boolean inscribirEvento(@PathVariable String nombre,
-            @RequestBody int id) {
+    @RequestMapping(value = "/usuario/{nombre}/evento/inscrito/{id}", method = POST, produces = "application/json")
+    public boolean inscribirEvento(@PathVariable String nombre,@PathVariable int id) {
 
         Evento evento = gestionEventos.obtenerEvento(id);
         EventoDTO eventoDTO = evento.toDTO();
@@ -121,9 +120,8 @@ public class GestionEventosREST {
 
     }
 
-    @RequestMapping(value = "/usuario/{nombre}/evento/inscrito", method = DELETE, produces = "application/json")
-    public void cancelarInscripcionEvento(@PathVariable String nombre,
-            @RequestBody int id) {
+    @RequestMapping(value = "/usuario/{nombre}/evento/inscrito/{id}", method = DELETE, produces = "application/json")
+    public void cancelarInscripcionEvento(@PathVariable String nombre,@PathVariable int id) {
 
         Evento evento = gestionEventos.obtenerEvento(id);
         EventoDTO eventoDTO = evento.toDTO();
