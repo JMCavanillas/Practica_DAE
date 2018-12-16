@@ -7,26 +7,19 @@ package org.ujaen.practicaDAE.Servidor.Interfaces;
 
 /**
  *
- * @author jabm9
+ * @author Javier Martínez Cavanillas
+ * @author Juan Antonio Béjar Martos
  */
 public interface ServiciosUsuario 
 {
     /**
-     * Dado un usuario le da acceso al sistema y le entrega un token 
-     * identificador con el que podrá validar las operaciones posteriores
-     * 
-     * Si el usuario que realiza el login ya tiene un token registrado, este se 
-     * eliminará del sistema y se le asignará uno nuevo, por lo que un mismo 
-     * usuario no podrá estar conectado simultáneamente desde dos clientes 
-     * distintos
-     * 
+     * Login al sistema
      * @param usuario
      * @param clave
-     * @return Token si el usuario existe y la clave es correcta
-     *         -1 si el usuario no existe
-     *         -2 si la contraseña especificada no es correcta
+     * @return true si el usuario está registrado en el sistema, false
+     * en caso contrario
      */
-    int login(String usuario, String clave);
+    boolean login(String usuario, String clave);
     
     
     /**

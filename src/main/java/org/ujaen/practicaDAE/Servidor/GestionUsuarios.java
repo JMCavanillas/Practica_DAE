@@ -62,54 +62,17 @@ public class GestionUsuarios implements ServiciosUsuario {
     }
 
     @Override
-    public int login(String usuario, String clave) {
+    public boolean login(String usuario, String clave) {
         //Version login para probar con cliente externo
-        int token=-1;
-  
+      
         Usuario r_usuario = getUsuarioDAO().buscarUsuario(usuario);
         
         if(r_usuario.getClave().equals(clave)){
-            token=1;
+            return true;
         }
         
-        return token;
-        //Version original Login
-//        int token = -1;
-//        Usuario r_usuario = getUsuarioDAO().buscarUsuario(usuario);
-//
-//        // Si no existe el usuario devuelve -1
-//        if (r_usuario == null) {
-//            return token;
-//        }
-//
-//        if (r_usuario.getClave().equals(clave)) {
-//            Random aleatorio = new Random(System.currentTimeMillis());
-//            token = aleatorio.nextInt(Integer.MAX_VALUE);
-//
-//            // Genera token hasta que haya uno nuevo
-//            while (registroTokens.containsKey(token)) {
-//                token = aleatorio.nextInt(Integer.MAX_VALUE);
-//            }
-//
-//            registroTokens.put(token, r_usuario);
-//
-//            // Ahora hay que ver si el token anterior esta en el registro 
-//            // y darlo de baja
-//            if (registroTokens.containsKey(r_usuario.getToken())) {
-//                registroTokens.remove(r_usuario.getToken());
-//            }
-//
-//            // Asignamos el nuevo Token
-//            r_usuario.setToken(token);
-//            usuarioDAO.actualizarUsuario(r_usuario);
-//            return token;
-//        }
-//        
-//        
-//
-//        // Si la clave no existe, retorna codigo -2
-//        token = -2;
-//        return token;
+        return false;
+
     }
 
     @Override
@@ -125,7 +88,7 @@ public class GestionUsuarios implements ServiciosUsuario {
 
             return true;
         } else {
-            throw new ExcepcionUsuarioYaRegistrado();
+            return false;
         }
 
     }

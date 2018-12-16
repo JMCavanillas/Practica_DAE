@@ -52,11 +52,12 @@ public class SeguridadDAE extends WebSecurityConfigurerAdapter {
 
         httpSecurity.httpBasic();
 
-        //httpSecurity.authorizeRequests().antMatchers("/usuario/**").permitAll();
+        httpSecurity.authorizeRequests().antMatchers("/usuario/**").permitAll();
         httpSecurity.authorizeRequests().antMatchers(HttpMethod.GET, "/evento/**").permitAll();
-        httpSecurity.authorizeRequests().antMatchers(HttpMethod.POST, "/evento/**").hasRole("USUARIO");
-        httpSecurity.authorizeRequests().antMatchers(HttpMethod.DELETE, "/evento/**").hasRole("USUARIO");
-        httpSecurity.authorizeRequests().antMatchers("/usuario/{nombre}/evento/*").access("hasRole('USUARIO') and #nombre == principal.username");
+        //httpSecurity.authorizeRequests().antMatchers("/usuario/{nombre}/evento/*").access("hasRole('USUARIO') and #nombre == principal.username");
+        httpSecurity.authorizeRequests().antMatchers(HttpMethod.POST, "/usuario/{nombre}/evento/*").access("hasRole('USUARIO') and #nombre == principal.username");
+        httpSecurity.authorizeRequests().antMatchers(HttpMethod.GET, "/usuario/{nombre}/evento/*").access("hasRole('USUARIO') and #nombre == principal.username");
+        httpSecurity.authorizeRequests().antMatchers(HttpMethod.DELETE, "/usuario/{nombre}/evento/*").access("hasRole('USUARIO') and #nombre == principal.username");
 
     }
 

@@ -3,6 +3,8 @@ package org.ujaen.practicaDAE.Servidor.InterfacesREST;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,57 +30,71 @@ public class GestionEventosREST {
     GestionEventos gestionEventos;
 
     @RequestMapping(value = "/evento/{id}", method = GET, produces = "application/json")
-    public EventoDTO obtenerEvento(@PathVariable int id) {
+    public ResponseEntity<EventoDTO> obtenerEvento(@PathVariable int id) {
         Evento evento = gestionEventos.obtenerEvento(id);
-        EventoDTO eventoDTO = evento.toDTO();
+        if (evento != null) {
+            EventoDTO eventoDTO = evento.toDTO();
+            return new ResponseEntity<>(eventoDTO, HttpStatus.OK);
 
-        return eventoDTO;
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
     }
 
     @RequestMapping(value = "/usuario/{nombre}/evento", method = POST, produces = "application/json")
-    public boolean crearEvento(@PathVariable String nombre, 
+    public ResponseEntity<Boolean> crearEvento(@PathVariable String nombre,
             @RequestBody EventoDTO evento) {
-        
-        if(!evento.getOrganizador().equals(nombre)){
-            return false;
+
+        if (!evento.getOrganizador().equals(nombre)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-        
-       if(gestionEventos.crearEvento(evento, evento.getOrganizador())){
-           return true;
-       }
-       return false;
+
+        if (gestionEventos.crearEvento(evento, evento.getOrganizador())) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @RequestMapping(value = "/evento/{id}", method = DELETE, produces = "application/json")
-    public void cancelarEvento(@PathVariable int id) {
+    //Mapeo cambiado
+    @RequestMapping(value = "/usuario/{nombre}/evento/organizado/{id}", method = DELETE, produces = "application/json")
+    public ResponseEntity<Void> cancelarEvento(@PathVariable int id, @PathVariable String nombre) {
 
-        EventoDTO evento=gestionEventos.buscarEventoID(id).toDTO();
-        
-        
+        EventoDTO evento = gestionEventos.buscarEventoID(id).toDTO();
+
+        if (!evento.getOrganizador().equals(nombre)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
         gestionEventos.cancelarEvento(evento, evento.getOrganizador());
+
+        return new ResponseEntity<>(HttpStatus.OK);
 
     }
 
     @RequestMapping(value = "/evento/tipo/{tipo}", method = GET, produces = "application/json")
-    public Pagina<EventoDTO> buscarEventoTipo(@PathVariable Evento.Tipo tipo, 
+    public ResponseEntity<Pagina<EventoDTO>> buscarEventoTipo(@PathVariable Evento.Tipo tipo,
             @RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "5") int size) {
-        
-        List<EventoDTO> eventosTipo = gestionEventos.buscarEventoTipo(tipo);
-        
-        Pagina<EventoDTO>  pagina = new Pagina<>(eventosTipo, page, size);
 
-        return pagina;
+        if (tipo.equals("CHARLA") || tipo.equals("CURSO") || tipo.equals("ACTIVIDAD_DEPORTIVA") || tipo.equals("VISITA_CULTURAL")) {
+            List<EventoDTO> eventosTipo = gestionEventos.buscarEventoTipo(tipo);
+
+            Pagina<EventoDTO> pagina = new Pagina<>(eventosTipo, page, size);
+            
+            return new ResponseEntity<>(pagina, HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-
+    //?
     @RequestMapping(value = "/evento", method = GET, produces = "application/json")
     public Pagina<EventoDTO> buscarEventoPalabrasClave(@RequestParam List<String> palabras,
             @RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "5") int size) {
 
         List<EventoDTO> eventosPalabras = gestionEventos.buscarEventoPalabrasClave(palabras);
-        
-        Pagina<EventoDTO>  pagina = new Pagina<>(eventosPalabras, page, size);
+
+        Pagina<EventoDTO> pagina = new Pagina<>(eventosPalabras, page, size);
 
         return pagina;
 
@@ -110,18 +126,19 @@ public class GestionEventosREST {
     }
 
     @RequestMapping(value = "/usuario/{nombre}/evento/inscrito/{id}", method = POST, produces = "application/json")
-    public boolean inscribirEvento(@PathVariable String nombre,@PathVariable int id) {
+    public boolean inscribirEvento(@PathVariable String nombre, @PathVariable int id) {
 
         Evento evento = gestionEventos.obtenerEvento(id);
+        
         EventoDTO eventoDTO = evento.toDTO();
         gestionEventos.inscribirseEvento(eventoDTO, nombre);
-       
+
         return true;
 
     }
 
     @RequestMapping(value = "/usuario/{nombre}/evento/inscrito/{id}", method = DELETE, produces = "application/json")
-    public void cancelarInscripcionEvento(@PathVariable String nombre,@PathVariable int id) {
+    public void cancelarInscripcionEvento(@PathVariable String nombre, @PathVariable int id) {
 
         Evento evento = gestionEventos.obtenerEvento(id);
         EventoDTO eventoDTO = evento.toDTO();
