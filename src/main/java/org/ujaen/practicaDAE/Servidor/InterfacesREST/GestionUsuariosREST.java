@@ -32,30 +32,8 @@ public class GestionUsuariosREST {
 
     @Autowired
     GestionUsuarios gestionUsuarios;
-
-    @RequestMapping(value = "/usuario/{nombre}", method = GET, produces = "application/json")
-    public UsuarioDTO buscarUsuario(@PathVariable String nombre) {
-        Usuario usuario = gestionUsuarios.buscarUsuario(nombre);
-        UsuarioDTO usuarioDTO = usuario.toDTO();
-
-        return usuarioDTO;
-
-    }
-    //?
-    @RequestMapping(value = "/usuario/login/{nombre}", method = POST, produces = "application/json")
-    public ResponseEntity<Boolean> login(@PathVariable String nombre,
-            @RequestBody UsuarioDTO usuario) {
-
-        if (!gestionUsuarios.login(nombre, usuario.getClave())) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(HttpStatus.OK);
-
-    }
-
-
-    @CrossOrigin
-    @RequestMapping(value = "/usuario/{nombre}", method = POST, produces = "application/json")
+        
+    @RequestMapping(value = "/usuarios/{nombre}", method = POST, produces = "application/json")
     public ResponseEntity<Boolean> registrarUsuario(
             @PathVariable String nombre,
             @RequestBody UsuarioDTO usuario) throws ExcepcionUsuarioYaRegistrado {

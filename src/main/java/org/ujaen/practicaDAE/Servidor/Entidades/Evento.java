@@ -28,7 +28,7 @@ public class Evento {
      * Enum para restringir los tipos de eventos
      */
     public enum Tipo {
-        CHARLA, CURSO, ACTIVIDAD_DEPORTIVA, VISITA_CULTURAL
+        CHARLA, CURSO, ACTIVIDAD_DEPORTIVA, VISITA_CULTURAL,NINGUNO
         
         
     }
