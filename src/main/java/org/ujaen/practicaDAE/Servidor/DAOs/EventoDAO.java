@@ -38,12 +38,20 @@ public class EventoDAO {
 
     private static final String buscarEventoTipoQuery = "select e from Evento e where e.tipo= :tipo";
     private static final String buscarEventoPalabra = "select e from Evento e where e.descripcion ";
+    private static final String listarEventosQuery = "select e from Evento e";
 
     @Cacheable(value = "eventos")
     public List<Evento> buscarEventoTipo(Evento.Tipo tipo) {
 //        slowQuery(5000);
 //        System.out.println("HOLA; NO SOY DE CACHE");
         List<Evento> eventos = em.createQuery(buscarEventoTipoQuery, Evento.class).setParameter("tipo", tipo).getResultList();
+
+        return eventos;
+    }
+    
+    @Cacheable(value = "eventos")
+    public List<Evento> listaEventos() {
+        List<Evento> eventos = em.createQuery(listarEventosQuery, Evento.class).getResultList();
 
         return eventos;
     }

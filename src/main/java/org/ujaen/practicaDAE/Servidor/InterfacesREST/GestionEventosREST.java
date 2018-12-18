@@ -44,7 +44,8 @@ public class GestionEventosREST {
 
     }
 
-    @RequestMapping(value = "/usuarios/{nombre}/eventos/organizados", method = POST, produces = "application/json")
+    @RequestMapping(value = "/usuarios/{nombre}/eventos/organizados", method = POST,
+            consumes = "application/json", produces = "application/json")
     public ResponseEntity<Boolean> crearEvento(@PathVariable String nombre,
             @RequestBody EventoDTO evento) {
 
@@ -89,27 +90,34 @@ public class GestionEventosREST {
 
         // return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
-    //?
 
     @RequestMapping(value = "/eventos", method = GET, produces = "application/json")
-    public Pagina<EventoDTO> buscarEvento(@RequestParam(required = false, defaultValue = "[]") List<String> palabras, @RequestParam(required = false, defaultValue = "NINGUNO") Evento.Tipo tipo,
+    public Pagina<EventoDTO> buscarEvento(@RequestParam(required = false, defaultValue = "") List<String> palabras, @RequestParam(required = false, defaultValue = "NINGUNO") Evento.Tipo tipo,
             @RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "5") int size) {
 
-        List<EventoDTO> eventosTipo = new ArrayList<>();
-        List<EventoDTO> eventosPalabras = gestionEventos.buscarEventoPalabrasClave(palabras);
-        List<EventoDTO> eventosResponse = new ArrayList();
+        List<EventoDTO> eventosTipo;
+        List<EventoDTO> eventosPalabras;
+        List<EventoDTO> eventosResponse = new ArrayList<>();
         
+        // Caso 0: Nose pasa ningun parametro de filtro
+        if(tipo==Evento.Tipo.NINGUNO && palabras.isEmpty())
+        {
+            eventosResponse = gestionEventos.listaEventos();
+        }
         //Caso 1: No se ha pasado tipo y hay una lista de palabras
-        if(tipo==Evento.Tipo.NINGUNO && !palabras.isEmpty()){
-            eventosResponse=eventosPalabras;
+        else if(tipo==Evento.Tipo.NINGUNO && !palabras.isEmpty())
+        {
+            eventosResponse = gestionEventos.buscarEventoPalabrasClave(palabras);;
         }
-        
         //Caso 2: Se ha pasado tipo y no lista de palabras
-         if(tipo!=Evento.Tipo.NINGUNO){
-            eventosResponse=gestionEventos.buscarEventoTipo(tipo);
+        else if(tipo!=Evento.Tipo.NINGUNO && palabras.isEmpty())
+        {
+            eventosResponse = gestionEventos.buscarEventoTipo(tipo);
         }
-        
-        if (tipo != Evento.Tipo.NINGUNO && !palabras.isEmpty()) {
+        // Caso 3: Se ha pasado tipo y lista de palabras
+        else if (tipo != Evento.Tipo.NINGUNO && !palabras.isEmpty()) 
+        {
+            eventosPalabras = gestionEventos.buscarEventoPalabrasClave(palabras);
             eventosTipo = gestionEventos.buscarEventoTipo(tipo);
             for (EventoDTO eventoPalabra : eventosPalabras) {
                 //  EventoDTO encontrado=null;

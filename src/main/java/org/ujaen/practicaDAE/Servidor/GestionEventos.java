@@ -45,6 +45,18 @@ public class GestionEventos implements ServiciosEvento {
     public Evento obtenerEvento(int id) {
         return eventoDAO.buscarEventoID(id);
     }
+    
+    @Override
+    public List<EventoDTO> listaEventos()
+    {
+        List<EventoDTO> eventosDTO = new ArrayList<>();
+        List<Evento> eventos = eventoDAO.listaEventos();
+        
+        for (Evento e : eventos)
+            eventosDTO.add(e.toDTO());
+
+        return eventosDTO;
+    }
 
     @Override
     public List<EventoDTO> buscarEventoTipo(Evento.Tipo tipo) {

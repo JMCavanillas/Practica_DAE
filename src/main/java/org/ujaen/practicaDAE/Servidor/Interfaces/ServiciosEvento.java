@@ -19,6 +19,13 @@ public interface ServiciosEvento {
      * @return Lista de eventos
      */
     List<EventoDTO> buscarEventoTipo(Tipo tipo);
+    
+    /**
+     * Devuelve una lista de todos los eventos
+     * 
+     * @return Lista de eventos
+     */
+    List<EventoDTO> listaEventos();
 
     /**
      * Devuelve una lista de eventos por que contengan una serie de 

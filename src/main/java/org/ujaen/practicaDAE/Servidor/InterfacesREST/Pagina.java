@@ -60,7 +60,7 @@ public class Pagina<T> {
             this.link_sig = "";
         
         this.primera_pag = buildPageLink("page", 0 , "size", this.tam_pag);
-        this.ultima_pag = buildPageLink("page", this.pag_totales - 1 , "size", this.tam_pag);
+        this.ultima_pag = buildPageLink("page", this.pag_totales == 0 ? 0 : this.pag_totales - 1 , "size", this.tam_pag);
         
     }
     
