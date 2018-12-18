@@ -27,6 +27,7 @@ import org.ujaen.practicaDAE.Servidor.GestionUsuarios;
  * @author Juan Antonio Béjar Martos
  */
 @RestController
+@CrossOrigin(origins = "http://localhost:8383")
 @RequestMapping("/")
 public class GestionUsuariosREST {
 

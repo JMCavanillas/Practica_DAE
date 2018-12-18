@@ -75,46 +75,52 @@ public class GestionEventosREST {
 
     }
 
-//    @RequestMapping(value = "/eventos/tipo/{tipo}", method = GET, produces = "application/json")
-//    public Pagina<EventoDTO> buscarEventoTipo(@PathVariable Evento.Tipo tipo,
-//            @RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "5") int size) {
-//
-//       // if (tipo.equals("CHARLA") || tipo.equals("CURSO") || tipo.equals("ACTIVIDAD_DEPORTIVA") || tipo.equals("VISITA_CULTURAL")) {
-//            List<EventoDTO> eventosTipo = gestionEventos.buscarEventoTipo(tipo);
-//
-//            Pagina<EventoDTO> pagina = new Pagina<>(eventosTipo, page, size);
-//
-//            return pagina;
-//       // }
-//
-//       // return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//    }
+    @RequestMapping(value = "/eventos/tipo/{tipo}", method = GET, produces = "application/json")
+    public Pagina<EventoDTO> buscarEventoTipo(@PathVariable Evento.Tipo tipo,
+            @RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "5") int size) {
+
+        // if (tipo.equals("CHARLA") || tipo.equals("CURSO") || tipo.equals("ACTIVIDAD_DEPORTIVA") || tipo.equals("VISITA_CULTURAL")) {
+        List<EventoDTO> eventosTipo = gestionEventos.buscarEventoTipo(tipo);
+
+        Pagina<EventoDTO> pagina = new Pagina<>(eventosTipo, page, size);
+
+        return pagina;
+        // }
+
+        // return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
     //?
+
     @RequestMapping(value = "/eventos", method = GET, produces = "application/json")
-    public Pagina<EventoDTO> buscarEvento(@RequestParam List<String> palabras, @RequestParam(required = false, defaultValue = "NINGUNO") Evento.Tipo tipo,
+    public Pagina<EventoDTO> buscarEvento(@RequestParam(required = false, defaultValue = "[]") List<String> palabras, @RequestParam(required = false, defaultValue = "NINGUNO") Evento.Tipo tipo,
             @RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "5") int size) {
 
         List<EventoDTO> eventosTipo = new ArrayList<>();
-        
-        if (tipo != Evento.Tipo.NINGUNO) {
-            eventosTipo = gestionEventos.buscarEventoTipo(tipo);
-        }
-
         List<EventoDTO> eventosPalabras = gestionEventos.buscarEventoPalabrasClave(palabras);
-        List<EventoDTO> eventosResponse = eventosTipo;
-
-        for (EventoDTO eventoPalabra : eventosPalabras) {
-            boolean repetido = false;
-            for (EventoDTO eventoResponse : eventosResponse) {
-                if (eventoResponse.getId() == eventoPalabra.getId()) {
-                    repetido = true;
-                    break;
+        List<EventoDTO> eventosResponse = new ArrayList();
+        
+        //Caso 1: No se ha pasado tipo y hay una lista de palabras
+        if(tipo==Evento.Tipo.NINGUNO && !palabras.isEmpty()){
+            eventosResponse=eventosPalabras;
+        }
+        
+        //Caso 2: Se ha pasado tipo y no lista de palabras
+         if(tipo!=Evento.Tipo.NINGUNO){
+            eventosResponse=gestionEventos.buscarEventoTipo(tipo);
+        }
+        
+        if (tipo != Evento.Tipo.NINGUNO && !palabras.isEmpty()) {
+            eventosTipo = gestionEventos.buscarEventoTipo(tipo);
+            for (EventoDTO eventoPalabra : eventosPalabras) {
+                //  EventoDTO encontrado=null;
+                for (EventoDTO evento : eventosTipo) {
+                    if (evento.getId() == eventoPalabra.getId()) {
+                        eventosResponse.add(evento);
+                        break;
+                    }
                 }
-            }
-            if (repetido == false) {
-                eventosResponse.add(eventoPalabra);
-            }
 
+            }
         }
 
         Pagina<EventoDTO> pagina = new Pagina<>(eventosResponse, page, size);
@@ -125,7 +131,7 @@ public class GestionEventosREST {
 
     @RequestMapping(value = "/usuarios/{nombre}/eventos/inscritos", method = GET, produces = "application/json")
     public List<EventoDTO> verEventosInscritos(@PathVariable String nombre,
-            @RequestParam(value = "tiempo", required = false) String tiempo) {
+            @RequestParam(value = "tiempo", required = false, defaultValue = "") String tiempo) {
 
         List<EventoDTO> eventosInscritos = new ArrayList<>();
         switch (tiempo) {
@@ -137,7 +143,7 @@ public class GestionEventosREST {
                 eventosInscritos = gestionEventos.verEventosInscritosCelebrados(nombre);
                 break;
             default:
-                eventosInscritos.addAll(gestionEventos.verEventosInscritosFuturos(nombre));
+                eventosInscritos = gestionEventos.verEventosInscritosFuturos(nombre);
                 break;
 
         }
@@ -176,7 +182,7 @@ public class GestionEventosREST {
 
     @RequestMapping(value = "/usuarios/{nombre}/eventos/organizados", method = GET, produces = "application/json")
     public List<EventoDTO> verEventosOrganizado(@PathVariable String nombre,
-            @RequestParam(value = "tiempo", required = false, defaultValue = "todos") String tiempo) {
+            @RequestParam(value = "tiempo", required = false, defaultValue = "") String tiempo) {
 
         List<EventoDTO> eventosOrganizados = new ArrayList<>();
         switch (tiempo) {
